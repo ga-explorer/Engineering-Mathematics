@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 2: Summarizing and Visualizing Data - Part 5</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .toc-sidebar {
+            width: 300px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+            overflow-y: auto;
+            position: fixed;
+            height: 100vh;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+        
+        .toc-sidebar h2 {
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .toc-sidebar ul {
+            list-style-type: none;
+        }
+        
+        .toc-sidebar li {
+            margin-bottom: 10px;
+        }
+        
+        .toc-sidebar a {
+            color: var(--light-color);
+            text-decoration: none;
+            display: block;
+            padding: 8px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        .toc-sidebar a:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: 300px;
+            padding: 30px;
+        }
+        
+        .slide {
+            background-color: white;
+            margin-bottom: 30px;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            page-break-inside: avoid;
+        }
+        
+        .slide h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .audio-control {
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+        
+        .content {
+            margin-top: 20px;
+        }
+        
+        .definition {
+            background-color: #e8f4fd;
+            border-left: 4px solid var(--secondary-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .example {
+            background-color: #f9f9f9;
+            border-left: 4px solid var(--accent-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .problem {
+            background-color: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .equation {
+            text-align: center;
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        
+        .figure {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .figure img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .figure-caption {
+            font-style: italic;
+            margin-top: 10px;
+            color: #666;
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .table th, .table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .table th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .highlight {
+            background-color: #fffacd;
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+        
+        .code-block {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            
+            .toc-sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="toc-sidebar">
+        <h2>Table of Contents</h2>
+        <ul>
+            <li><a href="#slide81">Slide 81 - Line Plots</a></li>
+            <li><a href="#slide82">Slide 82 - Line Plot Examples</a></li>
+            <li><a href="#slide83">Slide 83 - Scatter Plots</a></li>
+            <li><a href="#slide84">Slide 84 - Scatter Plot Examples</a></li>
+            <li><a href="#slide85">Slide 85 - Bar Charts</a></li>
+            <li><a href="#slide86">Slide 86 - Simple Bar Chart Example</a></li>
+            <li><a href="#slide87">Slide 87 - Grouped Bar Charts</a></li>
+            <li><a href="#slide88">Slide 88 - Relative Frequency Charts</a></li>
+            <li><a href="#slide89">Slide 89 - Data Preprocessing</a></li>
+            <li><a href="#slide90">Slide 90 - Univariate Preprocessing</a></li>
+            <li><a href="#slide91">Slide 91 - Standardization</a></li>
+            <li><a href="#slide92">Slide 92 - Min-Max Normalization</a></li>
+            <li><a href="#slide93">Slide 93 - Example 2.15</a></li>
+            <li><a href="#slide94">Slide 94 - Whitening Introduction</a></li>
+            <li><a href="#slide95">Slide 95 - Whitening Process</a></li>
+            <li><a href="#slide96">Slide 96 - Whitening Benefits</a></li>
+            <li><a href="#slide97">Slide 97 - Example 2.16</a></li>
+            <li><a href="#slide98">Slide 98 - Chapter Summary</a></li>
+            <li><a href="#slide99">Slide 99 - Further Reading</a></li>
+            <li><a href="#slide100">Slide 100 - Exercises Overview</a></li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        <section id="slide81" class="slide">
+            <h2>Slide 81 - Line Plots
+                <audio class="audio-control" controls>
+                    <source src="Slide81.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>2.3.2.1 Line Plot</h3>
+                
+                <p>The line plot is generally used when one of the variables is an independent variable (which is directly controlled in an experiment) and the other variable is a dependent variable (which is a numeric quantity representing the outcome of the experiment).</p>
+                
+                <ul>
+                    <li>The independent variable is represented on the X-axis</li>
+                    <li>The dependent variable is represented on the Y-axis</li>
+                </ul>
+                
+                <p>The line plot essentially draws a line through the different \((x,y)\) coordinates that are collected in the experiment.</p>
+                
+                <p>In the event that these coordinates do not lie on a straight line, a piecewise linear line is drawn through the points.</p>
+                
+                <div class="definition">
+                    <h4>Line Plot</h4>
+                    <p>A type of chart which displays information as a series of data points called 'markers' connected by straight line segments. It is often used to visualize a trend in data over intervals of time.</p>
+                </div>
+                
+                <div class="example">
+                    <p><strong>Example applications:</strong></p>
+                    <ul>
+                        <li>Stock prices over time</li>
+                        <li>Temperature changes throughout a day</li>
+                        <li>Website traffic over months</li>
+                    </ul>
+                </div>
+                
+                <p>In many cases, these piecewise linear lines do not represent satisfactory trends because they do not account for the random variations and natural errors that arise in data collection.</p>
+            </div>
+        </section>
+
+        <section id="slide82" class="slide">
+            <h2>Slide 82 - Line Plot Examples
+                <audio class="audio-control" controls>
+                    <source src="Slide82.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Line Plots with Best-Fit Lines</h3>
+                
+                <p>As you will learn in the chapter on regression (cf. Chapter 7), it is also possible to draw a (straight) line of best fit, which does not necessarily pass through all the points.</p>
+                
+                <p>Such a line is preferable when the collected data is known to have experimental errors or other random variations.</p>
+                
+                <div class="figure">
+                    <!-- Placeholder for line plot examples -->
+                    <div style="background-color: #f0f0f0; height: 200px; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc;">
+                        <p>Figure 2.19: Examples of line plots of different types</p>
+                    </div>
+                    <p class="figure-caption">(a) Standard piece-wise linear line plot, (b) Linear and nonlinear best-fit lines</p>
+                </div>
+                
+                <p>In some cases, the data may not naturally follow a linear trend. In such cases, it is possible to draw a nonlinear curve of best fit, which typically does a better job of passing through all the points but it is not a straight line — instead it is a smooth curve representing the typical trends in the data.</p>
+                
+                <div class="example">
+                    <p><strong>Example:</strong> The results of a laboratory experiment that measures the effect of temperature on the volume of water are illustrated. The temperature is shown on the \(X\)-axis, whereas the change in volume of water is shown on the \(Y\)-axis.</p>
+                    
+                    <p>In general, the volume of water is known to decrease from \(0^{o}\)C to \(4^{o}\)C, and then increase in a non-linear way. These types of known relationships in science are originally discovered using precisely this type of experiment that repeatedly measures temperature and change in volume (by repeatedly heating and cooling water).</p>
+                </div>
+                
+                <p>The different dots in Figure 2.9(b) illustrate the results of different experiments. There is significant variation across different experiments because of human error in measurement or other confounding factors.</p>
+            </div>
+        </section>
+
+        <section id="slide83" class="slide">
+            <h2>Slide 83 - Scatter Plots
+                <audio class="audio-control" controls>
+                    <source src="Slide83.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>2.3.2.2 Scatter Plot</h3>
+                
+                <p>The simplest visualization is the <span class="highlight">scatter plot</span>, which plots two of the features of the data with one another and therefore provides an idea of how the features vary with respect to each other.</p>
+                
+                <ul>
+                    <li>Each of the axes corresponds to one of the features</li>
+                    <li>Each observation in the data is denoted with a marker</li>
+                </ul>
+                
+                <p>It is possible for the \(X\)-axis to represent the independent variable and the \(Y\)-axis to represent the dependent variable (as in the case of the line plot), although it is not necessary for the variables to be classified as independent or dependent in the case of the line plot.</p>
+                
+                <div class="definition">
+                    <h4>Scatter Plot</h4>
+                    <p>A type of plot or mathematical diagram using Cartesian coordinates to display values for typically two variables for a set of data. The data are displayed as a collection of points, each having the value of one variable determining the position on the horizontal axis and the value of the other variable determining the position on the vertical axis.</p>
+                </div>
+                
+                <p>The scatter plot is a very simple form of visualization that exposes important patterns in the data.</p>
+                
+                <div class="example">
+                    <p><strong>Common patterns in scatter plots:</strong></p>
+                    <ul>
+                        <li><strong>Positive correlation:</strong> Points trend upward from left to right</li>
+                        <li><strong>Negative correlation:</strong> Points trend downward from left to right</li>
+                        <li><strong>No correlation:</strong> Points form a random cloud with no clear pattern</li>
+                        <li><strong>Clusters:</strong> Groups of points form distinct clusters</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide84" class="slide">
+            <h2>Slide 84 - Scatter Plot Examples
+                <audio class="audio-control" controls>
+                    <source src="Slide84.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Scatter Plot Examples</h3>
+                
+                <p>Examples of scatter plots are illustrated in Figure 2.10.</p>
+                
+                <div class="figure">
+                    <!-- Placeholder for scatter plot examples -->
+                    <div style="background-color: #f0f0f0; height: 200px; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc;">
+                        <p>Figure 2.20: Examples of scatter plots of different data patterns</p>
+                    </div>
+                    <p class="figure-caption">(a) Correlated data, (b) Clustered data</p>
+                </div>
+                
+                <p>The scatter plot of Figure 2.10(a) is an age-salary scatter-plot, which shows a positive correlation between the age and the salary.</p>
+                
+                <p>The scatter plot of Figure 2.10(b) shows the latitude and longitude of mobile phone users, and it tends to be naturally clustered in crowded regions.</p>
+                
+                <p>Both these types of patterns make a lot of sense for the data set at hand. Each scatter plot tells its own story that is specific to the scenario that generated the data (i.e., the generating mechanism).</p>
+                
+                <div class="example">
+                    <p><strong>Interpreting scatter plots:</strong></p>
+                    <ul>
+                        <li><strong>Correlated data:</strong> Suggests a relationship between variables that might be causal or influenced by common factors</li>
+                        <li><strong>Clustered data:</strong> Suggests the presence of distinct groups or segments in the data</li>
+                        <li><strong>Outliers:</strong> Points that fall far from the main pattern may indicate errors or special cases</li>
+                        <li><strong>Non-linear patterns:</strong> Curved patterns suggest more complex relationships</li>
+                    </ul>
+                </div>
+                
+                <p>Scatter plots are particularly useful in the early stages of data analysis for identifying relationships, outliers, and patterns that might warrant further investigation.</p>
+            </div>
+        </section>
+
+        <section id="slide85" class="slide">
+            <h2>Slide 85 - Bar Charts
+                <audio class="audio-control" controls>
+                    <source src="Slide85.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>2.3.2.3 Bar Chart</h3>
+                
+                <p>All visualization techniques that have been discussed thus far are designed for numerical data.</p>
+                
+                <p>The preponderance of numeric data for visualization is not particularly surprising because of the ability to intuitively represent numeric data spatially.</p>
+                
+                <p>Nevertheless, a number of techniques have also been developed for both multivariate categorical data and for mixed-attribute data.</p>
+                
+                <p>First, we discuss the visual representation of the association between a numerical attribute and one or more categorical attributes with the use of bar charts or bar plots.</p>
+                
+                <div class="definition">
+                    <h4>Bar Chart</h4>
+                    <p>A chart or graph that presents categorical data with rectangular bars with heights or lengths proportional to the values that they represent. The bars can be plotted vertically or horizontally.</p>
+                </div>
+                
+                <p>A bar plot first computes a summary statistics of a numeric attribute (typically the mean value but can also be another statistic including one involving dispersion-centric analysis) for data points corresponding to each value of the categorical attribute.</p>
+                
+                <p>Then, it plots this summary statistic of the numeric attribute for each value of the categorical attribute with a separate bar.</p>
+                
+                <p>Therefore, a bar plot always presents the statistic of a numeric attribute with respect to one or more categorical attributes.</p>
+            </div>
+        </section>
+
+        <section id="slide86" class="slide">
+            <h2>Slide 86 - Simple Bar Chart Example
+                <audio class="audio-control" controls>
+                    <source src="Slide86.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Simple Bar Chart Example</h3>
+                
+                <p>The specific statistic of the numeric attribute that is presented is referred to as the <span class="highlight">estimator</span>, and it is typically the mean of the numeric attribute, but can chosen to be another value such as the sum or the standard deviation.</p>
+                
+                <div class="example">
+                    <p><strong>Example:</strong> Consider the Adult data set from the UCI Machine Learning Repository [66], which contains several numerical and categorical demographic attributes, such as age, years of education, race, and salary-level.</p>
+                    
+                    <p>The age and years of education are obviously numeric attributes. Race is a categorical attribute. While salary level would normally be numeric, it turns out to be categorical in this particular data set because of how it has been preprocessed — the attribute has only two possible values, corresponding to people making less than 50,000 dollars and those making more than 50,000 dollars.</p>
+                    
+                    <p>Therefore, it is a binary attribute that should be treated as a categorical value.</p>
+                </div>
+                
+                <div class="figure">
+                    <!-- Placeholder for simple bar chart -->
+                    <div style="background-color: #f0f0f0; height: 200px; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc;">
+                        <p>Figure 2.21: Simple bar plot showing age and years of education by race for the Adult data set</p>
+                    </div>
+                    <p class="figure-caption">Bar charts showing variations in numeric attributes across categorical groups</p>
+                </div>
+                
+                <p>The bar plot in Figure 2.11(a) shows the average age of people in the Adult data set by race. Note that a small vertical line appears on the top of each bar, which is an <span class="highlight">error bar</span>, the length of which corresponds to the standard deviation of the numeric attribute within that group.</p>
+                
+                <p>This type of error bar is particularly useful when the mean of that group is analyzed and presented as the primary statistic.</p>
+            </div>
+        </section>
+
+        <section id="slide87" class="slide">
+            <h2>Slide 87 - Grouped Bar Charts
+                <audio class="audio-control" controls>
+                    <source src="Slide87.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Grouped Bar Charts</h3>
+                
+                <p>The aforementioned bar chart is a <span class="highlight">simple</span> bar chart, because it shows the variation of a numeric attribute across only one categorical attribute.</p>
+                
+                <p>By using the concept of grouping, it is possible to show the variation of a numeric attribute across multiple categorical attributes (which is typically a pair of categorical attributes).</p>
+                
+                <p>In a <span class="highlight">grouped bar chart</span>, the numerical attribute statistics (e.g., mean of age or salary) are computed for each combination of a pair of categorical attribute values and the statistics are shown by nesting one of the categorical attributes within the other as a grouped family.</p>
+                
+                <div class="example">
+                    <p><strong>Example:</strong> Figure 2.13(a) shows the variation in age across different races and salary levels, while using the salary-level attribute for the inner-level nesting of the categorical grouping.</p>
+                    
+                    <p>A similar type of nested bar chart in shown in Figure 2.13(b), except that the primary numeric attribute analyzed in this case is the number of years of education.</p>
+                </div>
+                
+                <div class="figure">
+                    <!-- Placeholder for grouped bar chart -->
+                    <div style="background-color: #f0f0f0; height: 200px; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc;">
+                        <p>Figure 2.22: Grouped bar plot showing age and years of education by race over different salary levels</p>
+                    </div>
+                    <p class="figure-caption">Grouped bar charts show interactions between multiple categorical variables</p>
+                </div>
+                
+                <p>Both figures show that the salary level is sensitive to the age and the number of years of education. Furthermore, it can be inferred that within each race, a higher salary level implies greater age and number of years of education.</p>
+                
+                <p>One limitation of the data set is that since the salary level is provided only as a binary value, it is impossible to analyze how the salary level varies across races while fixing the age and the number of years of education.</p>
+            </div>
+        </section>
+
+        <section id="slide88" class="slide">
+            <h2>Slide 88 - Relative Frequency Charts
+                <audio class="audio-control" controls>
+                    <source src="Slide88.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Relative Frequency Bar Charts</h3>
+                
+                <p>One can also use the grouped bar chart in order to present the frequencies of pairs of categorical attributes.</p>
+                
+                <p>As in the case of the generation of frequencies of numeric attributes, a dummy numeric attribute of ones can be created, and then the sum estimator is used on the dummy attribute with respect to the two nested categorical attributes.</p>
+                
+                <p>On applying this approach on the race and salary-level attributes the bar chart of Figure 2.14 is obtained.</p>
+                
+                <div class="figure">
+                    <!-- Placeholder for frequency bar chart -->
+                    <div style="background-color: #f0f0f0; height: 200px; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc;">
+                        <p>Figure 2.23: Grouped bar plot showing the frequencies of different races and salary level combinations</p>
+                    </div>
+                    <p class="figure-caption">Frequency bar charts show counts of categorical combinations</p>
+                </div>
+                
+                <p>In this case, the frequencies of the different race- and salary-level combinations are presented in the chart. One can view this chart as a pictorial representation of the contingency table discussed earlier in this chapter.</p>
+                
+                <p>One problem with this chart is that some of the frequency bars are too small to be properly visible. In such cases, it makes sense to construct relative frequency charts.</p>
+                
+                <div class="example">
+                    <p><strong>Example:</strong> The percent or fraction of people of that specific race making more or less than 50,000 can be presented in each case. Such an approach allows a more direct comparison across the different races in terms of their salary levels.</p>
+                    
+                    <p>To achieve this goal, the dummy attribute value can be modified in order to make it sensitive to the attribute over which the relative frequency normalization is done.</p>
+                    
+                    <p>Since the sum of the two bars over each race must equal 100, the value of the dummy attribute for an individual belonging to the \(i\)th race is set to \(100/f_i\), where \(f_i\) is the number of respondents belonging to the \(i\)th race in the data set.</p>
+                    
+                    <p>Then, using the sum estimator with respect to the two nested categorical attributes will yield a relative-frequency bar plot.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide89" class="slide">
+            <h2>Slide 89 - Data Preprocessing
+                <audio class="audio-control" controls>
+                    <source src="Slide89.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>2.4 Applications to Data Preprocessing</h3>
+                
+                <p>The summarization techniques discussed in this chapter are often used for data preprocessing.</p>
+                
+                <p>Data preprocessing is a critical step used in machine learning applications because it critically affects the performance of various machine learning algorithms.</p>
+                
+                <p>In other words, the nature of the preprocessing can affect both the accuracy and the speed of execution of a particular machine learning algorithm.</p>
+                
+                <div class="definition">
+                    <h4>Data Preprocessing</h4>
+                    <p>Techniques used to transform raw data into a clean, organized format that is suitable for building and training machine learning models. This often involves handling missing values, encoding categorical variables, and feature scaling.</p>
+                </div>
+                
+                <p>Common data preprocessing techniques include:</p>
+                <ul>
+                    <li><strong>Feature scaling:</strong> Standardization, normalization</li>
+                    <li><strong>Handling missing values:</strong> Imputation, deletion</li>
+                    <li><strong>Encoding categorical variables:</strong> One-hot encoding, label encoding</li>
+                    <li><strong>Feature engineering:</strong> Creating new features from existing ones</li>
+                    <li><strong>Dimensionality reduction:</strong> PCA, feature selection</li>
+                </ul>
+                
+                <div class="example">
+                    <p><strong>Importance of preprocessing:</strong></p>
+                    <ul>
+                        <li>Algorithms like SVM and k-means are sensitive to feature scales</li>
+                        <li>Gradient descent converges faster with normalized features</li>
+                        <li>Some algorithms assume features are normally distributed</li>
+                        <li>Preprocessing can reduce the impact of outliers</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide90" class="slide">
+            <h2>Slide 90 - Univariate Preprocessing
+                <audio class="audio-control" controls>
+                    <source src="Slide90.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>2.4.1 Univariate Preprocessing Methods</h3>
+                
+                <p>In univariate preprocessing methods, the features are processed independently from one another.</p>
+                
+                <p>These methods use various types of scaling and translation as follows:</p>
+                
+                <div class="definition">
+                    <h4>Univariate Preprocessing</h4>
+                    <p>Preprocessing techniques that are applied to each feature independently, without considering relationships between features. This includes methods like standardization and normalization that operate on individual columns of the data matrix.</p>
+                </div>
+                
+                <p>The two main univariate preprocessing methods are:</p>
+                <ol>
+                    <li><strong>Standardization:</strong> Transforming features to have zero mean and unit variance</li>
+                    <li><strong>Min-max normalization:</strong> Scaling features to a specific range, typically [0,1]</li>
+                </ol>
+                
+                <div class="example">
+                    <p><strong>When to use each method:</strong></p>
+                    <ul>
+                        <li><strong>Standardization:</strong> When features have different scales and you want to give them equal importance; when the algorithm assumes features are normally distributed</li>
+                        <li><strong>Min-max normalization:</strong> When you need features to be in a specific range; when preserving zero entries is important</li>
+                    </ul>
+                </div>
+                
+                <p>Feature normalization methods often enable better performance of machine learning algorithms both in terms of accuracy and running times.</p>
+                
+                <p>If the different features are on different scales that vary by orders of magnitude, the feature with large variability will dominate in terms of predictive influence.</p>
+            </div>
+        </section>
+
+        <section id="slide91" class="slide">
+            <h2>Slide 91 - Standardization
+                <audio class="audio-control" controls>
+                    <source src="Slide91.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Standardization</h3>
+                
+                <p>A common type of normalization is to subtract the feature mean from each feature value and then divide each resulting value by the feature standard deviation.</p>
+                
+                <p>If \(x_{ij}\) is the value of the \(j\)th feature for the \(i\)th observation, the standardization process uses the estimated mean \(\hat{\mu}_j\) and standard deviation \(\hat{\sigma}_j\) of attribute \(j\) in order to compute the normalized feature value as follows:</p>
+                
+                <div class="equation">
+                    \[x_{ij} \leftarrow \frac{x_{ij}-\hat{\mu}_j}{\hat{\sigma}_j} \tag{2.2}\]
+                </div>
+                
+                <p>The basic idea is that each feature is presumed to have been drawn from a standard normal distribution with zero mean and unit variance (which is why this form of feature preprocessing is referred to as standardization).</p>
+                
+                <div class="definition">
+                    <h4>Standardization (Z-score Normalization)</h4>
+                    <p>A preprocessing technique that rescales features to have a mean of 0 and a standard deviation of 1. This is achieved by subtracting the mean and dividing by the standard deviation for each feature.</p>
+                </div>
+                
+                <p>For unimodal and symmetric distributions, most of the resulting values of the features will lie in the range \((-3,3)\), although a few extreme values may lie outside this range.</p>
+                
+                <div class="example">
+                    <p><strong>Example:</strong> If a feature has mean 50 and standard deviation 10, then:</p>
+                    <ul>
+                        <li>A value of 60 becomes: (60-50)/10 = 1</li>
+                        <li>A value of 45 becomes: (45-50)/10 = -0.5</li>
+                        <li>A value of 70 becomes: (70-50)/10 = 2</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide92" class="slide">
+            <h2>Slide 92 - Min-Max Normalization
+                <audio class="audio-control" controls>
+                    <source src="Slide92.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Min-Max Normalization</h3>
+                
+                <p>This type of feature normalization maps all feature values to the range \((0,1)\).</p>
+                
+                <p>Let \(min_{j}\) and \(max_{j}\) be the minimum and maximum values of the \(j\)th attribute. Then, each feature value \(x_{ij}\) is scaled by min-max normalization as follows:</p>
+                
+                <div class="equation">
+                    \[x_{ij} \leftarrow \frac{x_{ij}-min_{j}}{max_{j}-min_{j}} \tag{2.3}\]
+                </div>
+                
+                <div class="definition">
+                    <h4>Min-Max Normalization</h4>
+                    <p>A preprocessing technique that rescales features to a fixed range, typically [0,1]. This is achieved by subtracting the minimum value and dividing by the range (max-min) for each feature.</p>
+                </div>
+                
+                <p>The main advantage of min-max normalization is that features are mapped to the specific range \((0,1)\). This can be useful in some applications where nonnegativity or boundedness is assumed.</p>
+                
+                <div class="example">
+                    <p><strong>Example:</strong> If a feature has minimum value 20 and maximum value 80, then:</p>
+                    <ul>
+                        <li>A value of 50 becomes: (50-20)/(80-20) = 30/60 = 0.5</li>
+                        <li>A value of 25 becomes: (25-20)/(80-20) = 5/60 ≈ 0.083</li>
+                        <li>A value of 75 becomes: (75-20)/(80-20) = 55/60 ≈ 0.917</li>
+                    </ul>
+                </div>
+                
+                <p>However, standardization is a more principled statistical approach because:</p>
+                <ul>
+                    <li>It's less sensitive to outliers (min and max are heavily influenced by outliers)</li>
+                    <li>It preserves the shape of the original distribution</li>
+                    <li>It's more interpretable in terms of standard deviations from the mean</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="slide93" class="slide">
+            <h2>Slide 93 - Example 2.15
+                <audio class="audio-control" controls>
+                    <source src="Slide93.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Example 2.15</h3>
+                
+                <div class="example">
+                    <h4>Example 2.15</h4>
+                    <p>Consider a data set with a few extreme values on some features. Discuss what kind of problems might arise in Euclidean distance-based algorithms on using min-max normalization on such a data set. Would this problem arise in standardization to the same extent?</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <p>A few extreme values can cause a lack of discrimination along a subset of the features where the extreme values exist.</p>
+                
+                <div class="example">
+                    <p><strong>Example scenario:</strong> Suppose we have two features:</p>
+                    <ul>
+                        <li>Feature 1: Values mostly between 0 and 10, with one extreme value of 1000</li>
+                        <li>Feature 2: Values between 0 and 100</li>
+                    </ul>
+                    
+                    <p>With min-max normalization:</p>
+                    <ul>
+                        <li>Feature 1 would be scaled by range 0-1000, so most values would be compressed into a very small range (0-0.01)</li>
+                        <li>Feature 2 would be scaled by range 0-100, so values would be spread across the full [0,1] range</li>
+                    </ul>
+                    
+                    <p>As a result, Feature 1 would be de-emphasized in Euclidean distance calculations, even though it might contain important information in the non-extreme values.</p>
+                </div>
+                
+                <p>Such features will be de-emphasized when using Euclidean distances. This is because the scale factor along each dimension in min-max normalization is decided exclusively by extreme values (which could easily be errors in recording the data).</p>
+                
+                <p>This problem does not arise to the same extent in standardization in which the scale factor is decided by all values.</p>
+                
+                <div class="example">
+                    <p><strong>With standardization:</strong></p>
+                    <ul>
+                        <li>The mean and standard deviation are influenced by all values, not just the extremes</li>
+                        <li>Extreme values will become outliers in the standardized space (values beyond ±3)</li>
+                        <li>But the majority of values will still be properly scaled relative to each other</li>
+                    </ul>
+                </div>
+                
+                <p>From a probabilistic point of view, standardization assumes that each feature is generated from the normal distribution introduced in Chapter 1 (where extreme values occasionally occur) and the squared Euclidean distance on standardized data turns out to have the same form as the exponent of the normal distribution from which the data is generated.</p>
+            </div>
+        </section>
+
+        <section id="slide94" class="slide">
+            <h2>Slide 94 - Whitening Introduction
+                <audio class="audio-control" controls>
+                    <source src="Slide94.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>2.4.2 Whitening: A Multivariate Preprocessing Method</h3>
+                
+                <p>Another form of feature pre-processing is referred to as <span class="highlight">whitening</span>, which is based on principal component analysis.</p>
+                
+                <p>Principal component analysis has already been discussed on page 42. This section discussed further details in the context of whitening.</p>
+                
+                <p>In whitening, the axis-system for data representation is rotreflected using principal component analysis to create a new set of <span class="highlight">de-correlated</span> features; the new data values along each decorrelated feature are then scaled to unit variance.</p>
+                
+                <div class="definition">
+                    <h4>Whitening (Sphering)</h4>
+                    <p>A preprocessing technique that transforms data to have zero mean, unit variance, and zero covariance between features. This is achieved through principal component analysis followed by scaling each component by the inverse of its standard deviation.</p>
+                </div>
+                
+                <p>Univariate forms of normalization do not decorrelate the data, because they process individual features at a time without regard to the other features.</p>
+                
+                <p>On the other hand, whitening methods create decorrelated features that are linear combinations of the original features.</p>
+                
+                <div class="example">
+                    <p><strong>Key difference from standardization:</strong></p>
+                    <ul>
+                        <li><strong>Standardization:</strong> Makes each feature have zero mean and unit variance, but doesn't remove correlations between features</li>
+                        <li><strong>Whitening:</strong> Makes features have zero mean, unit variance, AND zero covariance (uncorrelated)</li>
+                    </ul>
+                </div>
+                
+                <p>An important point is that very strong correlations among features can cause the same types of problems associated with the varying scales of features — correlated features may tend to get overemphasized in algorithmic computations and may also cause ill-conditioning.</p>
+            </div>
+        </section>
+
+        <section id="slide95" class="slide">
+            <h2>Slide 95 - Whitening Process
+                <audio class="audio-control" controls>
+                    <source src="Slide95.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Whitening Process</h3>
+                
+                <p>Let \(D\) be an \(n\times d\) data matrix <em>that has already been mean-centered</em>. Let \(C\) be the \(d\times d\) co-variance matrix of \(D\) in which the \((i,j)\)th entry is the co-variance between the dimensions \(i\) and \(j\).</p>
+                
+                <p>Because the matrix \(D\) is mean-centered, we have the following:</p>
+                <div class="equation">
+                    \[C=\frac{D^{T}D}{n}\propto D^{T}D \tag{2.4}\]
+                </div>
+                
+                <p>Note that the relationship above holds only for mean centered data, because the covariance between a pair of attributes is the mean of the pairwise products of (centered) attributes.</p>
+                
+                <p>Since \(D^{T}D\) is a \(d\times d\) matrix whose \((i,j)\)th entry contains the sum of the product of the \(i\)th and \(j\)th attribute (across observations), dividing each entry of this matrix by \(n\) results in a covariance matrix.</p>
+                
+                <p>The eigenvectors of this matrix are the principal components, corresponding to the de-correlated directions in the data (with respect to the sample at hand).</p>
+                
+                <p>Let \(P_{k}\) be a \(d\times k\) matrix in which each column contains one of the top-\(k\) eigenvectors. The eigenvectors of a positive semi-definite matrix (like the covariance matrix) are always orthonormal.</p>
+                
+                <p>Let \(\Delta_{k}\) be a \(k\times k\) diagonal matrix containing the corresponding nonnegative eigenvalues in the same order as the eigenvector columns of \(P_{k}\).</p>
+            </div>
+        </section>
+
+        <section id="slide96" class="slide">
+            <h2>Slide 96 - Whitening Benefits
+                <audio class="audio-control" controls>
+                    <source src="Slide96.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Benefits of Whitening</h3>
+                
+                <p>Then, the covariance matrix can be approximately represented by the following <span class="highlight">eigendecomposition</span>, with exact equality guaranteed at \(k=d\):</p>
+                <div class="equation">
+                    \[C\approx P_{k}\Delta_{k}P_{k}^{T}\]
+                </div>
+                
+                <p>Then, the data matrix \(D\) can be transformed into the \(k\)-dimensional axis system corresponding to the vectors in the columns of \(P_{k}\). This is achieved by post-multiplying \(D\) with the matrix \(P_{k}\).</p>
+                
+                <p>The resulting \(n\times k\) matrix \(U_{k}\), whose rows contain the transformed \(k\)-dimensional data points, is given by the following:</p>
+                <div class="equation">
+                    \[U_{k}=DP_{k} \tag{2.5}\]
+                </div>
+                
+                <p>The new data representation in the \(n\times k\) matrix \(U_{k}\) has \(k\) columns just like the \(d\times k\) eigenvector matrix \(P_{k}\). The columns of the matrix \(P_{k}\) form the new <span class="highlight">basis directions</span> (i.e., a rotreflected axis system) for the new data representation coordinates in \(U_{k}\).</p>
+                
+                <p>The variances of the columns of \(U_{k}\) are the eigenvalues of the corresponding eigenvectors in \(P_{k}\), because this is the property of the de-correlating transformation of principal component analysis.</p>
+                
+                <p>In whitening, each column of \(U_{k}\) is scaled to unit variance by dividing it with its standard deviation (i.e., the square-root of the corresponding eigenvalue). The transformed features can then be used by a variety of machine learning algorithms.</p>
+                
+                <div class="figure">
+                    <!-- Placeholder for whitening visualization -->
+                    <div style="background-color: #f0f0f0; height: 200px; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc;">
+                        <p>Figure 2.24: An example of how whitening can expose outliers in the data</p>
+                    </div>
+                    <p class="figure-caption">Whitening transforms the data distribution to be spherical</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide97" class="slide">
+            <h2>Slide 97 - Example 2.16
+                <audio class="audio-control" controls>
+                    <source src="Slide97.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Example 2.16</h3>
+                
+                <div class="example">
+                    <h4>Example 2.16</h4>
+                    <p>Consider the mean-centered data set of Example 2.13:</p>
+                    <div class="equation">
+                        \[\{(4,4),(3,3),(2,2),(1,1),(-1,-1),(-2,-2),(-3,-3),(-4,-4),(1,-1),(-1,1)\}\]
+                    </div>
+                    <p>Compute the whitened representation and comment on it.</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <p>Based on the discussion in the solution to Example 2.13, the decorrelated representation is as follows (with standard deviations of \(\sqrt{12}\) and \(\sqrt{0.4}\) along the two eigenvector dimensions):</p>
+                <div class="equation">
+                    \[\{(4\sqrt{2},0),(3\sqrt{2},0),(2\sqrt{2},0),(\sqrt{2},0),(-\sqrt{2},0),\]
+                    \[(-2\sqrt{2},0),(-3\sqrt{2},0),(-4\sqrt{2},0),(0,\sqrt{2}),(0,-\sqrt{2})\}\]
+                </div>
+                
+                <p>On dividing by the standard deviations along the two dimensions, the following whitened representation is obtained:</p>
+                <div class="equation">
+                    \[\{(2\sqrt{6}/3,0),(\sqrt{6}/2,0),(\sqrt{6}/3,0),(\sqrt{6}/6,0),(-\sqrt{6}/6,0),\]
+                    \[(-\sqrt{6}/3,0),(-\sqrt{6}/2,0),(-2\sqrt{6}/3,0),(0,\sqrt{5}),(0,-\sqrt{5})\}\]
+                </div>
+                
+                <p><strong>Comment:</strong></p>
+                <p>The data representation has been contracted along the first dimension and stretched along the second dimension.</p>
+                
+                <p>Based on the Euclidean distance using the original representation, the last two points are the most inlier-like because they are closest to the data mean. However, on whitening, the changed Euclidean distance causes these points have the highest outlier scores.</p>
+                
+                <p>This change is because these points deviate along a direction of low variance, which causes them to be recognized as outlier-like in a probabilistic sense.</p>
+                
+                <div class="example">
+                    <p><strong>Key insight:</strong> Whitening changes how we measure distances in the data space. Points that deviate along directions of low original variance become more prominent after whitening.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide98" class="slide">
+            <h2>Slide 98 - Chapter Summary
+                <audio class="audio-control" controls>
+                    <source src="Slide98.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>2.5 Summary</h3>
+                
+                <p>This chapter introduces a number of common summarization and visualization techniques in statistics and machine learning.</p>
+                
+                <p>Such methods are very useful for obtaining an understanding of the overall data distribution before designing machine learning algorithms.</p>
+                
+                <p>Summarization and visualization techniques can be designed for either univariate data or multivariate data.</p>
+                
+                <p><strong>Key concepts covered:</strong></p>
+                
+                <div class="definition">
+                    <h4>Univariate Summarization</h4>
+                    <ul>
+                        <li><strong>Measures of central tendency:</strong> Mean, median, mode</li>
+                        <li><strong>Measures of dispersion:</strong> Range, IQR, variance, standard deviation</li>
+                        <li><strong>Percentiles and quartiles:</strong> Understanding data distribution</li>
+                    </ul>
+                </div>
+                
+                <div class="definition">
+                    <h4>Multivariate Summarization</h4>
+                    <ul>
+                        <li><strong>Covariance and correlation:</strong> Relationships between variables</li>
+                        <li><strong>Rank correlations:</strong> Spearman, Kendall</li>
+                        <li><strong>Principal Component Analysis:</strong> Dimensionality reduction</li>
+                        <li><strong>Contingency tables:</strong> For categorical data</li>
+                    </ul>
+                </div>
+                
+                <div class="definition">
+                    <h4>Visualization Techniques</h4>
+                    <ul>
+                        <li><strong>Univariate:</strong> Histograms, box plots</li>
+                        <li><strong>Multivariate:</strong> Scatter plots, line plots, bar charts</li>
+                    </ul>
+                </div>
+                
+                <div class="definition">
+                    <h4>Data Preprocessing</h4>
+                    <ul>
+                        <li><strong>Univariate methods:</strong> Standardization, min-max normalization</li>
+                        <li><strong>Multivariate methods:</strong> Whitening using PCA</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide99" class="slide">
+            <h2>Slide 99 - Further Reading
+                <audio class="audio-control" controls>
+                    <source src="Slide99.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>2.6 Further Reading</h3>
+                
+                <p>A discussion of key summarization methods in statistics may be found in [38].</p>
+                
+                <p>Principal component analysis and its relationship to machine learning is discussed in detail in [6].</p>
+                
+                <p>A classical exposition of principal component analysis may be found in [41].</p>
+                
+                <p>An excellent book on data visualization may be found in [60].</p>
+                
+                <p>Variations of different types of box plots are discussed in [48].</p>
+                
+                <p>One of the best softwares for data visualization is the Seaborn library written in Python [61]. Many of the plots constructed in this chapter are based on Seaborn.</p>
+                
+                <div class="example">
+                    <p><strong>Recommended resources:</strong></p>
+                    <ul>
+                        <li><strong>[6]</strong> Detailed treatment of PCA and linear algebra in machine learning</li>
+                        <li><strong>[38]</strong> Comprehensive coverage of statistical summarization methods</li>
+                        <li><strong>[41]</strong> Classical reference on principal component analysis</li>
+                        <li><strong>[60]</strong> Excellent resource on data visualization principles and techniques</li>
+                        <li><strong>[61]</strong> Seaborn documentation and examples for practical visualization</li>
+                    </ul>
+                </div>
+                
+                <div class="code-block">
+                    # Example Python code for creating visualizations with Seaborn<br>
+                    import seaborn as sns<br>
+                    import matplotlib.pyplot as plt<br>
+                    <br>
+                    # Load dataset<br>
+                    data = sns.load_dataset("iris")<br>
+                    <br>
+                    # Create a histogram<br>
+                    sns.histplot(data=data, x="sepal_length", bins=20)<br>
+                    plt.show()<br>
+                    <br>
+                    # Create a box plot<br>
+                    sns.boxplot(data=data, x="species", y="sepal_length")<br>
+                    plt.show()<br>
+                    <br>
+                    # Create a scatter plot<br>
+                    sns.scatterplot(data=data, x="sepal_length", y="petal_length", hue="species")<br>
+                    plt.show()
+                </div>
+            </div>
+        </section>
+
+        <section id="slide100" class="slide">
+            <h2>Slide 100 - Exercises Overview
+                <audio class="audio-control" controls>
+                    <source src="Slide100.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>2.7 Exercises Overview</h3>
+                
+                <p>The chapter concludes with 24 exercises that reinforce the concepts covered:</p>
+                
+                <div class="problem">
+                    <h4>Selected Exercises:</h4>
+                    <ol>
+                        <li>Compute mean and median of 1, 2, 3, 5, 7, 8, 9 and explain why they are the same</li>
+                        <li>Compute mean, median, quartiles, and IQR of 1, 3, 3, 4, 7</li>
+                        <li>Compute mode of 1, 4, 4, 4, 5, 7, 9, 9, 9 and identify modality</li>
+                        <li>Find standard deviation of 3, 4, 5</li>
+                        <li>Compute covariance and correlation between 5, 4, 3 and 2, 4, 6</li>
+                        <li>Relationship between variance and linear transformations</li>
+                        <li>Generate contingency tables for Adult dataset</li>
+                        <li>Python program to create histograms with different sample sizes</li>
+                        <li>Create box plots for different distributions</li>
+                        <li>Generate scatter plots for age and education attributes</li>
+                        <li>Bounds on standardized values</li>
+                        <li>Kendall rank correlation calculation</li>
+                        <li>Properties of variance and MAD</li>
+                        <li>Relationships between composite dataset statistics</li>
+                        <li>Distance between mean and median</li>
+                        <li>Sum of squares decomposition</li>
+                        <li>Average squared inter-point distance and variance relationship</li>
+                        <li>Whitening computation</li>
+                        <li>Properties of medians of disjoint sets</li>
+                        <li>Computing statistics for union of disjoint sets</li>
+                        <li>Finding missing value given variance</li>
+                        <li>Relationship between variance and number of points</li>
+                    </ol>
+                </div>
+                
+                <div class="example">
+                    <p><strong>Learning objectives achieved:</strong></p>
+                    <ul>
+                        <li>Understanding of key statistical measures for data summarization</li>
+                        <li>Ability to create and interpret various data visualizations</li>
+                        <li>Knowledge of data preprocessing techniques for machine learning</li>
+                        <li>Practical skills in applying these concepts to real datasets</li>
+                    </ul>
+                </div>
+                
+                <p>These exercises provide hands-on practice with the concepts covered in the chapter and help build the foundational skills needed for machine learning applications.</p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Add smooth scrolling for navigation links
+        document.querySelectorAll('.toc-sidebar a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                document.querySelector(targetId).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Initialize MathJax
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+</body>
+</html>

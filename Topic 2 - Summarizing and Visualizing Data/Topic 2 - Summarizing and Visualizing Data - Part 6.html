@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 2: Summarizing and Visualizing Data - Part 6</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .toc-sidebar {
+            width: 300px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+            overflow-y: auto;
+            position: fixed;
+            height: 100vh;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+        
+        .toc-sidebar h2 {
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .toc-sidebar ul {
+            list-style-type: none;
+        }
+        
+        .toc-sidebar li {
+            margin-bottom: 10px;
+        }
+        
+        .toc-sidebar a {
+            color: var(--light-color);
+            text-decoration: none;
+            display: block;
+            padding: 8px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        .toc-sidebar a:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: 300px;
+            padding: 30px;
+        }
+        
+        .slide {
+            background-color: white;
+            margin-bottom: 30px;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            page-break-inside: avoid;
+        }
+        
+        .slide h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .audio-control {
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+        
+        .content {
+            margin-top: 20px;
+        }
+        
+        .definition {
+            background-color: #e8f4fd;
+            border-left: 4px solid var(--secondary-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .example {
+            background-color: #f9f9f9;
+            border-left: 4px solid var(--accent-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .problem {
+            background-color: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .equation {
+            text-align: center;
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        
+        .figure {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .figure img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .figure-caption {
+            font-style: italic;
+            margin-top: 10px;
+            color: #666;
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .table th, .table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .table th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .highlight {
+            background-color: #fffacd;
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+        
+        .code-block {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            
+            .toc-sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="toc-sidebar">
+        <h2>Table of Contents</h2>
+        <ul>
+            <li><a href="#slide101">Slide 101 - Exercise 1 Solution</a></li>
+            <li><a href="#slide102">Slide 102 - Exercise 2 Solution</a></li>
+            <li><a href="#slide103">Slide 103 - Exercise 3 Solution</a></li>
+            <li><a href="#slide104">Slide 104 - Exercise 4 Solution</a></li>
+            <li><a href="#slide105">Slide 105 - Exercise 5 Solution</a></li>
+            <li><a href="#slide106">Slide 106 - Exercise 6 Solution</a></li>
+            <li><a href="#slide107">Slide 107 - Exercise 7 Solution</a></li>
+            <li><a href="#slide108">Slide 108 - Exercise 8 Solution</a></li>
+            <li><a href="#slide109">Slide 109 - Exercise 9 Solution</a></li>
+            <li><a href="#slide110">Slide 110 - Exercise 10 Solution</a></li>
+            <li><a href="#slide111">Slide 111 - Exercise 11 Solution</a></li>
+            <li><a href="#slide112">Slide 112 - Exercise 12 Solution</a></li>
+            <li><a href="#slide113">Slide 113 - Exercise 13 Solution</a></li>
+            <li><a href="#slide114">Slide 114 - Exercise 14 Solution</a></li>
+            <li><a href="#slide115">Slide 115 - Exercise 15 Solution</a></li>
+            <li><a href="#slide116">Slide 116 - Exercise 16 Solution</a></li>
+            <li><a href="#slide117">Slide 117 - Exercise 17 Solution</a></li>
+            <li><a href="#slide118">Slide 118 - Exercise 18 Solution</a></li>
+            <li><a href="#slide119">Slide 119 - Exercise 19 Solution</a></li>
+            <li><a href="#slide120">Slide 120 - Final Review</a></li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        <section id="slide101" class="slide">
+            <h2>Slide 101 - Exercise 1 Solution
+                <audio class="audio-control" controls>
+                    <source src="Slide101.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Exercise 1 Solution</h3>
+                
+                <div class="problem">
+                    <h4>Exercise 1</h4>
+                    <p>Compute the mean and the median of \(1\), \(2\), \(3\), \(5\), \(7\), \(8\), \(9\). You will find that the mean and the median are the same. Give an intuitive reason why the mean and the median are the same in this case.</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <p><strong>Mean calculation:</strong></p>
+                <div class="equation">
+                    \[ \hat{\mu} = \frac{1 + 2 + 3 + 5 + 7 + 8 + 9}{7} = \frac{35}{7} = 5 \]
+                </div>
+                
+                <p><strong>Median calculation:</strong></p>
+                <p>Sorted values: 1, 2, 3, 5, 7, 8, 9</p>
+                <p>Since n=7 (odd), the median is the 4th value: 5</p>
+                
+                <p><strong>Intuitive reason:</strong></p>
+                <p>The mean and median are the same because the data is perfectly symmetric around the central value (5).</p>
+                
+                <p>If we look at the values:</p>
+                <ul>
+                    <li>1 and 9 are symmetric around 5 (both are 4 units away)</li>
+                    <li>2 and 8 are symmetric around 5 (both are 3 units away)</li>
+                    <li>3 and 7 are symmetric around 5 (both are 2 units away)</li>
+                    <li>5 is exactly at the center</li>
+                </ul>
+                
+                <div class="example">
+                    <p>This symmetry ensures that the balancing point (mean) is exactly at the center value (median).</p>
+                </div>
+                
+                <div class="figure">
+                    <!-- Placeholder for symmetric distribution -->
+                    <div style="background-color: #f0f0f0; height: 150px; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc;">
+                        <p>Visualization: Symmetric distribution around 5</p>
+                    </div>
+                    <p class="figure-caption">The data points are perfectly balanced around the center value</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide102" class="slide">
+            <h2>Slide 102 - Exercise 2 Solution
+                <audio class="audio-control" controls>
+                    <source src="Slide102.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Exercise 2 Solution</h3>
+                
+                <div class="problem">
+                    <h4>Exercise 2</h4>
+                    <p>Compute the mean, median, quartiles, and inter-quartile range of the data sample \(1\), \(3\), \(3\), \(4\), \(7\).</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <p><strong>Sorted data:</strong> 1, 3, 3, 4, 7</p>
+                
+                <p><strong>Mean:</strong></p>
+                <div class="equation">
+                    \[ \hat{\mu} = \frac{1 + 3 + 3 + 4 + 7}{5} = \frac{18}{5} = 3.6 \]
+                </div>
+                
+                <p><strong>Median:</strong></p>
+                <p>n=5 (odd), so median is the 3rd value: 3</p>
+                
+                <p><strong>First Quartile (Q1):</strong></p>
+                <p>Lower half: 1, 3, 3 (including median for odd n)</p>
+                <p>Median of lower half: 3</p>
+                <p>So Q1 = 3</p>
+                
+                <p><strong>Third Quartile (Q3):</strong></p>
+                <p>Upper half: 3, 4, 7 (including median for odd n)</p>
+                <p>Median of upper half: 4</p>
+                <p>So Q3 = 4</p>
+                
+                <p><strong>Inter-Quartile Range (IQR):</strong></p>
+                <div class="equation">
+                    \[ IQR = Q3 - Q1 = 4 - 3 = 1 \]
+                </div>
+                
+                <div class="example">
+                    <p><strong>Note:</strong> There are different conventions for calculating quartiles. This solution uses the method that includes the median in both halves for odd n.</p>
+                </div>
+                
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Statistic</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Mean</td>
+                            <td>3.6</td>
+                        </tr>
+                        <tr>
+                            <td>Median</td>
+                            <td>3</td>
+                        </tr>
+                        <tr>
+                            <td>Q1</td>
+                            <td>3</td>
+                        </tr>
+                        <tr>
+                            <td>Q3</td>
+                            <td>4</td>
+                        </tr>
+                        <tr>
+                            <td>IQR</td>
+                            <td>1</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="slide103" class="slide">
+            <h2>Slide 103 - Exercise 3 Solution
+                <audio class="audio-control" controls>
+                    <source src="Slide103.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Exercise 3 Solution</h3>
+                
+                <div class="problem">
+                    <h4>Exercise 3</h4>
+                    <p>Compute the mode of the set of data points \(1\), \(4\), \(4\), \(4\), \(5\), \(7\), \(9\), \(9\), \(9\). Is this data set unimodal, bimodal, or multimodal?</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <p>First, let's count the frequency of each value:</p>
+                
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Value</th>
+                            <th>Frequency</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>3</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td>3</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <p>The values with the highest frequency (3) are 4 and 9.</p>
+                
+                <p>Therefore, the modes are 4 and 9.</p>
+                
+                <p>Since there are two modes, this is a <span class="highlight">bimodal</span> distribution.</p>
+                
+                <div class="example">
+                    <p><strong>Interpretation:</strong> The data has two distinct peaks at values 4 and 9. This might indicate that the data comes from two different populations or processes.</p>
+                </div>
+                
+                <div class="figure">
+                    <!-- Placeholder for bimodal distribution -->
+                    <div style="background-color: #f0f0f0; height: 150px; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc;">
+                        <p>Bimodal distribution with peaks at 4 and 9</p>
+                    </div>
+                    <p class="figure-caption">A histogram would show two distinct peaks in this data</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide104" class="slide">
+            <h2>Slide 104 - Exercise 4 Solution
+                <audio class="audio-control" controls>
+                    <source src="Slide104.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Exercise 4 Solution</h3>
+                
+                <div class="problem">
+                    <h4>Exercise 4</h4>
+                    <p>Find the standard deviation of the points \(3\), \(4\), \(5\).</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <p><strong>Step 1: Calculate the mean</strong></p>
+                <div class="equation">
+                    \[ \hat{\mu} = \frac{3 + 4 + 5}{3} = \frac{12}{3} = 4 \]
+                </div>
+                
+                <p><strong>Step 2: Calculate the variance (with Bessel correction)</strong></p>
+                <div class="equation">
+                    \[ \hat{\sigma}^2 = \frac{(3-4)^2 + (4-4)^2 + (5-4)^2}{3-1} = \frac{1 + 0 + 1}{2} = \frac{2}{2} = 1 \]
+                </div>
+                
+                <p><strong>Step 3: Calculate the standard deviation</strong></p>
+                <div class="equation">
+                    \[ \hat{\sigma} = \sqrt{1} = 1 \]
+                </div>
+                
+                <p><strong>Alternative calculation (without Bessel correction):</strong></p>
+                <div class="equation">
+                    \[ \hat{\sigma}^2 = \frac{(3-4)^2 + (4-4)^2 + (5-4)^2}{3} = \frac{1 + 0 + 1}{3} = \frac{2}{3} \approx 0.667 \]
+                </div>
+                <div class="equation">
+                    \[ \hat{\sigma} = \sqrt{\frac{2}{3}} \approx 0.816 \]
+                </div>
+                
+                <div class="example">
+                    <p><strong>Note:</strong> The Bessel correction (using n-1 in the denominator) is typically used for sample variance to provide an unbiased estimate of the population variance. For small samples like this one (n=3), the correction makes a significant difference.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide105" class="slide">
+            <h2>Slide 105 - Exercise 5 Solution
+                <audio class="audio-control" controls>
+                    <source src="Slide105.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Exercise 5 Solution</h3>
+                
+                <div class="problem">
+                    <h4>Exercise 5</h4>
+                    <p>Compute the covariance and correlation between the ordered sets \(5\), \(4\), \(3\) and \(2\), \(4\), \(6\).</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <p>Let X = {5, 4, 3} and Y = {2, 4, 6}</p>
+                
+                <p><strong>Step 1: Calculate means</strong></p>
+                <div class="equation">
+                    \[ \hat{\mu}_X = \frac{5 + 4 + 3}{3} = 4 \]
+                    \[ \hat{\mu}_Y = \frac{2 + 4 + 6}{3} = 4 \]
+                </div>
+                
+                <p><strong>Step 2: Calculate covariance (with Bessel correction)</strong></p>
+                <div class="equation">
+                    \[ \hat{\sigma}_{XY} = \frac{(5-4)(2-4) + (4-4)(4-4) + (3-4)(6-4)}{3-1} \]
+                    \[ = \frac{(1)(-2) + (0)(0) + (-1)(2)}{2} = \frac{-2 + 0 - 2}{2} = \frac{-4}{2} = -2 \]
+                </div>
+                
+                <p><strong>Step 3: Calculate standard deviations</strong></p>
+                <div class="equation">
+                    \[ \hat{\sigma}_X = \sqrt{\frac{(5-4)^2 + (4-4)^2 + (3-4)^2}{2}} = \sqrt{\frac{1 + 0 + 1}{2}} = \sqrt{1} = 1 \]
+                    \[ \hat{\sigma}_Y = \sqrt{\frac{(2-4)^2 + (4-4)^2 + (6-4)^2}{2}} = \sqrt{\frac{4 + 0 + 4}{2}} = \sqrt{4} = 2 \]
+                </div>
+                
+                <p><strong>Step 4: Calculate correlation</strong></p>
+                <div class="equation">
+                    \[ \hat{\rho}_{XY} = \frac{\hat{\sigma}_{XY}}{\hat{\sigma}_X \hat{\sigma}_Y} = \frac{-2}{1 \times 2} = -1 \]
+                </div>
+                
+                <div class="example">
+                    <p><strong>Interpretation:</strong> The correlation of -1 indicates a perfect negative linear relationship between X and Y. As X increases, Y decreases in a perfectly linear fashion.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide106" class="slide">
+            <h2>Slide 106 - Exercise 6 Solution
+                <audio class="audio-control" controls>
+                    <source src="Slide106.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Exercise 6 Solution</h3>
+                
+                <div class="problem">
+                    <h4>Exercise 6</h4>
+                    <p>The pairs \((x_{i},y_{i})\) satisfy \(y_{i}=mx_{i}+b\). Answer the following:</p>
+                    <ol type="a">
+                        <li>Show that the variance of \(y_{1}\ldots y_{n}\) is \(m^{2}\) times the variance of \(x_{1}\ldots x_{n}\).</li>
+                        <li>How does the covariance of \((x_{i},y_{i})\) relate to the variance of \(x_{1}\ldots x_{n}\)?</li>
+                        <li>Show that the correlation between \(x_{1}\ldots x_{n}\) and \(y_{1}\ldots y_{n}\) is either \(1\) or -\(1\). When is the correlation positive and when is the correlation negative?</li>
+                    </ol>
+                </div>
+                
+                <p><strong>Solution (a):</strong></p>
+                
+                <p>Given: \(y_i = mx_i + b\)</p>
+                
+                <p>First, find the mean of y:</p>
+                <div class="equation">
+                    \[ \hat{\mu}_Y = \frac{\sum y_i}{n} = \frac{\sum (mx_i + b)}{n} = m\frac{\sum x_i}{n} + b = m\hat{\mu}_X + b \]
+                </div>
+                
+                <p>Now calculate the variance of y:</p>
+                <div class="equation">
+                    \[ \hat{\sigma}_Y^2 = \frac{\sum (y_i - \hat{\mu}_Y)^2}{n-1} = \frac{\sum (mx_i + b - (m\hat{\mu}_X + b))^2}{n-1} \]
+                    \[ = \frac{\sum (m(x_i - \hat{\mu}_X))^2}{n-1} = \frac{m^2 \sum (x_i - \hat{\mu}_X)^2}{n-1} = m^2 \hat{\sigma}_X^2 \]
+                </div>
+                
+                <p>Therefore, the variance of y is \(m^2\) times the variance of x.</p>
+                
+                <p><strong>Solution (b):</strong></p>
+                
+                <p>Calculate the covariance:</p>
+                <div class="equation">
+                    \[ \hat{\sigma}_{XY} = \frac{\sum (x_i - \hat{\mu}_X)(y_i - \hat{\mu}_Y)}{n-1} = \frac{\sum (x_i - \hat{\mu}_X)(m(x_i - \hat{\mu}_X))}{n-1} \]
+                    \[ = m \frac{\sum (x_i - \hat{\mu}_X)^2}{n-1} = m \hat{\sigma}_X^2 \]
+                </div>
+                
+                <p>Therefore, the covariance is \(m\) times the variance of x.</p>
+            </div>
+        </section>
+
+        <section id="slide107" class="slide">
+            <h2>Slide 107 - Exercise 6 Solution (Continued)
+                <audio class="audio-control" controls>
+                    <source src="Slide107.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Exercise 6 Solution (Continued)</h3>
+                
+                <div class="problem">
+                    <h4>Exercise 6 (continued)</h4>
+                    <p>Show that the correlation between \(x_{1}\ldots x_{n}\) and \(y_{1}\ldots y_{n}\) is either \(1\) or -\(1\). When is the correlation positive and when is the correlation negative?</p>
+                </div>
+                
+                <p><strong>Solution (c):</strong></p>
+                
+                <p>From parts (a) and (b), we have:</p>
+                <div class="equation">
+                    \[ \hat{\sigma}_Y^2 = m^2 \hat{\sigma}_X^2 \]
+                    \[ \hat{\sigma}_{XY} = m \hat{\sigma}_X^2 \]
+                </div>
+                
+                <p>Now calculate the correlation:</p>
+                <div class="equation">
+                    \[ \hat{\rho}_{XY} = \frac{\hat{\sigma}_{XY}}{\hat{\sigma}_X \hat{\sigma}_Y} = \frac{m \hat{\sigma}_X^2}{\hat{\sigma}_X \cdot |m| \hat{\sigma}_X} = \frac{m \hat{\sigma}_X^2}{|m| \hat{\sigma}_X^2} = \frac{m}{|m|} \]
+                </div>
+                
+                <p>Since \(\frac{m}{|m|}\) equals:</p>
+                <ul>
+                    <li>1 when m > 0</li>
+                    <li>-1 when m < 0</li>
+                    <li>undefined when m = 0</li>
+                </ul>
+                
+                <p>Therefore, the correlation is either 1 or -1 (unless m = 0, in which case all y values are constant and the correlation is undefined).</p>
+                
+                <p><strong>Summary:</strong></p>
+                <ul>
+                    <li>Correlation is <span class="highlight">+1</span> when m > 0 (positive slope)</li>
+                    <li>Correlation is <span class="highlight">-1</span> when m < 0 (negative slope)</li>
+                    <li>Correlation is <span class="highlight">undefined</span> when m = 0 (constant relationship)</li>
+                </ul>
+                
+                <div class="example">
+                    <p><strong>Interpretation:</strong> When y is a perfect linear function of x (with non-zero slope), the correlation is always exactly ±1, indicating a perfect linear relationship.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide108" class="slide">
+            <h2>Slide 108 - Exercise 7 Solution
+                <audio class="audio-control" controls>
+                    <source src="Slide108.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Exercise 7 Solution</h3>
+                
+                <div class="problem">
+                    <h4>Exercise 7</h4>
+                    <p>Download the Adult data set from the UCI machine learning repository [66]. Generate the contingency tables of race and salary-level attribute. Generate both absolute frequency and relative frequency versions of the contingency table.</p>
+                </div>
+                
+                <p><strong>Solution Approach:</strong></p>
+                
+                <p>This exercise requires working with real data. Here's the approach:</p>
+                
+                <div class="code-block">
+                    # Python code to generate contingency tables<br>
+                    import pandas as pd<br>
+                    <br>
+                    # Load the Adult dataset<br>
+                    # Note: You may need to download it from the UCI repository first<br>
+                    url = "https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data"<br>
+                    columns = ["age", "workclass", "fnlwgt", "education", "education-num", <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"marital-status", "occupation", "relationship", "race", "sex",<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"capital-gain", "capital-loss", "hours-per-week", "native-country", "salary"]<br>
+                    <br>
+                    data = pd.read_csv(url, names=columns, na_values=" ?", skipinitialspace=True)<br>
+                    <br>
+                    # Create absolute frequency contingency table<br>
+                    absolute_table = pd.crosstab(data['race'], data['salary'])<br>
+                    print("Absolute Frequency Table:")<br>
+                    print(absolute_table)<br>
+                    <br>
+                    # Create row-wise relative frequency table<br>
+                    row_relative = pd.crosstab(data['race'], data['salary'], normalize='index') * 100<br>
+                    print("\nRow-wise Relative Frequency Table (%):")<br>
+                    print(row_relative)<br>
+                    <br>
+                    # Create column-wise relative frequency table<br>
+                    col_relative = pd.crosstab(data['race'], data['salary'], normalize='columns') * 100<br>
+                    print("\nColumn-wise Relative Frequency Table (%):")<br>
+                    print(col_relative)
+                </div>
+                
+                <div class="example">
+                    <p><strong>Expected output format:</strong></p>
+                    <p>The contingency tables would show the relationship between race categories (White, Black, Asian-Pac-Islander, Amer-Indian-Eskimo, Other) and salary levels (≤50K, >50K).</p>
+                </div>
+                
+                <p><strong>Interpretation:</strong></p>
+                <p>These tables would reveal patterns in income distribution across different racial groups, which could be useful for understanding socioeconomic disparities.</p>
+            </div>
+        </section>
+
+        <section id="slide109" class="slide">
+            <h2>Slide 109 - Exercise 8 Solution
+                <audio class="audio-control" controls>
+                    <source src="Slide109.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Exercise 8 Solution</h3>
+                
+                <div class="problem">
+                    <h4>Exercise 8</h4>
+                    <p>Write a Python program to generate random values uniformly in \((0,1)\) and create a histogram with \(10\) bins. Observe the changes in your histograms when you generate (i) \(20\) points (ii) \(200\) points, and (iii) \(2000\) points. Do the histograms become more or less representative of the underlying data distribution with increasing sample size?</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <div class="code-block">
+                    import numpy as np<br>
+                    import matplotlib.pyplot as plt<br>
+                    <br>
+                    # Set random seed for reproducibility<br>
+                    np.random.seed(42)<br>
+                    <br>
+                    # Generate different sample sizes<br>
+                    sample_sizes = [20, 200, 2000]<br>
+                    <br>
+                    # Create subplots<br>
+                    fig, axes = plt.subplots(1, 3, figsize=(15, 5))<br>
+                    <br>
+                    for i, n in enumerate(sample_sizes):<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;# Generate n random values from uniform distribution<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;data = np.random.uniform(0, 1, n)<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;# Create histogram with 10 bins<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;axes[i].hist(data, bins=10, alpha=0.7, edgecolor='black')<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;axes[i].set_title(f'Histogram with {n} points')<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;axes[i].set_xlabel('Value')<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;axes[i].set_ylabel('Frequency')<br>
+                    <br>
+                    plt.tight_layout()<br>
+                    plt.show()
+                </div>
+                
+                <p><strong>Observation:</strong></p>
+                <p>As the sample size increases from 20 to 2000:</p>
+                <ul>
+                    <li>With <strong>20 points</strong>: The histogram appears irregular and may not clearly show the uniform distribution due to random fluctuations.</li>
+                    <li>With <strong>200 points</strong>: The histogram becomes smoother and starts to approximate the uniform distribution more closely.</li>
+                    <li>With <strong>2000 points</strong>: The histogram closely matches the expected uniform distribution, with approximately equal frequencies in each bin.</li>
+                </ul>
+                
+                <div class="example">
+                    <p><strong>Conclusion:</strong> The histograms become <span class="highlight">more representative</span> of the underlying uniform distribution as the sample size increases. This demonstrates the <span class="highlight">law of large numbers</span> in action.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide110" class="slide">
+            <h2>Slide 110 - Exercise 9 Solution
+                <audio class="audio-control" controls>
+                    <source src="Slide110.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Exercise 9 Solution</h3>
+                
+                <div class="problem">
+                    <h4>Exercise 9</h4>
+                    <p>Repeat Exercise 8 by generating data from a \(1\)-dimensional normal distribution.</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <div class="code-block">
+                    import numpy as np<br>
+                    import matplotlib.pyplot as plt<br>
+                    <br>
+                    # Set random seed for reproducibility<br>
+                    np.random.seed(42)<br>
+                    <br>
+                    # Generate different sample sizes from normal distribution<br>
+                    sample_sizes = [20, 200, 2000]<br>
+                    <br>
+                    # Create subplots<br>
+                    fig, axes = plt.subplots(1, 3, figsize=(15, 5))<br>
+                    <br>
+                    for i, n in enumerate(sample_sizes):<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;# Generate n random values from normal distribution (mean=0, std=1)<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;data = np.random.normal(0, 1, n)<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;# Create histogram with 10 bins<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;axes[i].hist(data, bins=10, alpha=0.7, edgecolor='black')<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;axes[i].set_title(f'Normal Distribution: {n} points')<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;axes[i].set_xlabel('Value')<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;axes[i].set_ylabel('Frequency')<br>
+                    <br>
+                    plt.tight_layout()<br>
+                    plt.show()
+                </div>
+                
+                <p><strong>Observation:</strong></p>
+                <p>As the sample size increases from 20 to 2000:</p>
+                <ul>
+                    <li>With <strong>20 points</strong>: The histogram may not clearly show the bell-shaped curve of the normal distribution due to random sampling variation.</li>
+                    <li>With <strong>200 points</strong>: The histogram begins to approximate the characteristic bell shape of the normal distribution.</li>
+                    <li>With <strong>2000 points</strong>: The histogram closely matches the expected normal distribution curve, symmetric around the mean with the characteristic shape.</li>
+                </ul>
+                
+                <div class="example">
+                    <p><strong>Key insight:</strong> This exercise demonstrates how sample size affects our ability to accurately estimate the underlying population distribution. Larger samples provide better approximations of the true distribution.</p>
+                </div>
+                
+                <p><strong>Comparison with Exercise 8:</strong></p>
+                <p>The same principle applies to both uniform and normal distributions: as sample size increases, the histogram becomes a better representation of the true underlying distribution.</p>
+            </div>
+        </section>
+
+        <section id="slide111" class="slide">
+            <h2>Slide 111 - Exercise 10 Solution
+                <audio class="audio-control" controls>
+                    <source src="Slide111.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Exercise 10 Solution</h3>
+                
+                <div class="problem">
+                    <h4>Exercise 10</h4>
+                    <p>Create box-plots on the data of Exercises 8 and 9.</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <div class="code-block">
+                    import numpy as np<br>
+                    import matplotlib.pyplot as plt<br>
+                    <br>
+                    # Set random seed for reproducibility<br>
+                    np.random.seed(42)<br>
+                    <br>
+                    # Generate data for both distributions<br>
+                    sample_sizes = [20, 200, 2000]<br>
+                    <br>
+                    # Create data for uniform distribution<br>
+                    uniform_data = [np.random.uniform(0, 1, n) for n in sample_sizes]<br>
+                    <br>
+                    # Create data for normal distribution<br>
+                    normal_data = [np.random.normal(0, 1, n) for n in sample_sizes]<br>
+                    <br>
+                    # Create subplots<br>
+                    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6))<br>
+                    <br>
+                    # Box plot for uniform distribution<br>
+                    ax1.boxplot(uniform_data, labels=[f'n={n}' for n in sample_sizes])<br>
+                    ax1.set_title('Box Plots: Uniform Distribution')<br>
+                    ax1.set_ylabel('Value')<br>
+                    <br>
+                    # Box plot for normal distribution<br>
+                    ax2.boxplot(normal_data, labels=[f'n={n}' for n in sample_sizes])<br>
+                    ax2.set_title('Box Plots: Normal Distribution')<br>
+                    ax2.set_ylabel('Value')<br>
+                    <br>
+                    plt.tight_layout()<br>
+                    plt.show()
+                </div>
+                
+                <p><strong>Observations:</strong></p>
+                
+                <p><strong>Uniform Distribution Box Plots:</strong></p>
+                <ul>
+                    <li>The box (IQR) should cover approximately the middle 50% of the data (from 0.25 to 0.75)</li>
+                    <li>The median should be around 0.5</li>
+                    <li>As sample size increases, the box plot becomes more stable and representative</li>
+                </ul>
+                
+                <p><strong>Normal Distribution Box Plots:</strong></p>
+                <ul>
+                    <li>The box (IQR) should cover approximately the range from -0.6745 to 0.6745 (the 25th to 75th percentiles of standard normal)</li>
+                    <li>The median should be around 0</li>
+                    <li>Potential outliers may appear beyond the whiskers, especially with larger sample sizes</li>
+                    <li>As sample size increases, the box plot becomes more symmetric around the median</li>
+                </ul>
+                
+                <div class="example">
+                    <p><strong>Comparison:</strong> Box plots provide a different perspective than histograms. They focus on the five-number summary (min, Q1, median, Q3, max) and outliers, giving a compact representation of the data distribution.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide112" class="slide">
+            <h2>Slide 112 - Exercise 11 Solution
+                <audio class="audio-control" controls>
+                    <source src="Slide112.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Exercise 11 Solution</h3>
+                
+                <div class="problem">
+                    <h4>Exercise 11</h4>
+                    <p>Download the Adult data set from the UCI Machine Learning Repository [66]. Generate a scatter plot of the age and the number of years of education attributes.</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <div class="code-block">
+                    import pandas as pd<br>
+                    import matplotlib.pyplot as plt<br>
+                    <br>
+                    # Load the Adult dataset<br>
+                    url = "https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data"<br>
+                    columns = ["age", "workclass", "fnlwgt", "education", "education-num", <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"marital-status", "occupation", "relationship", "race", "sex",<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"capital-gain", "capital-loss", "hours-per-week", "native-country", "salary"]<br>
+                    <br>
+                    data = pd.read_csv(url, names=columns, na_values=" ?", skipinitialspace=True)<br>
+                    <br>
+                    # Create scatter plot<br>
+                    plt.figure(figsize=(10, 6))<br>
+                    plt.scatter(data['age'], data['education-num'], alpha=0.5)<br>
+                    plt.xlabel('Age')<br>
+                    plt.ylabel('Years of Education')<br>
+                    plt.title('Scatter Plot: Age vs Years of Education')<br>
+                    plt.grid(True, alpha=0.3)<br>
+                    plt.show()<br>
+                    <br>
+                    # Optional: Calculate correlation<br>
+                    correlation = data['age'].corr(data['education-num'])<br>
+                    print(f"Correlation between age and education: {correlation:.3f}")
+                </div>
+                
+                <p><strong>Expected Observations:</strong></p>
+                
+                <ul>
+                    <li>The scatter plot will show the relationship between age (X-axis) and years of education (Y-axis)</li>
+                    <li>We might expect to see a weak positive correlation, as older individuals in the dataset might have had more opportunities for education</li>
+                    <li>However, the relationship might be complex due to various socioeconomic factors</li>
+                    <li>The plot might show clustering at common education levels (e.g., 12 years for high school, 16 years for college)</li>
+                </ul>
+                
+                <div class="example">
+                    <p><strong>Interpretation:</strong> Scatter plots are excellent for visualizing relationships between two continuous variables. In this case, we can see how education levels vary across different ages and identify any patterns or outliers.</p>
+                </div>
+                
+                <p><strong>Additional analysis:</strong> The calculated correlation coefficient will quantify the strength and direction of the linear relationship between age and education.</p>
+            </div>
+        </section>
+
+        <section id="slide113" class="slide">
+            <h2>Slide 113 - Exercise 12 Solution
+                <audio class="audio-control" controls>
+                    <source src="Slide113.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Exercise 12 Solution</h3>
+                
+                <div class="problem">
+                    <h4>Exercise 12</h4>
+                    <p>Consider a 1-dimensional data set, which has been standardized. Show that no more than one-ninth of the resulting values can have absolute magnitude greater than 3.</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <p>This result follows from <span class="highlight">Chebyshev's inequality</span>, which states that for any random variable with finite mean μ and finite non-zero variance σ², and for any real number k > 1:</p>
+                
+                <div class="equation">
+                    \[ P(|X - \mu| \geq k\sigma) \leq \frac{1}{k^2} \]
+                </div>
+                
+                <p>For standardized data:</p>
+                <ul>
+                    <li>The mean μ = 0</li>
+                    <li>The standard deviation σ = 1</li>
+                </ul>
+                
+                <p>We're interested in values with absolute magnitude greater than 3, i.e., |X| > 3.</p>
+                
+                <p>Applying Chebyshev's inequality with k = 3:</p>
+                <div class="equation">
+                    \[ P(|X| \geq 3) \leq \frac{1}{3^2} = \frac{1}{9} \]
+                </div>
+                
+                <p>Therefore, no more than 1/9 (approximately 11.11%) of the standardized values can have absolute magnitude greater than 3.</p>
+                
+                <div class="example">
+                    <p><strong>Note:</strong> Chebyshev's inequality is very general and applies to any distribution with finite variance. For specific distributions (like the normal distribution), the actual proportion of values beyond 3 standard deviations is much smaller (about 0.27%).</p>
+                </div>
+                
+                <p><strong>Practical implication:</strong></p>
+                <p>When working with standardized data, we can be confident that the vast majority of values (at least 8/9 or about 88.89%) will fall within the range [-3, 3]. Values outside this range can be considered potential outliers.</p>
+            </div>
+        </section>
+
+        <section id="slide114" class="slide">
+            <h2>Slide 114 - Exercise 13 Solution
+                <audio class="audio-control" controls>
+                    <source src="Slide114.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Exercise 13 Solution</h3>
+                
+                <div class="problem">
+                    <h4>Exercise 13</h4>
+                    <p>Compute the Kendall rank correlation between 2, 1, 3, 4, 5 and 5, 4, 1, 2, 3.</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <p>Let X = {2, 1, 3, 4, 5} and Y = {5, 4, 1, 2, 3}</p>
+                
+                <p><strong>Step 1: List all pairs (i,j) where i < j</strong></p>
+                <p>We have n=5 points, so there are 5(5-1)/2 = 10 pairs:</p>
+                <ul>
+                    <li>(1,2), (1,3), (1,4), (1,5)</li>
+                    <li>(2,3), (2,4), (2,5)</li>
+                    <li>(3,4), (3,5)</li>
+                    <li>(4,5)</li>
+                </ul>
+                
+                <p><strong>Step 2: Determine concordant and discordant pairs</strong></p>
+                
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Pair</th>
+                            <th>(Xᵢ - Xⱼ)</th>
+                            <th>(Yᵢ - Yⱼ)</th>
+                            <th>Product</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>(1,2)</td>
+                            <td>2-1 = 1</td>
+                            <td>5-4 = 1</td>
+                            <td>1</td>
+                            <td>Concordant</td>
+                        </tr>
+                        <tr>
+                            <td>(1,3)</td>
+                            <td>2-3 = -1</td>
+                            <td>5-1 = 4</td>
+                            <td>-4</td>
+                            <td>Discordant</td>
+                        </tr>
+                        <tr>
+                            <td>(1,4)</td>
+                            <td>2-4 = -2</td>
+                            <td>5-2 = 3</td>
+                            <td>-6</td>
+                            <td>Discordant</td>
+                        </tr>
+                        <tr>
+                            <td>(1,5)</td>
+                            <td>2-5 = -3</td>
+                            <td>5-3 = 2</td>
+                            <td>-6</td>
+                            <td>Discordant</td>
+                        </tr>
+                        <tr>
+                            <td>(2,3)</td>
+                            <td>1-3 = -2</td>
+                            <td>4-1 = 3</td>
+                            <td>-6</td>
+                            <td>Discordant</td>
+                        </tr>
+                        <tr>
+                            <td>(2,4)</td>
+                            <td>1-4 = -3</td>
+                            <td>4-2 = 2</td>
+                            <td>-6</td>
+                            <td>Discordant</td>
+                        </tr>
+                        <tr>
+                            <td>(2,5)</td>
+                            <td>1-5 = -4</td>
+                            <td>4-3 = 1</td>
+                            <td>-4</td>
+                            <td>Discordant</td>
+                        </tr>
+                        <tr>
+                            <td>(3,4)</td>
+                            <td>3-4 = -1</td>
+                            <td>1-2 = -1</td>
+                            <td>1</td>
+                            <td>Concordant</td>
+                        </tr>
+                        <tr>
+                            <td>(3,5)</td>
+                            <td>3-5 = -2</td>
+                            <td>1-3 = -2</td>
+                            <td>4</td>
+                            <td>Concordant</td>
+                        </tr>
+                        <tr>
+                            <td>(4,5)</td>
+                            <td>4-5 = -1</td>
+                            <td>2-3 = -1</td>
+                            <td>1</td>
+                            <td>Concordant</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <p><strong>Step 3: Count concordant and discordant pairs</strong></p>
+                <ul>
+                    <li>Concordant pairs: 4</li>
+                    <li>Discordant pairs: 6</li>
+                </ul>
+                
+                <p><strong>Step 4: Calculate Kendall rank correlation</strong></p>
+                <div class="equation">
+                    \[ \hat{\tau} = \frac{\text{concordant} - \text{discordant}}{\text{total pairs}} = \frac{4 - 6}{10} = \frac{-2}{10} = -0.2 \]
+                </div>
+                
+                <p>Therefore, the Kendall rank correlation is -0.2.</p>
+            </div>
+        </section>
+
+        <section id="slide115" class="slide">
+            <h2>Slide 115 - Exercise 14 Solution
+                <audio class="audio-control" controls>
+                    <source src="Slide115.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Exercise 14 Solution</h3>
+                
+                <div class="problem">
+                    <h4>Exercise 14</h4>
+                    <p>We define the modified variance and mean absolute deviation (MAD) of \(x_1, x_2, \ldots x_n\) about centrally located point \(a\) as follows:</p>
+                    <div class="equation">
+                        \[\sigma^2(a) = \frac{\sum_{i=1}^n (x_i - a)^2}{n}\]
+                        \[MAD(a) = \frac{\sum_{i=1}^n |(x_i - a)|}{n}\]
+                    </div>
+                    <p>Show that the value of \(\sigma^2(a)\) is minimized when \(a\) is the mean of the points in the data set. Show that \(MAD(a)\) is minimized when \(a\) is the median of the points.</p>
+                </div>
+                
+                <p><strong>Solution for Variance:</strong></p>
+                
+                <p>To find the value of \(a\) that minimizes \(\sigma^2(a)\), we can take the derivative with respect to \(a\) and set it to zero:</p>
+                
+                <div class="equation">
+                    \[ \frac{d}{da} \sigma^2(a) = \frac{d}{da} \left[ \frac{\sum_{i=1}^n (x_i - a)^2}{n} \right] = \frac{1}{n} \sum_{i=1}^n 2(x_i - a)(-1) = -\frac{2}{n} \sum_{i=1}^n (x_i - a) \]
+                </div>
+                
+                <p>Setting the derivative to zero:</p>
+                <div class="equation">
+                    \[ -\frac{2}{n} \sum_{i=1}^n (x_i - a) = 0 \]
+                    \[ \sum_{i=1}^n (x_i - a) = 0 \]
+                    \[ \sum_{i=1}^n x_i - na = 0 \]
+                    \[ a = \frac{\sum_{i=1}^n x_i}{n} = \hat{\mu} \]
+                </div>
+                
+                <p>Therefore, \(\sigma^2(a)\) is minimized when \(a\) is the mean of the data points.</p>
+                
+                <p><strong>Solution for MAD:</strong></p>
+                
+                <p>The mean absolute deviation \(MAD(a) = \frac{1}{n} \sum_{i=1}^n |x_i - a|\) is minimized when \(a\) is the median.</p>
+                
+                <p>This can be shown by considering that the sum of absolute deviations is minimized at the median. For an odd number of points, this occurs at the middle value. For an even number of points, any value between the two middle values minimizes the sum of absolute deviations.</p>
+                
+                <div class="example">
+                    <p><strong>Intuitive explanation:</strong> The mean minimizes squared errors (variance), while the median minimizes absolute errors (MAD). This is why the mean is sensitive to outliers (squaring amplifies large deviations), while the median is robust to outliers.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide116" class="slide">
+            <h2>Slide 116 - Exercise 15 Solution
+                <audio class="audio-control" controls>
+                    <source src="Slide116.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Exercise 15 Solution</h3>
+                
+                <div class="problem">
+                    <h4>Exercise 15</h4>
+                    <p>Let \(x_1 \ldots x_n\) and \(y_1 \ldots y_n\) be sets of samples with means \(\hat{\mu}_X\) and \(\hat{\mu}_Y\), respectively. Let the sample standard deviation of the composite data set be \(\hat{\sigma}\). Show that the sample standard deviations and means satisfy the following relationship:</p>
+                    <div class="equation">
+                        \[\hat{\sigma}^2 = \frac{\hat{\sigma}_X^2}{2} + \frac{\hat{\sigma}_Y^2}{2} + \left(\frac{\hat{\mu}_X - \hat{\mu}_Y}{2}\right)^2\]
+                    </div>
+                    <p>Assume that \(n\) is large and you can ignore the Bessel correction.</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <p>Let Z be the composite data set containing all x's and y's. The total number of points is 2n.</p>
+                
+                <p>The mean of Z is:</p>
+                <div class="equation">
+                    \[ \hat{\mu}_Z = \frac{\sum x_i + \sum y_i}{2n} = \frac{n\hat{\mu}_X + n\hat{\mu}_Y}{2n} = \frac{\hat{\mu}_X + \hat{\mu}_Y}{2} \]
+                </div>
+                
+                <p>The variance of Z (without Bessel correction) is:</p>
+                <div class="equation">
+                    \[ \hat{\sigma}^2 = \frac{\sum (z_i - \hat{\mu}_Z)^2}{2n} = \frac{\sum (x_i - \hat{\mu}_Z)^2 + \sum (y_i - \hat{\mu}_Z)^2}{2n} \]
+                </div>
+                
+                <p>Now, let's express each term separately:</p>
+                <div class="equation">
+                    \[ \sum (x_i - \hat{\mu}_Z)^2 = \sum (x_i - \hat{\mu}_X + \hat{\mu}_X - \hat{\mu}_Z)^2 \]
+                    \[ = \sum (x_i - \hat{\mu}_X)^2 + 2(\hat{\mu}_X - \hat{\mu}_Z)\sum (x_i - \hat{\mu}_X) + n(\hat{\mu}_X - \hat{\mu}_Z)^2 \]
+                </div>
+                
+                <p>Since \(\sum (x_i - \hat{\mu}_X) = 0\), we get:</p>
+                <div class="equation">
+                    \[ \sum (x_i - \hat{\mu}_Z)^2 = \sum (x_i - \hat{\mu}_X)^2 + n(\hat{\mu}_X - \hat{\mu}_Z)^2 = n\hat{\sigma}_X^2 + n(\hat{\mu}_X - \hat{\mu}_Z)^2 \]
+                </div>
+                
+                <p>Similarly:</p>
+                <div class="equation">
+                    \[ \sum (y_i - \hat{\mu}_Z)^2 = n\hat{\sigma}_Y^2 + n(\hat{\mu}_Y - \hat{\mu}_Z)^2 \]
+                </div>
+                
+                <p>Now substitute back:</p>
+                <div class="equation">
+                    \[ \hat{\sigma}^2 = \frac{n\hat{\sigma}_X^2 + n(\hat{\mu}_X - \hat{\mu}_Z)^2 + n\hat{\sigma}_Y^2 + n(\hat{\mu}_Y - \hat{\mu}_Z)^2}{2n} \]
+                    \[ = \frac{\hat{\sigma}_X^2 + \hat{\sigma}_Y^2}{2} + \frac{(\hat{\mu}_X - \hat{\mu}_Z)^2 + (\hat{\mu}_Y - \hat{\mu}_Z)^2}{2} \]
+                </div>
+                
+                <p>Now substitute \(\hat{\mu}_Z = \frac{\hat{\mu}_X + \hat{\mu}_Y}{2}\):</p>
+                <div class="equation">
+                    \[ \hat{\mu}_X - \hat{\mu}_Z = \hat{\mu}_X - \frac{\hat{\mu}_X + \hat{\mu}_Y}{2} = \frac{\hat{\mu}_X - \hat{\mu}_Y}{2} \]
+                    \[ \hat{\mu}_Y - \hat{\mu}_Z = \hat{\mu}_Y - \frac{\hat{\mu}_X + \hat{\mu}_Y}{2} = \frac{\hat{\mu}_Y - \hat{\mu}_X}{2} = -\frac{\hat{\mu}_X - \hat{\mu}_Y}{2} \]
+                </div>
+                
+                <p>Both squared give the same value:</p>
+                <div class="equation">
+                    \[ (\hat{\mu}_X - \hat{\mu}_Z)^2 = (\hat{\mu}_Y - \hat{\mu}_Z)^2 = \left(\frac{\hat{\mu}_X - \hat{\mu}_Y}{2}\right)^2 \]
+                </div>
+                
+                <p>Therefore:</p>
+                <div class="equation">
+                    \[ \hat{\sigma}^2 = \frac{\hat{\sigma}_X^2 + \hat{\sigma}_Y^2}{2} + \frac{2\left(\frac{\hat{\mu}_X - \hat{\mu}_Y}{2}\right)^2}{2} = \frac{\hat{\sigma}_X^2}{2} + \frac{\hat{\sigma}_Y^2}{2} + \left(\frac{\hat{\mu}_X - \hat{\mu}_Y}{2}\right)^2 \]
+                </div>
+                
+                <p>This completes the proof.</p>
+            </div>
+        </section>
+
+        <section id="slide117" class="slide">
+            <h2>Slide 117 - Exercise 16 Solution
+                <audio class="audio-control" controls>
+                    <source src="Slide117.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Exercise 16 Solution</h3>
+                
+                <div class="problem">
+                    <h4>Exercise 16</h4>
+                    <p>Let \(x_1 \ldots x_n\) and \(y_1 \ldots y_n\) be sets of samples with means \(\hat{\mu}_X\) and \(\hat{\mu}_Y\), respectively, as in Exercise 15. Assume that \(n\) is large and you can ignore the Bessel correction. Use the result of Exercise 15 to argue that the standard deviation \(\hat{\sigma}\) of the composite data set containing \(x_1 \ldots x_n\) and \(y_1 \ldots y_n\) is at least equal to \(|\hat{\mu}_X - \hat{\mu}_Y|/2\). Give an example of a data set where this inequality is satisfied as a strict equality.</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <p>From Exercise 15, we have:</p>
+                <div class="equation">
+                    \[ \hat{\sigma}^2 = \frac{\hat{\sigma}_X^2}{2} + \frac{\hat{\sigma}_Y^2}{2} + \left(\frac{\hat{\mu}_X - \hat{\mu}_Y}{2}\right)^2 \]
+                </div>
+                
+                <p>Since variances are always non-negative (\(\hat{\sigma}_X^2 \geq 0\) and \(\hat{\sigma}_Y^2 \geq 0\)), we have:</p>
+                <div class="equation">
+                    \[ \hat{\sigma}^2 \geq \left(\frac{\hat{\mu}_X - \hat{\mu}_Y}{2}\right)^2 \]
+                </div>
+                
+                <p>Taking square roots (and noting that standard deviation is non-negative):</p>
+                <div class="equation">
+                    \[ \hat{\sigma} \geq \left|\frac{\hat{\mu}_X - \hat{\mu}_Y}{2}\right| = \frac{|\hat{\mu}_X - \hat{\mu}_Y|}{2} \]
+                </div>
+                
+                <p>Therefore, the standard deviation of the composite data set is at least equal to \(|\hat{\mu}_X - \hat{\mu}_Y|/2\).</p>
+                
+                <p><strong>Example where equality holds:</strong></p>
+                
+                <p>Consider two datasets where:</p>
+                <ul>
+                    <li>All x values are the same: x₁ = x₂ = ... = xₙ = a</li>
+                    <li>All y values are the same: y₁ = y₂ = ... = yₙ = b</li>
+                    <li>And a ≠ b</li>
+                </ul>
+                
+                <p>Then:</p>
+                <ul>
+                    <li>\(\hat{\mu}_X = a\), \(\hat{\mu}_Y = b\)</li>
+                    <li>\(\hat{\sigma}_X^2 = 0\), \(\hat{\sigma}_Y^2 = 0\)</li>
+                    <li>\(\hat{\mu}_Z = \frac{a + b}{2}\)</li>
+                </ul>
+                
+                <p>The composite dataset has half its values at a and half at b.</p>
+                
+                <p>The variance of the composite dataset is:</p>
+                <div class="equation">
+                    \[ \hat{\sigma}^2 = \frac{n(a - \frac{a+b}{2})^2 + n(b - \frac{a+b}{2})^2}{2n} = \frac{(\frac{a-b}{2})^2 + (\frac{b-a}{2})^2}{2} = \left(\frac{a-b}{2}\right)^2 \]
+                </div>
+                
+                <p>So the standard deviation is:</p>
+                <div class="equation">
+                    \[ \hat{\sigma} = \frac{|a-b|}{2} = \frac{|\hat{\mu}_X - \hat{\mu}_Y|}{2} \]
+                </div>
+                
+                <p>This shows the equality case.</p>
+            </div>
+        </section>
+
+        <section id="slide118" class="slide">
+            <h2>Slide 118 - Exercise 17 Solution
+                <audio class="audio-control" controls>
+                    <source src="Slide118.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Exercise 17 Solution</h3>
+                
+                <div class="problem">
+                    <h4>Exercise 17</h4>
+                    <p>Argue why the distance between the sample median and the sample mean of a data set is at most equal to half the absolute distance between the sample means of the first half and second half of the data set. Now use the result of Exercise 16 to show the famous result [17, 30] that the distance between the mean and median is at most equal to the standard deviation. Strictly speaking, this result can be rigorously shown only for probability distributions rather than samples (i.e., populations or data sets of infinite size), and one has to ignore the Bessel correction to make it hold for samples. Also assume for simplicity that the data set has an even number of points.</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <p><strong>Part 1:</strong> Distance between median and mean</p>
+                
+                <p>For a dataset with an even number of points (n=2m), let:</p>
+                <ul>
+                    <li>First half: x₁, x₂, ..., xₘ with mean μ₁</li>
+                    <li>Second half: xₘ₊₁, xₘ₊₂, ..., x₂ₘ with mean μ₂</li>
+                    <li>Overall mean: μ = (μ₁ + μ₂)/2</li>
+                </ul>
+                
+                <p>The median lies between xₘ and xₘ₊₁. The maximum possible distance between the median and the mean occurs when the median is at one extreme of this interval.</p>
+                
+                <p>Since the mean of the entire dataset is exactly halfway between μ₁ and μ₂, and the median lies somewhere between the first and second halves, the distance between the median and mean is at most half the distance between μ₁ and μ₂:</p>
+                <div class="equation">
+                    \[ |\text{median} - \mu| \leq \frac{|\mu_1 - \mu_2|}{2} \]
+                </div>
+                
+                <p><strong>Part 2:</strong> Using Exercise 16 to show |mean - median| ≤ standard deviation</p>
+                
+                <p>Consider splitting the dataset into two parts:</p>
+                <ul>
+                    <li>First part: values less than or equal to the median</li>
+                    <li>Second part: values greater than or equal to the median</li>
+                </ul>
+                
+                <p>Let μ₁ be the mean of the first part and μ₂ be the mean of the second part.</p>
+                
+                <p>From Exercise 16, we know that for any two datasets:</p>
+                <div class="equation">
+                    \[ \sigma \geq \frac{|\mu_1 - \mu_2|}{2} \]
+                </div>
+                
+                <p>And from Part 1, we have:</p>
+                <div class="equation">
+                    \[ |\mu - \text{median}| \leq \frac{|\mu_1 - \mu_2|}{2} \]
+                </div>
+                
+                <p>Combining these:</p>
+                <div class="equation">
+                    \[ |\mu - \text{median}| \leq \frac{|\mu_1 - \mu_2|}{2} \leq \sigma \]
+                </div>
+                
+                <p>Therefore, the distance between the mean and median is at most equal to the standard deviation.</p>
+                
+                <div class="example">
+                    <p><strong>Note:</strong> This is a famous result in statistics. It shows that the mean and median cannot be too far apart relative to the spread of the data.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide119" class="slide">
+            <h2>Slide 119 - Exercise 18 Solution
+                <audio class="audio-control" controls>
+                    <source src="Slide119.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Exercise 18 Solution</h3>
+                
+                <div class="problem">
+                    <h4>Exercise 18</h4>
+                    <p>A 1-dimensional data set of \(n\) points \(x_1 \ldots x_n\) is partitioned into \(k\) groups \(\mathcal{G}_1 \ldots \mathcal{G}_k\), so that the \(j\)th group has sample mean \(\hat{\mu}_j\) and has \(n_j = |\mathcal{G}_j|\) points.</p>
+                    <ol type="a">
+                        <li>Show that \(\sum_{j=1}^k \sum_{x_i \in \mathcal{G}_j} (x_i - \hat{\mu}_j)\hat{\mu}_j = 0\).</li>
+                        <li>Use the result of part (a) to show the following:
+                            \[\sum_{i=1}^n x_i^2 = \sum_{j=1}^k \sum_{x_i \in \mathcal{G}_j} (x_i - \hat{\mu}_j)^2 + \sum_{j=1}^k n_j \hat{\mu}_j^2\]</li>
+                        <li>Use the result of part (b) to show the following for any scalar \(a\):
+                            \[\sum_{i=1}^{n}(x_i - a)^2 = \sum_{j=1}^{k}\sum_{x_i\in\mathcal{G}_j}(x_i - \hat{\mu}_j)^2 + \sum_{j=1}^{k}n_j(\hat{\mu}_j - a)^2\]</li>
+                    </ol>
+                </div>
+                
+                <p><strong>Solution (a):</strong></p>
+                
+                <p>For each group j:</p>
+                <div class="equation">
+                    \[ \sum_{x_i \in \mathcal{G}_j} (x_i - \hat{\mu}_j)\hat{\mu}_j = \hat{\mu}_j \sum_{x_i \in \mathcal{G}_j} (x_i - \hat{\mu}_j) = \hat{\mu}_j \left( \sum_{x_i \in \mathcal{G}_j} x_i - n_j \hat{\mu}_j \right) \]
+                </div>
+                
+                <p>But \(\sum_{x_i \in \mathcal{G}_j} x_i = n_j \hat{\mu}_j\), so:</p>
+                <div class="equation">
+                    \[ \hat{\mu}_j (n_j \hat{\mu}_j - n_j \hat{\mu}_j) = \hat{\mu}_j \cdot 0 = 0 \]
+                </div>
+                
+                <p>Since this holds for each group j, the total sum is also 0:</p>
+                <div class="equation">
+                    \[ \sum_{j=1}^k \sum_{x_i \in \mathcal{G}_j} (x_i - \hat{\mu}_j)\hat{\mu}_j = 0 \]
+                </div>
+                
+                <p><strong>Solution (b):</strong></p>
+                
+                <p>We start with the identity:</p>
+                <div class="equation">
+                    \[ x_i = (x_i - \hat{\mu}_j) + \hat{\mu}_j \]
+                </div>
+                
+                <p>Squaring both sides:</p>
+                <div class="equation">
+                    \[ x_i^2 = (x_i - \hat{\mu}_j)^2 + 2(x_i - \hat{\mu}_j)\hat{\mu}_j + \hat{\mu}_j^2 \]
+                </div>
+                
+                <p>Summing over all points:</p>
+                <div class="equation">
+                    \[ \sum_{i=1}^n x_i^2 = \sum_{j=1}^k \sum_{x_i \in \mathcal{G}_j} (x_i - \hat{\mu}_j)^2 + 2\sum_{j=1}^k \sum_{x_i \in \mathcal{G}_j} (x_i - \hat{\mu}_j)\hat{\mu}_j + \sum_{j=1}^k \sum_{x_i \in \mathcal{G}_j} \hat{\mu}_j^2 \]
+                </div>
+                
+                <p>From part (a), the middle term is 0. The last term becomes \(\sum_{j=1}^k n_j \hat{\mu}_j^2\). Therefore:</p>
+                <div class="equation">
+                    \[ \sum_{i=1}^n x_i^2 = \sum_{j=1}^k \sum_{x_i \in \mathcal{G}_j} (x_i - \hat{\mu}_j)^2 + \sum_{j=1}^k n_j \hat{\mu}_j^2 \]
+                </div>
+            </div>
+        </section>
+
+        <section id="slide120" class="slide">
+            <h2>Slide 120 - Final Review
+                <audio class="audio-control" controls>
+                    <source src="Slide120.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Chapter 2: Final Review</h3>
+                
+                <p>Congratulations! You have completed Chapter 2: Summarizing and Visualizing Data.</p>
+                
+                <div class="definition">
+                    <h4>Key Takeaways</h4>
+                    <ul>
+                        <li><strong>Data Summarization:</strong> Techniques to extract key information from data including measures of central tendency, dispersion, and relationships between variables</li>
+                        <li><strong>Data Visualization:</strong> Graphical methods to understand data distributions, patterns, and relationships</li>
+                        <li><strong>Data Preprocessing:</strong> Methods to prepare data for machine learning algorithms</li>
+                    </ul>
+                </div>
+                
+                <p><strong>Main Concepts Covered:</strong></p>
+                
+                <div class="example">
+                    <h4>Univariate Summarization</h4>
+                    <ul>
+                        <li>Measures of central tendency: Mean, median, mode</li>
+                        <li>Measures of dispersion: Range, IQR, variance, standard deviation</li>
+                        <li>Percentiles and quartiles</li>
+                    </ul>
+                </div>
+                
+                <div class="example">
+                    <h4>Multivariate Summarization</h4>
+                    <ul>
+                        <li>Covariance and correlation</li>
+                        <li>Rank correlations: Spearman, Kendall</li>
+                        <li>Principal Component Analysis (PCA)</li>
+                        <li>Contingency tables for categorical data</li>
+                    </ul>
+                </div>
+                
+                <div class="example">
+                    <h4>Data Visualization</h4>
+                    <ul>
+                        <li>Univariate: Histograms, box plots</li>
+                        <li>Multivariate: Scatter plots, line plots, bar charts</li>
+                    </ul>
+                </div>
+                
+                <div class="example">
+                    <h4>Data Preprocessing</h4>
+                    <ul>
+                        <li>Standardization and normalization</li>
+                        <li>Whitening using PCA</li>
+                    </ul>
+                </div>
+                
+                <p><strong>Next Steps:</strong></p>
+                <ul>
+                    <li>Practice applying these techniques to real datasets</li>
+                    <li>Explore advanced visualization libraries like Seaborn and Plotly</li>
+                    <li>Learn about probability distributions (Chapter 3)</li>
+                    <li>Study statistical inference and hypothesis testing</li>
+                </ul>
+                
+                <div class="example">
+                    <p><strong>Remember:</strong> Data summarization and visualization are essential first steps in any data analysis or machine learning project. They help you understand your data, identify patterns, and make informed decisions about subsequent analysis.</p>
+                </div>
+                
+                <p>Thank you for completing this comprehensive presentation on Chapter 2!</p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Add smooth scrolling for navigation links
+        document.querySelectorAll('.toc-sidebar a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                document.querySelector(targetId).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Initialize MathJax
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+</body>
+</html>

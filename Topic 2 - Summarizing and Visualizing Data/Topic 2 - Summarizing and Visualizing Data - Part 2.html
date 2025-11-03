@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 2: Summarizing and Visualizing Data - Part 2</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .toc-sidebar {
+            width: 300px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+            overflow-y: auto;
+            position: fixed;
+            height: 100vh;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+        
+        .toc-sidebar h2 {
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .toc-sidebar ul {
+            list-style-type: none;
+        }
+        
+        .toc-sidebar li {
+            margin-bottom: 10px;
+        }
+        
+        .toc-sidebar a {
+            color: var(--light-color);
+            text-decoration: none;
+            display: block;
+            padding: 8px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        .toc-sidebar a:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: 300px;
+            padding: 30px;
+        }
+        
+        .slide {
+            background-color: white;
+            margin-bottom: 30px;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            page-break-inside: avoid;
+        }
+        
+        .slide h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .audio-control {
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+        
+        .content {
+            margin-top: 20px;
+        }
+        
+        .definition {
+            background-color: #e8f4fd;
+            border-left: 4px solid var(--secondary-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .example {
+            background-color: #f9f9f9;
+            border-left: 4px solid var(--accent-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .problem {
+            background-color: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .equation {
+            text-align: center;
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        
+        .figure {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .figure img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .figure-caption {
+            font-style: italic;
+            margin-top: 10px;
+            color: #666;
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .table th, .table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .table th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .highlight {
+            background-color: #fffacd;
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+        
+        .code-block {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            
+            .toc-sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="toc-sidebar">
+        <h2>Table of Contents</h2>
+        <ul>
+            <li><a href="#slide21">Slide 21 - Problem 2.2</a></li>
+            <li><a href="#slide22">Slide 22 - Problem 2.3</a></li>
+            <li><a href="#slide23">Slide 23 - Mode Definition</a></li>
+            <li><a href="#slide24">Slide 24 - Example 2.3</a></li>
+            <li><a href="#slide25">Slide 25 - Problem 2.4</a></li>
+            <li><a href="#slide26">Slide 26 - Measures of Dispersion</a></li>
+            <li><a href="#slide27">Slide 27 - Inter-Quartile Range</a></li>
+            <li><a href="#slide28">Slide 28 - Mean Absolute Deviation</a></li>
+            <li><a href="#slide29">Slide 29 - Variance with Known Mean</a></li>
+            <li><a href="#slide30">Slide 30 - Sample Variance</a></li>
+            <li><a href="#slide31">Slide 31 - Standard Deviation</a></li>
+            <li><a href="#slide32">Slide 32 - Example 2.4</a></li>
+            <li><a href="#slide33">Slide 33 - Example 2.5</a></li>
+            <li><a href="#slide34">Slide 34 - Problem 2.5</a></li>
+            <li><a href="#slide35">Slide 35 - Problem 2.6</a></li>
+            <li><a href="#slide36">Slide 36 - Multivariate Summarization</a></li>
+            <li><a href="#slide37">Slide 37 - Covariance</a></li>
+            <li><a href="#slide38">Slide 38 - Covariance Lemma</a></li>
+            <li><a href="#slide39">Slide 39 - Variance as Covariance</a></li>
+            <li><a href="#slide40">Slide 40 - Variance Computational Formula</a></li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        <section id="slide21" class="slide">
+            <h2>Slide 21 - Problem 2.2
+                <audio class="audio-control" controls>
+                    <source src="Slide21.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Problem 2.2</h3>
+                
+                <div class="problem">
+                    <h4>Problem 2.2</h4>
+                    <p>Compute the 40th percentile for the same sets of points in the above example. In other words, you want to use the sets of data points 1, 4, 5, 7 and 1, 4, 5, 7, 9.</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <p><strong>First set: 1, 4, 5, 7 (n=4)</strong></p>
+                <p>Fractional value: f = 40/100 = 0.4</p>
+                <div class="equation">
+                    \[k = n \cdot f + 1 - f = 4 \times 0.4 + 1 - 0.4 = 1.6 + 0.6 = 2.2\]
+                </div>
+                <p>We need to interpolate between the 2nd and 3rd values (4 and 5).</p>
+                <p>Weight for 2nd value: 1 - 0.2 = 0.8</p>
+                <p>Weight for 3rd value: 0.2</p>
+                <div class="equation">
+                    \[40th\ percentile = 0.8 \times 4 + 0.2 \times 5 = 3.2 + 1 = 4.2\]
+                </div>
+                
+                <p><strong>Second set: 1, 4, 5, 7, 9 (n=5)</strong></p>
+                <div class="equation">
+                    \[k = 5 \times 0.4 + 1 - 0.4 = 2 + 0.6 = 2.6\]
+                </div>
+                <p>We need to interpolate between the 2nd and 3rd values (4 and 5).</p>
+                <p>Weight for 2nd value: 1 - 0.6 = 0.4</p>
+                <p>Weight for 3rd value: 0.6</p>
+                <div class="equation">
+                    \[40th\ percentile = 0.4 \times 4 + 0.6 \times 5 = 1.6 + 3 = 4.6\]
+                </div>
+            </div>
+        </section>
+
+        <section id="slide22" class="slide">
+            <h2>Slide 22 - Problem 2.3
+                <audio class="audio-control" controls>
+                    <source src="Slide22.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Problem 2.3</h3>
+                
+                <div class="problem">
+                    <h4>Problem 2.3</h4>
+                    <p>A data set with \( n \) distinct points is such that both quartiles can be selected from the data without the use of interpolation. Show that \((n - 1)\) must be divisible by 4.</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <p>For quartiles to be selected without interpolation, the positions of the quartiles must be integers.</p>
+                
+                <p>The first quartile (25th percentile) position is given by:</p>
+                <div class="equation">
+                    \[k_{Q1} = n \cdot 0.25 + 1 - 0.25 = 0.25n + 0.75\]
+                </div>
+                
+                <p>The third quartile (75th percentile) position is given by:</p>
+                <div class="equation">
+                    \[k_{Q3} = n \cdot 0.75 + 1 - 0.75 = 0.75n + 0.25\]
+                </div>
+                
+                <p>For both to be integers, we need:</p>
+                <div class="equation">
+                    \[0.25n + 0.75 \in \mathbb{Z} \quad \text{and} \quad 0.75n + 0.25 \in \mathbb{Z}\]
+                </div>
+                
+                <p>Multiplying both by 4:</p>
+                <div class="equation">
+                    \[n + 3 \in 4\mathbb{Z} \quad \text{and} \quad 3n + 1 \in 4\mathbb{Z}\]
+                </div>
+                
+                <p>From the first condition: \(n + 3 = 4m\) for some integer m, so \(n = 4m - 3\)</p>
+                
+                <p>From the second condition: \(3n + 1 = 4k\) for some integer k</p>
+                
+                <p>Substituting n from the first condition:</p>
+                <div class="equation">
+                    \[3(4m - 3) + 1 = 12m - 9 + 1 = 12m - 8 = 4(3m - 2)\]
+                </div>
+                
+                <p>This is clearly divisible by 4. Therefore, the condition is that n = 4m - 3 for some integer m, which means n + 3 is divisible by 4, or equivalently, n - 1 is divisible by 4.</p>
+            </div>
+        </section>
+
+        <section id="slide23" class="slide">
+            <h2>Slide 23 - Mode Definition
+                <audio class="audio-control" controls>
+                    <source src="Slide23.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Sample Mode</h3>
+                
+                <p>Another important summary statistic is the mode, which is nominally considered a measure of central tendency, although the location of the mode may sometimes be far from central regions of the data.</p>
+                
+                <div class="definition">
+                    <h4>Definition 2.4 (Sample Mode for Discrete Data)</h4>
+                    <p>Given a sample of \( n \) (numeric discrete or categorical) values \( x_1, x_2, \ldots, x_n \) (with possible repetitions), the sample mode is the discrete value in the set with the largest frequency. If multiple values have the largest frequency, the data may have multiple modes.</p>
+                </div>
+                
+                <p>Data sets in which a single mode exists are referred to as <span class="highlight">unimodal</span>, whereas data sets with multiple modes are referred to as <span class="highlight">multimodal</span>. A data set with two modes is referred to as <span class="highlight">bimodal</span>.</p>
+                
+                <p>The notion of mode is sometimes extended to samples of continuous data in a heuristic manner by creating bins of the entire numeric data range, and then reporting the middle of the bin with the largest frequency as the mode.</p>
+                
+                <p>However, such an approach can sometimes result in ambiguity, since the answer can depend drastically on the scheme used for creating the ranges of values, especially when the amount of available data is limited.</p>
+            </div>
+        </section>
+
+        <section id="slide24" class="slide">
+            <h2>Slide 24 - Example 2.3
+                <audio class="audio-control" controls>
+                    <source src="Slide24.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Example 2.3</h3>
+                
+                <div class="example">
+                    <h4>Example 2.3</h4>
+                    <p>Compute the mode(s) of the set of discrete data values 1, 2, 2, 3, 4, 4, 5, 9, 9. Is this data set unimodal, bimodal, or multimodal?</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <p>First, let's count the frequency of each value:</p>
+                
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Value</th>
+                            <th>Frequency</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>2</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>2</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td>2</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <p>The values 2, 4, and 9 all have frequency 2, which is the highest frequency in the dataset.</p>
+                
+                <p>Therefore, there are three modes: 2, 4, and 9.</p>
+                
+                <p>Since there are three modes, this is a <span class="highlight">multimodal</span> distribution.</p>
+                
+                <div class="example">
+                    <p>This example also shows why a mode is not a reliable measure of central tendency. The rounded value of the mean of this data set is 4.33 and the median is 4. However, some of the modes are far away from these values of the mean and median.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide25" class="slide">
+            <h2>Slide 25 - Problem 2.4
+                <audio class="audio-control" controls>
+                    <source src="Slide25.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Problem 2.4</h3>
+                
+                <div class="problem">
+                    <h4>Problem 2.4</h4>
+                    <p>Compute the mode of the discrete data set 1, 2, 3, 3, 3, 3, 4, 4, 5, 6, 6, 6, 6, 7, 7, 8. Is this data set unimodal, bimodal, or multimodal?</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <p>First, let's count the frequency of each value:</p>
+                
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Value</th>
+                            <th>Frequency</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>4</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>2</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>4</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>2</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>1</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <p>The values with the highest frequency (4) are 3 and 6.</p>
+                
+                <p>Therefore, the modes are 3 and 6.</p>
+                
+                <p>Since there are two modes, this is a <span class="highlight">bimodal</span> distribution.</p>
+                
+                <div class="figure">
+                    <!-- Placeholder for bimodal distribution -->
+                    <div style="background-color: #f0f0f0; height: 200px; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc;">
+                        <p>Figure 2.4: Bimodal distribution with peaks at 3 and 6</p>
+                    </div>
+                    <p class="figure-caption">A histogram of this data would show two distinct peaks</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide26" class="slide">
+            <h2>Slide 26 - Measures of Dispersion
+                <audio class="audio-control" controls>
+                    <source src="Slide26.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>2.2.1.2 Measures of Dispersion</h3>
+                
+                <p>Next, we will introduce measures of dispersion. Measures of dispersion quantify the level of spread in a data distribution.</p>
+                
+                <p>One measure of dispersion that has already been introduced earlier is the inter-quartile range of a sample.</p>
+                
+                <p>Measures of dispersion provide information about how spread out the data points are around the central tendency.</p>
+                
+                <p>Common measures of dispersion include:</p>
+                <ul>
+                    <li><strong>Range:</strong> Difference between maximum and minimum values</li>
+                    <li><strong>Inter-Quartile Range (IQR):</strong> Difference between third and first quartiles</li>
+                    <li><strong>Mean Absolute Deviation (MAD):</strong> Average of absolute deviations from mean</li>
+                    <li><strong>Variance:</strong> Average of squared deviations from mean</li>
+                    <li><strong>Standard Deviation:</strong> Square root of variance</li>
+                </ul>
+                
+                <div class="definition">
+                    <h4>Dispersion</h4>
+                    <p>Dispersion measures how stretched or squeezed the distribution of data is. It quantifies the variability or spread in a dataset.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide27" class="slide">
+            <h2>Slide 27 - Inter-Quartile Range
+                <audio class="audio-control" controls>
+                    <source src="Slide27.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Inter-Quartile Range</h3>
+                
+                <div class="definition">
+                    <h4>Definition 2.5 (Sample Inter-Quartile Range)</h4>
+                    <p>The inter-quartile range of a sample is a nonnegative value that is the difference between the third quartile and the first quartile of a sample. This value is the length of the interval containing the middle \(50\%\) of the data.</p>
+                </div>
+                
+                <div class="equation">
+                    \[IQR = Q3 - Q1\]
+                </div>
+                
+                <p>Like the median, the inter-quartile range is not very sensitive to the points at the extreme ends of the data.</p>
+                
+                <div class="example">
+                    <p><strong>Example:</strong> Increasing the maximum value or decreasing the minimum value in the data sample does not change its inter-quartile range.</p>
+                </div>
+                
+                <p>Furthermore, translating the top \(25\%\) of the largest values of the data by positive offsets will also not change the inter-quartile range, even though the data distribution does qualitatively look much more dispersed to most observers.</p>
+                
+                <p>The insensitivity of the inter-quartile range to as much as \(50\%\) of the data (on the two ends) can be viewed as both a strength and a weakness of this measure of dispersion.</p>
+            </div>
+        </section>
+
+        <section id="slide28" class="slide">
+            <h2>Slide 28 - Mean Absolute Deviation
+                <audio class="audio-control" controls>
+                    <source src="Slide28.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Mean Absolute Deviation</h3>
+                
+                <p>Some measures of dispersion are more sensitive to the values at the two ends of the data distribution. Examples of such measures include the <span class="highlight">mean absolute deviation</span>, the <span class="highlight">variance</span> and its close relative, which is the <span class="highlight">standard deviation</span>.</p>
+                
+                <div class="definition">
+                    <h4>Definition 2.6 (Sample Mean Absolute Deviation)</h4>
+                    <p>The mean absolute deviation (MAD) of a sample of \(n\) values \(x_{1}\), \(x_{2}\), ..., \(x_{n}\) is defined as the average of the absolute distances of these points from their sample mean \(\hat{\mu}_{X}=\sum_{i=1}^{n}x_{i}/n\):</p>
+                    <div class="equation">
+                        \[M\hat{A}D_{X}=\frac{\sum_{i=1}^{n}|x_{i}-\hat{\mu}_{X}|}{n}\]
+                    </div>
+                </div>
+                
+                <p>Averaging the <em>absolute</em> values of the deviations is important; simply averaging the deviations without taking absolute values will result in the positive and negative deviations around the mean canceling out to \(0\).</p>
+                
+                <p>It is further noteworthy that the above estimate is typically an underestimate of the true deviation of data points from the mean <em>of the population</em>, especially when the value of \(n\) is small.</p>
+                
+                <div class="example">
+                    <p><strong>Example:</strong> When a sample of only \(1\) point is available, the formula will always provide an estimate of \(0\) for the mean absolute deviation, which is obviously an underestimate.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide29" class="slide">
+            <h2>Slide 29 - Variance with Known Mean
+                <audio class="audio-control" controls>
+                    <source src="Slide29.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Variance with Known Population Mean</h3>
+                
+                <p>A more popular approach for estimating the measure of dispersion is the <span class="highlight">variance</span>, which averages the squared distances from the sample mean instead of using the absolute deviations from the sample mean.</p>
+                
+                <p>Using the squared values to compute the measure of dispersion turns out to have some nice properties, since some widely used probability distributions (such as the normal distribution) directly use the variance of the underlying distribution as a parameter to control the level of dispersion in the generated samples.</p>
+                
+                <p>We consider two cases for computing the variance:</p>
+                <ol>
+                    <li>When the population mean is known from domain knowledge</li>
+                    <li>When the population mean is not known (the standard case)</li>
+                </ol>
+                
+                <div class="definition">
+                    <h4>Definition 2.7 (Sample Variance with Known Population Mean)</h4>
+                    <p>Given a sample of data values \(x_{1}\ldots x_{n}\), the variance is defined as the mean-squared deviations of the values from the known population mean \(\mu_{X}\):</p>
+                    <div class="equation">
+                        \[\hat{\sigma}_{X}^{2}=\frac{\sum_{i=1}^{n}(x_{i}-\mu_{X})^{2}}{n}\]
+                    </div>
+                </div>
+                
+                <p>This case is relatively rare in practice, as we typically don't know the true population mean.</p>
+            </div>
+        </section>
+
+        <section id="slide30" class="slide">
+            <h2>Slide 30 - Sample Variance
+                <audio class="audio-control" controls>
+                    <source src="Slide30.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Sample Variance</h3>
+                
+                <p>In most real-world settings, the population mean is not known in advance but must be estimated from the sample. In such a case, it is important to use an adjustment, which reflects the fact that the sample mean is usually closer to the sample values than the population mean.</p>
+                
+                <p>This adjustment is referred to as the <span class="highlight">Bessel correction</span>, and the corrected approach divides the sum of squared deviation by \((n-1)\) instead of \(n\) for the purpose of averaging:</p>
+                
+                <div class="definition">
+                    <h4>Definition 2.8 (Sample Variance)</h4>
+                    <p>Given a sample of data values \(x_{1}\ldots x_{n}\), the variance is defined as the <strong>corrected</strong> mean-squared deviations of the values from the sample mean \(\hat{\mu}_{X}=\sum x_{i}/n\):</p>
+                    <div class="equation">
+                        \[\hat{\sigma}_{X}^{2}=\frac{\sum_{i=1}^{n}(x_{i}-\hat{\mu}_{X})^{2}}{n-1}\]
+                    </div>
+                </div>
+                
+                <p>The Bessel correction <em>rigorously</em> corrects the bias caused by using the sample mean in lieu of the population mean.</p>
+                
+                <p>It is noteworthy that it is not possible to estimate the variance with only one sample, because both the numerator and denominator of the equation evaluate to 0 in this case.</p>
+                
+                <p>For large values of \(n\), the correction to the standard deviation has very little effect from a percentage-wise point of view.</p>
+            </div>
+        </section>
+
+        <section id="slide31" class="slide">
+            <h2>Slide 31 - Standard Deviation
+                <audio class="audio-control" controls>
+                    <source src="Slide31.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Standard Deviation</h3>
+                
+                <p>An important observation about the variance is that it uses the squares of the deviations, which has an effect on the units in terms of which the variance is expressed.</p>
+                
+                <div class="example">
+                    <p><strong>Example:</strong> If the original values are measurements in meters, the variance is in the units of squared meters.</p>
+                </div>
+                
+                <p>This makes the variance somewhat harder to interpret as compared to the mean absolute deviation.</p>
+                
+                <p>The <span class="highlight">standard deviation</span> is a related measure that uses the square-root of the variance instead in order to ensure that the measure of dispersion is in the same units as the data values:</p>
+                
+                <div class="definition">
+                    <h4>Definition 2.9 (Sample Standard Deviation)</h4>
+                    <p>Given a sample of data values \(x_{1}\ldots x_{n}\), the sample standard deviation is defined as the <strong>corrected</strong> root-mean-squared deviations of the values from the sample mean \(\hat{\mu}_{X}=\sum_{i}x_{i}/n\):</p>
+                    <div class="equation">
+                        \[\hat{\sigma}_{X}=\sqrt{\frac{\sum_{i=1}^{n}(x_{i}-\hat{\mu}_{X})^{2}}{n-1}}\]
+                    </div>
+                </div>
+                
+                <p>As in the case of the mean absolute deviation, the Bessel correction is used in case of small sample sizes, although its practical use in machine learning is limited.</p>
+            </div>
+        </section>
+
+        <section id="slide32" class="slide">
+            <h2>Slide 32 - Example 2.4
+                <audio class="audio-control" controls>
+                    <source src="Slide32.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Example 2.4</h3>
+                
+                <div class="example">
+                    <h4>Example 2.4</h4>
+                    <p>Find the mean absolute deviation and standard deviation of 1, 1, 1, 3, 3, 3. Do not use the Bessel correction. Repeat the exercise for the set of points 1, 3, 3, 3, 3, 3.</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <p><strong>First case: 1, 1, 1, 3, 3, 3</strong></p>
+                <p>Mean: \(\hat{\mu} = (1+1+1+3+3+3)/6 = 12/6 = 2\)</p>
+                
+                <p>Mean Absolute Deviation:</p>
+                <div class="equation">
+                    \[MAD = \frac{|1-2| + |1-2| + |1-2| + |3-2| + |3-2| + |3-2|}{6} = \frac{1+1+1+1+1+1}{6} = 1\]
+                </div>
+                
+                <p>Variance (without Bessel correction):</p>
+                <div class="equation">
+                    \[\hat{\sigma}^2 = \frac{(1-2)^2 + (1-2)^2 + (1-2)^2 + (3-2)^2 + (3-2)^2 + (3-2)^2}{6} = \frac{1+1+1+1+1+1}{6} = 1\]
+                </div>
+                <p>Standard deviation: \(\sqrt{1} = 1\)</p>
+                
+                <p><strong>Second case: 1, 3, 3, 3, 3, 3</strong></p>
+                <p>Mean: \(\hat{\mu} = (1+3+3+3+3+3)/6 = 16/6 = 8/3 \approx 2.667\)</p>
+                
+                <p>Mean Absolute Deviation:</p>
+                <div class="equation">
+                    \[MAD = \frac{|1-8/3| + 5 \times |3-8/3|}{6} = \frac{5/3 + 5 \times (1/3)}{6} = \frac{5/3 + 5/3}{6} = \frac{10/3}{6} = \frac{10}{18} = \frac{5}{9} \approx 0.556\]
+                </div>
+                
+                <p>Variance (without Bessel correction):</p>
+                <div class="equation">
+                    \[\hat{\sigma}^2 = \frac{(1-8/3)^2 + 5 \times (3-8/3)^2}{6} = \frac{(5/3)^2 + 5 \times (1/3)^2}{6} = \frac{25/9 + 5/9}{6} = \frac{30/9}{6} = \frac{30}{54} = \frac{5}{9} \approx 0.556\]
+                </div>
+                <p>Standard deviation: \(\sqrt{5/9} \approx 0.745\)</p>
+                
+                <p>In the second case, the standard deviation is larger than the mean absolute deviation.</p>
+            </div>
+        </section>
+
+        <section id="slide33" class="slide">
+            <h2>Slide 33 - Example 2.5
+                <audio class="audio-control" controls>
+                    <source src="Slide33.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Example 2.5</h3>
+                
+                <div class="example">
+                    <h4>Example 2.5</h4>
+                    <p>Suppose that you have a set of n data values \(x_1 \ldots x_n\), and each value lies in \([a, b]\). Show that the sample variance of these values is bounded above by \(\frac{n(b-a)^2}{4(n-1)}\).</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <p>The variance is largest when each data value is either a or b. This point can be proven by method of contradiction.</p>
+                
+                <p>Suppose that some \(x_i\) is strictly between a and b. The partial derivative of the variance with respect to \(x_i\) can be shown to be proportional to \((x_i - \hat{\mu}_X)\). This means that the variance of the data set can be increased by reducing \(x_i\) if \(x_i\) is below the current mean and increasing \(x_i\), otherwise.</p>
+                
+                <p>Therefore, each \(x_i\) cannot lie strictly between a and b in order for the variance to be as large as possible.</p>
+                
+                <p>Next, assume that a fraction \(f\) of the values \(x_1, x_2, \ldots x_n\) take on the value of a and the remaining take on the value of b. Then, the mean is \(af + b(1-f)\), and the Bessel-uncorrected variance can be shown to be \((b-a)^2 f(1-f)\).</p>
+                
+                <p>Since the correction factor is \(n/(n-1)\), it follows that the corrected variance is \((b-a)^2 f(1-f)n/(n-1)\).</p>
+                
+                <p>By using differential calculus, it can be shown that the optimal value of \(f\) is 0.5, which yields the above bound:</p>
+                <div class="equation">
+                    \[\hat{\sigma}_X^2 \leq (b-a)^2 \cdot 0.5 \cdot 0.5 \cdot \frac{n}{n-1} = \frac{(b-a)^2 n}{4(n-1)}\]
+                </div>
+            </div>
+        </section>
+
+        <section id="slide34" class="slide">
+            <h2>Slide 34 - Problem 2.5
+                <audio class="audio-control" controls>
+                    <source src="Slide34.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Problem 2.5</h3>
+                
+                <div class="problem">
+                    <h4>Problem 2.5</h4>
+                    <p>Show that the sample standard deviation of two points is proportional to the distance between them. What is the proportionality factor?</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <p>Let the two points be \(x_1\) and \(x_2\).</p>
+                
+                <p>The sample mean is:</p>
+                <div class="equation">
+                    \[\hat{\mu} = \frac{x_1 + x_2}{2}\]
+                </div>
+                
+                <p>The sample variance (with Bessel correction) is:</p>
+                <div class="equation">
+                    \[\hat{\sigma}^2 = \frac{(x_1 - \hat{\mu})^2 + (x_2 - \hat{\mu})^2}{2-1} = (x_1 - \hat{\mu})^2 + (x_2 - \hat{\mu})^2\]
+                </div>
+                
+                <p>Substituting \(\hat{\mu}\):</p>
+                <div class="equation">
+                    \[\hat{\sigma}^2 = \left(x_1 - \frac{x_1 + x_2}{2}\right)^2 + \left(x_2 - \frac{x_1 + x_2}{2}\right)^2 = \left(\frac{x_1 - x_2}{2}\right)^2 + \left(\frac{x_2 - x_1}{2}\right)^2\]
+                </div>
+                <div class="equation">
+                    \[= \frac{(x_1 - x_2)^2}{4} + \frac{(x_1 - x_2)^2}{4} = \frac{(x_1 - x_2)^2}{2}\]
+                </div>
+                
+                <p>Therefore, the standard deviation is:</p>
+                <div class="equation">
+                    \[\hat{\sigma} = \sqrt{\frac{(x_1 - x_2)^2}{2}} = \frac{|x_1 - x_2|}{\sqrt{2}}\]
+                </div>
+                
+                <p>The sample standard deviation of two points is proportional to the distance between them, with proportionality factor \(1/\sqrt{2}\).</p>
+            </div>
+        </section>
+
+        <section id="slide35" class="slide">
+            <h2>Slide 35 - Problem 2.6
+                <audio class="audio-control" controls>
+                    <source src="Slide35.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Problem 2.6</h3>
+                
+                <div class="problem">
+                    <h4>Problem 2.6</h4>
+                    <p>Find the standard deviation of the points 0, 3, 3.</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <p>First, calculate the mean:</p>
+                <div class="equation">
+                    \[\hat{\mu} = \frac{0 + 3 + 3}{3} = \frac{6}{3} = 2\]
+                </div>
+                
+                <p>Now calculate the variance (with Bessel correction):</p>
+                <div class="equation">
+                    \[\hat{\sigma}^2 = \frac{(0-2)^2 + (3-2)^2 + (3-2)^2}{3-1} = \frac{4 + 1 + 1}{2} = \frac{6}{2} = 3\]
+                </div>
+                
+                <p>The standard deviation is:</p>
+                <div class="equation">
+                    \[\hat{\sigma} = \sqrt{3} \approx 1.732\]
+                </div>
+                
+                <p>We can also calculate without Bessel correction for comparison:</p>
+                <div class="equation">
+                    \[\hat{\sigma}^2 = \frac{(0-2)^2 + (3-2)^2 + (3-2)^2}{3} = \frac{4 + 1 + 1}{3} = \frac{6}{3} = 2\]
+                </div>
+                <div class="equation">
+                    \[\hat{\sigma} = \sqrt{2} \approx 1.414\]
+                </div>
+                
+                <p>As we can see, with only 3 data points, the Bessel correction makes a significant difference in the variance estimate.</p>
+            </div>
+        </section>
+
+        <section id="slide36" class="slide">
+            <h2>Slide 36 - Multivariate Summarization
+                <audio class="audio-control" controls>
+                    <source src="Slide36.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>2.2.2 Multivariate Summarization</h3>
+                
+                <p>The univariate summary statistics discussed thus far are only useful for modeling the behavior of a single attribute.</p>
+                
+                <p>A more useful concept is that of <span class="highlight">multivariate summary statistics</span>. In multivariate summary statistics, we attempt to find the relationships among different attributes.</p>
+                
+                <div class="example">
+                    <p><strong>Examples of questions we might ask:</strong></p>
+                    <ul>
+                        <li>Does a person's age increase with their salary?</li>
+                        <li>How about their height?</li>
+                    </ul>
+                </div>
+                
+                <p>Relating different attributes of the data to one another is a critical step in machine learning applications. This is because machine learning applications often predict missing values in observations.</p>
+                
+                <p>As we will see in Chapter 7, machine learning applications like simple regression have deep connections with some of the multivariate summary statistics that quantify associations between attributes.</p>
+                
+                <div class="definition">
+                    <h4>Multivariate Data</h4>
+                    <p>Data that consists of observations on multiple characteristics or attributes simultaneously.</p>
+                    <p>Examples: Height and weight of students, temperature and humidity readings.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide37" class="slide">
+            <h2>Slide 37 - Covariance
+                <audio class="audio-control" controls>
+                    <source src="Slide37.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Covariance and Correlation</h3>
+                
+                <p>The simplest form of multivariate summary statistics is the <span class="highlight">covariance</span>, which generalizes the concept of variance to multiple attributes.</p>
+                
+                <div class="definition">
+                    <h4>Definition 2.10 (Sample Covariance)</h4>
+                    <p>Given two paired samples \(x_{1}\ldots x_{n}\) and \(y_{1}\ldots y_{n}\) of data values (where \(x_{i}\) is paired with \(y_{i}\)), the covariance between these paired sets is defined as the average product of deviations of these values from their corresponding sample means \(\hat{\mu}_{X}=\sum_{i}x_{i}/n\) and \(\hat{\mu}_{Y}=\sum_{i}y_{i}/n\):</p>
+                    <div class="equation">
+                        \[\hat{\sigma}_{XY}=\frac{\sum_{i=1}^{n}(x_{i}-\hat{\mu}_{X})(y_{i}-\hat{\mu}_{Y})}{n-1}\]
+                    </div>
+                </div>
+                
+                <p>As in the case of variance, a value of \((n-1)\) is used for averaging instead of \(n\) as a correction mechanism for the fact that sample means are used instead of population means in the covariance calculation.</p>
+                
+                <p>However, since most machine learning applications work with relatively large values of \(n\) anyway, it is common to use \(n\) for averaging rather than \((n-1)\) without a significant change to the estimate.</p>
+                
+                <p>One advantage of using \(n\) for averaging (i.e., ignoring the Bessel correction) is that it allows the use of some simple and intuitive formulae for computation of the covariance and variance without cumbersome tweaks to the formula.</p>
+            </div>
+        </section>
+
+        <section id="slide38" class="slide">
+            <h2>Slide 38 - Covariance Lemma
+                <audio class="audio-control" controls>
+                    <source src="Slide38.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Computational Formula for Covariance</h3>
+                
+                <div class="definition">
+                    <h4>Lemma 2.1</h4>
+                    <p>Consider two paired samples \(x_{1}\ldots x_{n}\) and \(y_{1}\ldots y_{n}\) of data values (where \(x_{i}\) is paired with \(y_{i}\)). The unadjusted covariance between these paired sets satisfies the following relationship:</p>
+                    <div class="equation">
+                        \[\frac{\sum_{i=1}^{n}(x_{i}-\hat{\mu}_{X})(y_{i}-\hat{\mu}_{Y})}{n}=\frac{\sum_{i=1}^{n}x_{i}y_{i}}{n}-\hat{\mu}_{X}\hat{\mu}_{Y}\]
+                    </div>
+                    <p>Here, \(\hat{\mu}_{X}\) and \(\hat{\mu}_{Y}\) represent the sample means of the two attributes. In other words, the covariance can be intuitively understood as the difference between the mean of products and the product of means.</p>
+                </div>
+                
+                <p><strong>Proof:</strong></p>
+                
+                <p>By distributing the products on the left-hand side, one obtains the following expression:</p>
+                <div class="equation">
+                    \[\frac{\sum_{i=1}^{n}(x_{i}-\hat{\mu}_{X})(y_{i}-\hat{\mu}_{Y})}{n}=\frac{\sum_{i=1}^{n}x_{i}y_{i}}{n}-\frac{\sum_{i=1}^{n}x_{i}}{n}\hat{\mu}_{Y}-\hat{\mu}_{X}\frac{\sum_{i=1}^{n}y_{i}}{n}+\hat{\mu}_{X}\hat{\mu}_{Y}\sum_{i=1}^{n}\frac{1}{n}\]
+                </div>
+                
+                <p>On simplification of the above expression by using \(\hat{\mu}_{X}=\sum_{i}x_{i}/n\) and \(\hat{\mu}_{Y}=\sum_{i}y_{i}/n\), the result follows.</p>
+                
+                <p>This lemma is extremely useful for processing data incrementally in the streaming context.</p>
+            </div>
+        </section>
+
+        <section id="slide39" class="slide">
+            <h2>Slide 39 - Variance as Covariance
+                <audio class="audio-control" controls>
+                    <source src="Slide39.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Variance as Special Case of Covariance</h3>
+                
+                <p>It is noteworthy that the notion of covariance is a generalization of the concept of variance, since the variance of a variable is the covariance of the variable with itself.</p>
+                
+                <div class="definition">
+                    <h4>Observation 2.1</h4>
+                    <p>The variance of a set of observations is equal to the covariance of the observations paired with themselves.</p>
+                </div>
+                
+                <p>If we set \(y_i = x_i\) in the covariance formula, we get:</p>
+                <div class="equation">
+                    \[\hat{\sigma}_{XX} = \frac{\sum_{i=1}^{n}(x_{i}-\hat{\mu}_{X})(x_{i}-\hat{\mu}_{X})}{n-1} = \frac{\sum_{i=1}^{n}(x_{i}-\hat{\mu}_{X})^2}{n-1} = \hat{\sigma}_X^2\]
+                </div>
+                
+                <p>Since the variance is a special case of the covariance, the results of Lemma 2.1 also apply to the case of variances.</p>
+                
+                <div class="figure">
+                    <!-- Placeholder for covariance visualization -->
+                    <div style="background-color: #f0f0f0; height: 200px; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc;">
+                        <p>Figure 2.5: Visualization of positive and negative covariance</p>
+                    </div>
+                    <p class="figure-caption">Positive covariance: variables tend to move together; Negative covariance: variables tend to move in opposite directions</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide40" class="slide">
+            <h2>Slide 40 - Variance Computational Formula
+                <audio class="audio-control" controls>
+                    <source src="Slide40.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Variance Computational Formula</h3>
+                
+                <p>We summarize the special case of variance as a corollary to Lemma 2.1:</p>
+                
+                <div class="definition">
+                    <h4>Corollary 2.1</h4>
+                    <p>Let \( x_1, x_2, \ldots x_n \) be a set of \( n \) data values. The variance of these values (without adjusting for the Bessel correction) satisfies the following relationship:</p>
+                    <div class="equation">
+                        \[\frac{\sum_{i=1}^n (x_i - \hat{\mu}_X)^2}{n} = \frac{\sum_{i=1}^n x_i^2}{n} - \hat{\mu}_X^2\]
+                    </div>
+                    <p>Here, \(\hat{\mu}_X\) is the sample mean of the data values. In other words, the variance can be intuitively understood as the difference between the mean of the squared observations and the squared mean.</p>
+                </div>
+                
+                <p>The proof of this result is exactly similar to the proof of the analogous result for covariances, because the variance is a special case of the covariance.</p>
+                
+                <div class="example">
+                    <p><strong>Example:</strong> For the dataset {1, 3, 5}:</p>
+                    <p>Mean: \(\hat{\mu}_X = (1+3+5)/3 = 3\)</p>
+                    <p>Mean of squares: \((1^2 + 3^2 + 5^2)/3 = (1+9+25)/3 = 35/3 \approx 11.667\)</p>
+                    <p>Variance: \(11.667 - 3^2 = 11.667 - 9 = 2.667\)</p>
+                    <p>Direct calculation: \([(1-3)^2 + (3-3)^2 + (5-3)^2]/3 = (4+0+4)/3 = 8/3 \approx 2.667\)</p>
+                </div>
+                
+                <p>This computational formula is often more efficient for calculation, especially with large datasets.</p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Add smooth scrolling for navigation links
+        document.querySelectorAll('.toc-sidebar a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                document.querySelector(targetId).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Initialize MathJax
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+</body>
+</html>

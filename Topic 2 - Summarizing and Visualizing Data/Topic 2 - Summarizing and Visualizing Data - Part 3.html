@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 2: Summarizing and Visualizing Data - Part 3</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .toc-sidebar {
+            width: 300px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+            overflow-y: auto;
+            position: fixed;
+            height: 100vh;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+        
+        .toc-sidebar h2 {
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .toc-sidebar ul {
+            list-style-type: none;
+        }
+        
+        .toc-sidebar li {
+            margin-bottom: 10px;
+        }
+        
+        .toc-sidebar a {
+            color: var(--light-color);
+            text-decoration: none;
+            display: block;
+            padding: 8px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        .toc-sidebar a:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: 300px;
+            padding: 30px;
+        }
+        
+        .slide {
+            background-color: white;
+            margin-bottom: 30px;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            page-break-inside: avoid;
+        }
+        
+        .slide h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .audio-control {
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+        
+        .content {
+            margin-top: 20px;
+        }
+        
+        .definition {
+            background-color: #e8f4fd;
+            border-left: 4px solid var(--secondary-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .example {
+            background-color: #f9f9f9;
+            border-left: 4px solid var(--accent-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .problem {
+            background-color: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .equation {
+            text-align: center;
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        
+        .figure {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .figure img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .figure-caption {
+            font-style: italic;
+            margin-top: 10px;
+            color: #666;
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .table th, .table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .table th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .highlight {
+            background-color: #fffacd;
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+        
+        .code-block {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            
+            .toc-sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="toc-sidebar">
+        <h2>Table of Contents</h2>
+        <ul>
+            <li><a href="#slide41">Slide 41 - Covariance Interpretation</a></li>
+            <li><a href="#slide42">Slide 42 - Example 2.6</a></li>
+            <li><a href="#slide43">Slide 43 - Example 2.7</a></li>
+            <li><a href="#slide44">Slide 44 - Example 2.8</a></li>
+            <li><a href="#slide45">Slide 45 - Example 2.9</a></li>
+            <li><a href="#slide46">Slide 46 - Correlation Coefficient</a></li>
+            <li><a href="#slide47">Slide 47 - Example 2.10</a></li>
+            <li><a href="#slide48">Slide 48 - Problem 2.7</a></li>
+            <li><a href="#slide49">Slide 49 - Rank Correlation</a></li>
+            <li><a href="#slide50">Slide 50 - Spearman Rank Correlation</a></li>
+            <li><a href="#slide51">Slide 51 - Kendall Rank Correlation</a></li>
+            <li><a href="#slide52">Slide 52 - Example 2.11</a></li>
+            <li><a href="#slide53">Slide 53 - Problem 2.8</a></li>
+            <li><a href="#slide54">Slide 54 - Modified Kendall Coefficient</a></li>
+            <li><a href="#slide55">Slide 55 - Example 2.12</a></li>
+            <li><a href="#slide56">Slide 56 - Multiple Attributes Correlation</a></li>
+            <li><a href="#slide57">Slide 57 - Covariance Matrix</a></li>
+            <li><a href="#slide58">Slide 58 - Principal Component Analysis</a></li>
+            <li><a href="#slide59">Slide 59 - Eigendecomposition</a></li>
+            <li><a href="#slide60">Slide 60 - Principal Component Directions</a></li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        <section id="slide41" class="slide">
+            <h2>Slide 41 - Covariance Interpretation
+                <audio class="audio-control" controls>
+                    <source src="Slide41.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Interpreting Covariance</h3>
+                
+                <p>The covariance is a measure of the association between variables:</p>
+                <ul>
+                    <li>A <span class="highlight">positive covariance</span> indicates that the variables are positively associated</li>
+                    <li>A <span class="highlight">negative covariance</span> indicates that the variables are negatively associated</li>
+                </ul>
+                
+                <div class="example">
+                    <p><strong>Example:</strong> The age and height of a person will typically be positively associated and therefore pairwise samples of age and height will have positive covariance.</p>
+                </div>
+                
+                <p>Unfortunately, however, the absolute value of the covariance is sensitive to the units used to measure it.</p>
+                
+                <div class="example">
+                    <p><strong>Example:</strong> Changing the units of measurement of height from meters to centimeters will increase the age-height covariance by a factor of 100.</p>
+                </div>
+                
+                <p>Therefore, the calculated value of covariance between two quantities does not provide a good understanding of the strength of the association between the two quantities.</p>
+                
+                <p>Another way of thinking about the covariance is in terms of dot products between the mean-centered \( n \)-dimensional vectors:</p>
+                <div class="equation">
+                    \[ \vec{x_c} = [x_1 - \hat{\mu}_X, x_2 - \hat{\mu}_X, \ldots, x_n - \hat{\mu}_X] \]
+                    \[ \vec{y_c} = [y_1 - \hat{\mu}_Y, y_2 - \hat{\mu}_Y, \ldots, y_n - \hat{\mu}_Y] \]
+                </div>
+                <p>The covariance is equal to \(1/(n-1)\) times the dot-product between the mean-centered vectors \(\vec{x_c}\) and \(\vec{y_c}\).</p>
+            </div>
+        </section>
+
+        <section id="slide42" class="slide">
+            <h2>Slide 42 - Example 2.6
+                <audio class="audio-control" controls>
+                    <source src="Slide42.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Example 2.6</h3>
+                
+                <div class="example">
+                    <h4>Example 2.6</h4>
+                    <p>Consider a very large set of numbers drawn over \(\{1, 2, \ldots, 9\}\). Suppose that the frequency of integer \(i\) in the set is exactly proportional to \(1/i\), where \(i\) varies between 1 and 9. Compute the variance of the set. You may use the result from Example 2.1 that the mean of the data is 3.193 and the sum of all frequencies is proportional to 2.829.</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <p>This problem is an excellent opportunity to apply Corollary 2.1.</p>
+                
+                <p>It is already known that the sum of the frequencies is \( 2.829 \).</p>
+                
+                <p>The value of \( \hat{\mu}_{X^2} \) can be computed as follows:</p>
+                <div class="equation">
+                    \[\hat{\mu}_{X^2} = \frac{\sum_{i=1}^9 (1/i) \cdot i^2}{\sum_{i=1}^9 (1/i)} = \frac{\sum_{i=1}^9 i}{2.829} = \frac{45}{2.829} \approx 15.91\]
+                </div>
+                
+                <p>One can then use Corollary 2.1 to compute the sample variance as follows:</p>
+                <div class="equation">
+                    \[\hat{\sigma}_X^2 = \hat{\mu}_{X^2} - \hat{\mu}_X^2 \approx 15.91 - 3.193^2 \approx 15.91 - 10.20 \approx 5.71\]
+                </div>
+                
+                <p>Therefore, the variance of the data set is approximately 5.71.</p>
+                
+                <div class="example">
+                    <p>This example demonstrates the computational efficiency of using the formula from Corollary 2.1, especially when we already have the mean and the sum of frequencies.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide43" class="slide">
+            <h2>Slide 43 - Example 2.7
+                <audio class="audio-control" controls>
+                    <source src="Slide43.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Example 2.7</h3>
+                
+                <div class="example">
+                    <h4>Example 2.7</h4>
+                    <p>Use Corollary 2.1 to show that the variance of a set of values is always at least equal the square of the mean absolute deviation. Furthermore, show that the difference between the two is equal to the variance of the absolute deviations. Use this result to identify the conditions under which the variance is equal to the mean absolute deviation. The Bessel correction is ignored for the purpose of this example.</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <p>Let \( x_1, x_2, \ldots, x_n \) be the data values (corresponding to instantiations of the random variable \( X \)), and let \( a_1 \ldots a_n \geq 0 \) be the absolute deviations of the data points \( x_1, x_2, \ldots, x_n \) from the sample mean \( \hat{\mu}_X \).</p>
+                
+                <p>One can treat these deviations \( a_1, a_2, \ldots, a_n \) as samples from the new random variable \( A \). Then, the sample mean absolute deviation of \( X \) can be expressed in terms of \( A \) as follows:</p>
+                <div class="equation">
+                    \[MAD_X = \frac{\sum_{i=1}^n a_i}{n} = \hat{\mu}_A\]
+                </div>
+                
+                <p>The sample variance of \( X \) can be expressed in terms of \( A \) as follows:</p>
+                <div class="equation">
+                    \[\hat{\sigma}_X^2 = \frac{\sum_{i=1}^n a_i^2}{n} = \hat{\mu}_{A^2}\]
+                </div>
+                
+                <p>Combining the above two results, the difference between the sample variance of \( X \) and the square of the sample mean absolute deviation can be expressed in terms of \( A \) as follows:</p>
+                <div class="equation">
+                    \[\hat{\sigma}_X^2 - MAD_X^2 = \frac{\sum_{i=1}^n a_i^2}{n} - \left( \frac{\sum_{i=1}^n a_i}{n} \right)^2 = \hat{\mu}_{A^2} - \hat{\mu}_A^2\]
+                </div>
+                
+                <p>Using Corollary 2.1 to deduce that the expression on the right is the sample variance of \( A \), the following can be inferred:</p>
+                <div class="equation">
+                    \[\hat{\sigma}_X^2 - MAD_X^2 = \hat{\mu}_{A^2} - \hat{\mu}_A^2 = \hat{\sigma}_A^2 \geq 0\]
+                </div>
+                
+                <p>Therefore, the difference between the variance of \( X \) and the squared mean absolute deviation of \( X \) is equal to the variance of the absolute deviations.</p>
+                
+                <p>Furthermore, since the variance of the mean absolute deviations is a nonnegative value, it follows that the variance of a sample is at least equal to its squared mean absolute deviation.</p>
+                
+                <p>The two are equal when the variance of the mean absolute deviation is zero. This occurs when all values of \( a \) are the same, and therefore all samples of \( X \) are equidistant from the sample mean of \( X \).</p>
+            </div>
+        </section>
+
+        <section id="slide44" class="slide">
+            <h2>Slide 44 - Example 2.8
+                <audio class="audio-control" controls>
+                    <source src="Slide44.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Example 2.8</h3>
+                
+                <div class="example">
+                    <h4>Example 2.8</h4>
+                    <p>Compute the covariance between the ordered sets \( X = \{1,3,5\} \) and \( Y = \{2,4,6\} \), where the \( i \)th element of the first set is paired with the \( i \)th element of the second set. Now double each element of the first set to \(\{2,6,10\}\) and compute the covariance with \(\{2,4,6\}\). What do you observe about the effect of scaling on the covariance?</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <p><strong>First case:</strong> \( X = \{1,3,5\} \), \( Y = \{2,4,6\} \)</p>
+                
+                <p>The means of \( X \) and \( Y \) are:</p>
+                <div class="equation">
+                    \[ \hat{\mu}_X = \frac{1+3+5}{3} = 3 \]
+                    \[ \hat{\mu}_Y = \frac{2+4+6}{3} = 4 \]
+                </div>
+                
+                <p>The corresponding values of \( (X - \hat{\mu}_X) \) and \( (Y - \hat{\mu}_Y) \) are both \(\{-2,0,2\}\).</p>
+                
+                <p>On using the covariance formula:</p>
+                <div class="equation">
+                    \[\hat{\sigma}_{XY} = \frac{(-2)(-2) + (0)(0) + (2)(2)}{3 - 1} = \frac{4 + 0 + 4}{2} = \frac{8}{2} = 4\]
+                </div>
+                
+                <p><strong>Second case:</strong> \( X = \{2,6,10\} \), \( Y = \{2,4,6\} \)</p>
+                
+                <p>The means of \( X \) and \( Y \) are:</p>
+                <div class="equation">
+                    \[ \hat{\mu}_X = \frac{2+6+10}{3} = 6 \]
+                    \[ \hat{\mu}_Y = \frac{2+4+6}{3} = 4 \]
+                </div>
+                
+                <p>The corresponding values of \( (X - \hat{\mu}_X) \) and \( (Y - \hat{\mu}_Y) \) are \(\{-4,0,4\}\) and \(\{-2,0,2\}\) respectively.</p>
+                
+                <p>On using the covariance formula:</p>
+                <div class="equation">
+                    \[\hat{\sigma}_{XY} = \frac{(-4)(-2) + (0)(0) + (4)(2)}{3 - 1} = \frac{8 + 0 + 8}{2} = \frac{16}{2} = 8\]
+                </div>
+                
+                <p><strong>Observation:</strong> On doubling the elements of the first set, the covariance doubles as well because the elements of \( (X - \hat{\mu}_X) \) double.</p>
+                
+                <p>This demonstrates that covariance is sensitive to the scale of the variables.</p>
+            </div>
+        </section>
+
+        <section id="slide45" class="slide">
+            <h2>Slide 45 - Example 2.9
+                <audio class="audio-control" controls>
+                    <source src="Slide45.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Example 2.9</h3>
+                
+                <div class="example">
+                    <h4>Example 2.9</h4>
+                    <p>Suppose that you are pairs of data points \((x_i, y_i)\) arrive continuously over time. Show how you can maintain the means and covariances of these points incrementally by using only a constant number of calculations for each point arrival. Ignore the Bessel correction.</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <p>Lemma 2.1 is very useful in the context of this problem.</p>
+                
+                <p>When \( k \) points have been received, the following incremental statistics are maintained:</p>
+                <ol>
+                    <li>\( SS_{xy} = \sum_{i=1}^k x_i y_i \)</li>
+                    <li>\( S_x = \sum_{i=1}^k x_i \)</li>
+                    <li>\( S_y = \sum_{i=1}^k y_i \)</li>
+                    <li>The number of points \( k \) that have arrived thus far</li>
+                </ol>
+                
+                <p>A key point is that when the \( (k+1) \)th point arrives, these statistics can be maintained incrementally using a constant number of operations simply by adding the contribution of the \( (k+1) \)th point to each statistic.</p>
+                
+                <p>This process requires a constant number of operations. This is because the statistics are additively separable.</p>
+                
+                <p>The means and covariances can be computed from these additive statistics. Specifically:</p>
+                <ul>
+                    <li>The means can be computed first as \( \hat{\mu}_X = S_x / k \) and \( \hat{\mu}_Y = S_y / k \)</li>
+                    <li>After computing these means the covariance \( \hat{\sigma}_{xy} = SS_{xy} / k - \hat{\mu}_X \hat{\mu}_Y \)</li>
+                </ul>
+                
+                <p>As in the case of updates, the computation of the means and covariance also requires a constant number of operations.</p>
+                
+                <p>This approach can also be used to incrementally maintain variances by maintaining \( SS_{xx} = \sum_{i=1}^k x_i^2 \) and computing variance as \( \hat{\sigma}_x^2 = SS_{xx} / k - \hat{\mu}_X^2 \).</p>
+                
+                <div class="code-block">
+                    // Pseudocode for incremental covariance calculation<br>
+                    Initialize: SS_xy = 0, S_x = 0, S_y = 0, count = 0<br>
+                    <br>
+                    For each new point (x, y):<br>
+                    &nbsp;&nbsp;count = count + 1<br>
+                    &nbsp;&nbsp;S_x = S_x + x<br>
+                    &nbsp;&nbsp;S_y = S_y + y<br>
+                    &nbsp;&nbsp;SS_xy = SS_xy + x*y<br>
+                    <br>
+                    &nbsp;&nbsp;// Calculate current statistics<br>
+                    &nbsp;&nbsp;mean_x = S_x / count<br>
+                    &nbsp;&nbsp;mean_y = S_y / count<br>
+                    &nbsp;&nbsp;covariance = SS_xy / count - mean_x * mean_y
+                </div>
+            </div>
+        </section>
+
+        <section id="slide46" class="slide">
+            <h2>Slide 46 - Correlation Coefficient
+                <audio class="audio-control" controls>
+                    <source src="Slide46.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Correlation Coefficient</h3>
+                
+                <p>One problem with the covariance is that it is sensitive to the absolute magnitudes of the points. Therefore, multiplying the values of all points in one of the sets by 2 causes the covariance to be scaled by a factor of 2 as well.</p>
+                
+                <p>A quantity that offers a better understanding of the strength of the association between two quantities is the <span class="highlight">coefficient of correlation</span>, which is a normalized version of the covariance.</p>
+                
+                <div class="definition">
+                    <h4>Definition 2.11 (Sample Correlation)</h4>
+                    <p>Given two paired samples \( x_1 \ldots x_n \) and \( y_1 \ldots y_n \) of data values (where \( x_i \) is paired with \( y_i \)), the coefficient of correlation \( \rho_{XY} \) between these paired sets is defined as a function of their sample covariance \( \hat{\sigma}_{XY} \) and sample standard deviations \( \hat{\sigma}_X \), \( \hat{\sigma}_Y \) as follows:</p>
+                    <div class="equation">
+                        \[\hat{\rho}_{XY} = \frac{\hat{\sigma}_{XY}}{\hat{\sigma}_X \hat{\sigma}_Y}\]
+                    </div>
+                </div>
+                
+                <p>This correlation is also referred to as the <span class="highlight">Pearson correlation coefficient</span>.</p>
+                
+                <p>Dividing each measured quantity with its standard deviation has the effect of making the quantities unit-less and also dividing the co-variance between the original quantities by the product of the standard deviations (thereby making the covariance between the unit-less quantities unit-less as well).</p>
+                
+                <p>The coefficient of correlation between two sets of paired values always lies between \(-1\) and \(+1\).</p>
+            </div>
+        </section>
+
+        <section id="slide47" class="slide">
+            <h2>Slide 47 - Example 2.10
+                <audio class="audio-control" controls>
+                    <source src="Slide47.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Example 2.10</h3>
+                
+                <div class="example">
+                    <h4>Example 2.10</h4>
+                    <p>Compute the coefficient of correlation between the ordered sets \( X = \{1,3,5\} \) and \( Y = \{2,4,6\} \), where the \( i \)th element of the first set is paired with the \( i \)th element of the second set. Can you explain why the result you obtain takes on the sign that it does? Now double each elements of the first set to \(\{2,6,10\}\) and compute the correlation with \(\{2,4,6\}\). What do you observe about the change in the correlation?</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <p><strong>First case:</strong> \( X = \{1,3,5\} \), \( Y = \{2,4,6\} \)</p>
+                
+                <p>From Example 2.8, we know that \( \hat{\sigma}_{XY} = 4 \).</p>
+                
+                <p>Now we need to compute the standard deviations:</p>
+                <div class="equation">
+                    \[ \hat{\sigma}_X = \sqrt{\frac{(1-3)^2 + (3-3)^2 + (5-3)^2}{3-1}} = \sqrt{\frac{4 + 0 + 4}{2}} = \sqrt{4} = 2 \]
+                    \[ \hat{\sigma}_Y = \sqrt{\frac{(2-4)^2 + (4-4)^2 + (6-4)^2}{3-1}} = \sqrt{\frac{4 + 0 + 4}{2}} = \sqrt{4} = 2 \]
+                </div>
+                
+                <p>Therefore, the coefficient of correlation is:</p>
+                <div class="equation">
+                    \[ \hat{\rho}_{XY} = \frac{4}{2 \times 2} = 1 \]
+                </div>
+                
+                <p>The correlation is +1 because X and Y have a perfect positive linear relationship: \( Y = X + 1 \).</p>
+                
+                <p><strong>Second case:</strong> \( X = \{2,6,10\} \), \( Y = \{2,4,6\} \)</p>
+                
+                <p>From Example 2.8, we know that \( \hat{\sigma}_{XY} = 8 \).</p>
+                
+                <p>Now we need to compute the standard deviations:</p>
+                <div class="equation">
+                    \[ \hat{\sigma}_X = \sqrt{\frac{(2-6)^2 + (6-6)^2 + (10-6)^2}{3-1}} = \sqrt{\frac{16 + 0 + 16}{2}} = \sqrt{16} = 4 \]
+                    \[ \hat{\sigma}_Y = 2 \quad \text{(same as before)} \]
+                </div>
+                
+                <p>Therefore, the coefficient of correlation is:</p>
+                <div class="equation">
+                    \[ \hat{\rho}_{XY} = \frac{8}{4 \times 2} = 1 \]
+                </div>
+                
+                <p><strong>Observation:</strong> On doubling the first set, \( \hat{\sigma}_{XY} \) doubles, but so does \( \hat{\sigma}_X \). Therefore, the coefficient of correlation remains fixed at 1.</p>
+                
+                <p>This demonstrates that correlation is scale-invariant, unlike covariance.</p>
+            </div>
+        </section>
+
+        <section id="slide48" class="slide">
+            <h2>Slide 48 - Problem 2.7
+                <audio class="audio-control" controls>
+                    <source src="Slide48.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Problem 2.7</h3>
+                
+                <div class="problem">
+                    <h4>Problem 2.7</h4>
+                    <p>Show that the correlation between paired observations for \( n = 2 \) observations is always \( +1, -1 \), or undefined. Under what condition is the correlation undefined? Can you make a general statement about when the correlation is undefined for \( n > 2 \)?</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <p>For \( n = 2 \), we have two points: \((x_1, y_1)\) and \((x_2, y_2)\).</p>
+                
+                <p>The means are:</p>
+                <div class="equation">
+                    \[ \hat{\mu}_X = \frac{x_1 + x_2}{2}, \quad \hat{\mu}_Y = \frac{y_1 + y_2}{2} \]
+                </div>
+                
+                <p>The deviations from the mean are:</p>
+                <div class="equation">
+                    \[ x_1 - \hat{\mu}_X = \frac{x_1 - x_2}{2}, \quad x_2 - \hat{\mu}_X = \frac{x_2 - x_1}{2} \]
+                    \[ y_1 - \hat{\mu}_Y = \frac{y_1 - y_2}{2}, \quad y_2 - \hat{\mu}_Y = \frac{y_2 - y_1}{2} \]
+                </div>
+                
+                <p>The covariance is:</p>
+                <div class="equation">
+                    \[ \hat{\sigma}_{XY} = \frac{(x_1 - \hat{\mu}_X)(y_1 - \hat{\mu}_Y) + (x_2 - \hat{\mu}_X)(y_2 - \hat{\mu}_Y)}{2-1} \]
+                    \[ = \frac{\frac{x_1 - x_2}{2} \cdot \frac{y_1 - y_2}{2} + \frac{x_2 - x_1}{2} \cdot \frac{y_2 - y_1}{2}}{1} \]
+                    \[ = \frac{(x_1 - x_2)(y_1 - y_2)}{4} + \frac{(x_2 - x_1)(y_2 - y_1)}{4} \]
+                    \[ = \frac{(x_1 - x_2)(y_1 - y_2)}{2} \]
+                </div>
+                
+                <p>The standard deviations are:</p>
+                <div class="equation">
+                    \[ \hat{\sigma}_X = \sqrt{\frac{(x_1 - \hat{\mu}_X)^2 + (x_2 - \hat{\mu}_X)^2}{1}} = \frac{|x_1 - x_2|}{\sqrt{2}} \]
+                    \[ \hat{\sigma}_Y = \sqrt{\frac{(y_1 - \hat{\mu}_Y)^2 + (y_2 - \hat{\mu}_Y)^2}{1}} = \frac{|y_1 - y_2|}{\sqrt{2}} \]
+                </div>
+                
+                <p>Therefore, the correlation is:</p>
+                <div class="equation">
+                    \[ \hat{\rho}_{XY} = \frac{\frac{(x_1 - x_2)(y_1 - y_2)}{2}}{\frac{|x_1 - x_2|}{\sqrt{2}} \cdot \frac{|y_1 - y_2|}{\sqrt{2}}} = \frac{(x_1 - x_2)(y_1 - y_2)}{|x_1 - x_2| \cdot |y_1 - y_2|} \]
+                </div>
+                
+                <p>This equals:</p>
+                <ul>
+                    <li>\(+1\) if \((x_1 - x_2)\) and \((y_1 - y_2)\) have the same sign</li>
+                    <li>\(-1\) if \((x_1 - x_2)\) and \((y_1 - y_2)\) have opposite signs</li>
+                    <li>Undefined if either \(x_1 = x_2\) or \(y_1 = y_2\) (division by zero)</li>
+                </ul>
+                
+                <p>For \( n > 2 \), the correlation is undefined when at least one of the variables has zero variance (all values are the same).</p>
+            </div>
+        </section>
+
+        <section id="slide49" class="slide">
+            <h2>Slide 49 - Rank Correlation
+                <audio class="audio-control" controls>
+                    <source src="Slide49.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>2.2.2.2 Rank Correlation Measures</h3>
+                
+                <p>In some applications, the raw values of the attributes may not be available, but their ranks may be available. This is particularly true if the attributes are ordinal in nature.</p>
+                
+                <p>In other cases, the application at hand might necessitate computation of correlations between ranks rather than between raw values.</p>
+                
+                <p><span class="highlight">Rank-based correlations</span> generally tend to be more stable to outliers (i.e., unusual extreme values).</p>
+                
+                <p>A number of rank-based correlation measures enable such computations. For simplicity in notation, we assume that the attributes are numeric, although the generalization to ordinal attributes is straightforward.</p>
+                
+                <p>The two main rank correlation measures are:</p>
+                <ol>
+                    <li><strong>Spearman rank correlation:</strong> Pearson correlation applied to ranks</li>
+                    <li><strong>Kendall rank correlation:</strong> Based on concordant and discordant pairs</li>
+                </ol>
+                
+                <div class="definition">
+                    <h4>Rank Correlation</h4>
+                    <p>A measure of correlation that uses the rank order of values rather than their actual values. This makes it more robust to outliers and non-linear relationships.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide50" class="slide">
+            <h2>Slide 50 - Spearman Rank Correlation
+                <audio class="audio-control" controls>
+                    <source src="Slide50.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Spearman Rank Correlation</h3>
+                
+                <p>The simplest generalization of correlation to ranks is obtained by replacing the raw numerical values with their ranks and then computing the Pearson coefficient of correlation between the ranks.</p>
+                
+                <p>The resulting measure of correlation is referred to as the <span class="highlight">Spearman rank correlation</span>.</p>
+                
+                <p>The key point here is to first define the ranks appropriately in order to account for ties.</p>
+                
+                <p>The first step is to convert raw values to ranks, while breaking ties arbitrarily. Therefore, all values in \(x_{1},\ldots x_{n}\) as well as the values in \(y_{1},\ldots y_{n}\) get an integer rank from 1 through \(n\).</p>
+                
+                <p>Subsequently, the ranks of the tied values are averaged to (possibly) fractional ranks, so that tied values map to tied ranks.</p>
+                
+                <div class="example">
+                    <p><strong>Example:</strong> If ranks 2, 3, 4, and 5 are tied in raw value, these ranks are all replaced with four occurrences of \((2+3+4+5)/4=3.5\).</p>
+                </div>
+                
+                <p>Therefore, each pair of raw values \((x_{i},y_{i})\) now maps to a rank pair \((a_{i},b_{i})\).</p>
+                
+                <div class="definition">
+                    <h4>Definition 2.12 (Spearman Rank Correlation)</h4>
+                    <p>Let \(x_{1},x_{2},\ldots x_{n}\) and \(y_{1},y_{2},\ldots y_{n}\) be a set of \(n\) paired values, so that \(x_{i}\) is paired with \(y_{i}\). Let \(a_{i}\) be the rank of \(x_{i}\) in \(x_{1},x_{2},\ldots x_{n}\) and let \(b_{i}\) be the rank of \(y_{i}\) in \(y_{1},y_{2},\ldots y_{n}\). The Spearman rank correlation coefficient between \(x_{1},x_{2},\ldots x_{n}\) and \(y_{1},y_{2},\ldots y_{n}\) is defined in exactly the same way as the Pearson correlation coefficient, except that the computation is applied to the ranks \((a_{i},b_{i})\) rather than the raw numeric values \((x_{i},y_{i})\).</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide51" class="slide">
+            <h2>Slide 51 - Kendall Rank Correlation
+                <audio class="audio-control" controls>
+                    <source src="Slide51.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Kendall Rank Correlation</h3>
+                
+                <p>Another popular measure of rank correlation is the <span class="highlight">Kendall rank correlation</span>.</p>
+                
+                <p>Intuitively, the Kendall rank correlation is a value between \(-1\) and \(+1\), which tells us how frequently pairs of observations have the same ordering of the rank across two attributes.</p>
+                
+                <div class="definition">
+                    <h4>Definition 2.13 (Kendall Rank Correlation)</h4>
+                    <p>Let \(x_{1}\ldots x_{n}\) and \(y_{1}\ldots y_{n}\) be two sets of paired numeric observations, where \(x_{i}\) is paired with \(y_{i}\). Then, the Kendall rank correlation coefficient, \(\hat{\tau}_{XY}\), is defined as follows:</p>
+                    <div class="equation">
+                        \[\hat{\tau}_{XY}=\frac{\sum_{i=1}^{n}\sum_{j=i+1}^{n}sign\{(x_{i}-x_{j})(y_{i}-y_{j})\}}{n(n-1)/2}\]
+                    </div>
+                    <p>Note that the sign of \((x_{i}-x_{j})(y_{i}-y_{j})\) will be 0 in case of ties between the pair \((x_{i},x_{j})\) or between the pair \((y_{i},y_{j})\).</p>
+                </div>
+                
+                <p>A pair \((i,j)\) is said to be <span class="highlight">concordant</span> if \(x_{i}\) and \(x_{j}\) has the same ordering of rank as \(y_{i}\) and \(y_{j}\).</p>
+                
+                <p>A pair \((i,j)\) is said to be <span class="highlight">discordant</span> if \(x_{i}\) and \(x_{j}\) has a different ordering of rank as \(y_{i}\) and \(y_{j}\).</p>
+                
+                <p>If \(x_{i}=x_{j}\) or \(y_{i}=y_{j}\), then the pair \((i,j)\) is neither concordant nor discordant.</p>
+                
+                <p>The Kendall rank correlation coefficient is the normalized difference between the number of concordant and the number of discordant pairs, where the normalization factor is the total number of pairs.</p>
+            </div>
+        </section>
+
+        <section id="slide52" class="slide">
+            <h2>Slide 52 - Example 2.11
+                <audio class="audio-control" controls>
+                    <source src="Slide52.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Example 2.11</h3>
+                
+                <div class="example">
+                    <h4>Example 2.11</h4>
+                    <p>Calculate the Spearman and Kendall rank correlations between the ordered sets 1.2, 2.3, 1.6 and 3.3, 5.7, and 6.5.</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <p>First, we need to assign ranks to each set:</p>
+                
+                <p><strong>First set:</strong> 1.2, 2.3, 1.6</p>
+                <p>Sorted: 1.2, 1.6, 2.3</p>
+                <p>Ranks: [a₁, a₂, a₃] = [1, 3, 2]</p>
+                
+                <p><strong>Second set:</strong> 3.3, 5.7, 6.5</p>
+                <p>Sorted: 3.3, 5.7, 6.5</p>
+                <p>Ranks: [b₁, b₂, b₃] = [1, 2, 3]</p>
+                
+                <p><strong>Spearman rank correlation:</strong></p>
+                <div class="equation">
+                    \[\hat{\rho}_{XY}^{s}=1-6\frac{(1-1)^2+(3-2)^2+(2-3)^2}{3(3^{2}-1)}=1-6\frac{0+1+1}{3(9-1)}=1-6\frac{2}{24}=1-0.5=0.5\]
+                </div>
+                
+                <p><strong>Kendall rank correlation:</strong></p>
+                <p>We need to examine all pairs (i,j) where i < j:</p>
+                <ul>
+                    <li>Pair (1,2): (x₁-x₂)(y₁-y₂) = (1.2-2.3)(3.3-5.7) = (-1.1)(-2.4) = 2.64 > 0 → concordant</li>
+                    <li>Pair (1,3): (x₁-x₃)(y₁-y₃) = (1.2-1.6)(3.3-6.5) = (-0.4)(-3.2) = 1.28 > 0 → concordant</li>
+                    <li>Pair (2,3): (x₂-x₃)(y₂-y₃) = (2.3-1.6)(5.7-6.5) = (0.7)(-0.8) = -0.56 < 0 → discordant</li>
+                </ul>
+                
+                <p>Number of concordant pairs: 2</p>
+                <p>Number of discordant pairs: 1</p>
+                <p>Total pairs: 3</p>
+                
+                <div class="equation">
+                    \[\hat{\tau}_{XY}=\frac{2-1}{3}=\frac{1}{3}\approx 0.333\]
+                </div>
+                
+                <p>Therefore, the Spearman correlation is 0.5 and the Kendall correlation is approximately 0.333.</p>
+            </div>
+        </section>
+
+        <section id="slide53" class="slide">
+            <h2>Slide 53 - Problem 2.8
+                <audio class="audio-control" controls>
+                    <source src="Slide53.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Problem 2.8</h3>
+                
+                <div class="problem">
+                    <h4>Problem 2.8</h4>
+                    <p>Find the Spearman and the Kendall rank correlation coefficient between 2.1, 1.3, 3.5, 4.7 and 4.1, 1.3, 3.6, 2.8 (where the two sets are ordered). Which one turns out to be larger?</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <p>First, we need to assign ranks to each set:</p>
+                
+                <p><strong>First set:</strong> 2.1, 1.3, 3.5, 4.7</p>
+                <p>Sorted: 1.3, 2.1, 3.5, 4.7</p>
+                <p>Ranks: [a₁, a₂, a₃, a₄] = [2, 1, 3, 4]</p>
+                
+                <p><strong>Second set:</strong> 4.1, 1.3, 3.6, 2.8</p>
+                <p>Sorted: 1.3, 2.8, 3.6, 4.1</p>
+                <p>Ranks: [b₁, b₂, b₃, b₄] = [4, 1, 3, 2]</p>
+                
+                <p><strong>Spearman rank correlation:</strong></p>
+                <p>We need to calculate the differences in ranks:</p>
+                <div class="equation">
+                    \[d_1 = a_1 - b_1 = 2 - 4 = -2\]
+                    \[d_2 = a_2 - b_2 = 1 - 1 = 0\]
+                    \[d_3 = a_3 - b_3 = 3 - 3 = 0\]
+                    \[d_4 = a_4 - b_4 = 4 - 2 = 2\]
+                </div>
+                <div class="equation">
+                    \[\sum d_i^2 = (-2)^2 + 0^2 + 0^2 + 2^2 = 4 + 0 + 0 + 4 = 8\]
+                </div>
+                <div class="equation">
+                    \[\hat{\rho}_{XY}^{s}=1-\frac{6\sum d_i^2}{n(n^2-1)}=1-\frac{6\times 8}{4(16-1)}=1-\frac{48}{60}=1-0.8=0.2\]
+                </div>
+                
+                <p><strong>Kendall rank correlation:</strong></p>
+                <p>We need to examine all pairs (i,j) where i < j:</p>
+                <ul>
+                    <li>Pair (1,2): (a₁-a₂)(b₁-b₂) = (2-1)(4-1) = (1)(3) = 3 > 0 → concordant</li>
+                    <li>Pair (1,3): (a₁-a₃)(b₁-b₃) = (2-3)(4-3) = (-1)(1) = -1 < 0 → discordant</li>
+                    <li>Pair (1,4): (a₁-a₄)(b₁-b₄) = (2-4)(4-2) = (-2)(2) = -4 < 0 → discordant</li>
+                    <li>Pair (2,3): (a₂-a₃)(b₂-b₃) = (1-3)(1-3) = (-2)(-2) = 4 > 0 → concordant</li>
+                    <li>Pair (2,4): (a₂-a₄)(b₂-b₄) = (1-4)(1-2) = (-3)(-1) = 3 > 0 → concordant</li>
+                    <li>Pair (3,4): (a₃-a₄)(b₃-b₄) = (3-4)(3-2) = (-1)(1) = -1 < 0 → discordant</li>
+                </ul>
+                
+                <p>Number of concordant pairs: 3</p>
+                <p>Number of discordant pairs: 3</p>
+                <p>Total pairs: 6</p>
+                
+                <div class="equation">
+                    \[\hat{\tau}_{XY}=\frac{3-3}{6}=0\]
+                </div>
+                
+                <p>The Spearman correlation (0.2) is larger than the Kendall correlation (0).</p>
+                
+                <p>In most cases, the Spearman rank correlation coefficient tends to be larger than the Kendall rank correlation coefficient.</p>
+            </div>
+        </section>
+
+        <section id="slide54" class="slide">
+            <h2>Slide 54 - Modified Kendall Coefficient
+                <audio class="audio-control" controls>
+                    <source src="Slide54.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Modified Kendall Coefficient</h3>
+                
+                <p>A variant of the Kendall rank correlation is often used to measure the quality of rankings with respect to binary data. This type of approach has great usefulness in evaluation of machine learning algorithms like binary classification, anomaly detection, and search engines.</p>
+                
+                <div class="example">
+                    <p><strong>Example scenario:</strong> Consider a set of points (e.g., demographic information about customers) of which only a subset of the points are relevant to a sales promotion by the merchant. This information about the customer relevance is not known at the time of the promotion, but is known at a later stage after the time for sales promotion has passed.</p>
+                </div>
+                
+                <p>One problem with the standard Kendall coefficient in this context is that most customers are assumed to be non-relevant (corresponding to a ground-truth value of 0), which causes very few concordants or discordants but a comparatively large denominator \(n(n-1)/2\) of the Kendall coefficient.</p>
+                
+                <p>Note that there are only \(n_{1}(n-n_{1})\) pairs if values out of the \(n(n-1)/2\) pairs that are either concordant or discordant.</p>
+                
+                <p>As a result, the Kendall coefficient will have very small absolute values that are never close to 1, and it is hard to interpret the correlation strength between the binary ground truth and the ranking for a specific value of the Kendall coefficient.</p>
+                
+                <p>The main problem is that the value of the Kendall rank correlation coefficient is strongly affected by the value of \(n_{1}\).</p>
+                
+                <p>Therefore, for a binary data set containing \(n_{1}\ll n\) relevant items and \((n-n_{1})\) non-relevant items (along with a corresponding ranking), the denominator of the Kendall coefficient is changed from \(n(n-1)/2\) to \(n_{1}(n-n_{1})\):</p>
+                <div class="equation">
+                    \[n_{1}(n-n_{1})\ll{n\choose 2}\]
+                </div>
+            </div>
+        </section>
+
+        <section id="slide55" class="slide">
+            <h2>Slide 55 - Example 2.12
+                <audio class="audio-control" controls>
+                    <source src="Slide55.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Example 2.12</h3>
+                
+                <div class="example">
+                    <h4>Example 2.12 (Outlier Algorithm Evaluation)</h4>
+                    <p>Consider a set of ten points associated with binary ground-truth values indicating whether or not they are outliers. Two of them are labeled 1, because they are outliers. The other eight inliers are labeled 0. An outlier detection algorithm that does not know the ground-truth is used to score these points, where higher values indicate outlierness. The two outliers have scores of 3.1 and 7.2. The remaining eight points have scores of 1.1, 1.6, 2.1, 2.3, 2.5, 2.8, 3.3, and 3.7. Find the modified Kendall rank correlation between binary labels and outlier scores.</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <p>Since there are two outliers and eight inliers, there are a total of \(2\times8=16\) pairs to consider (one outlier and one inlier in each pair).</p>
+                
+                <p>Let's list the scores with their labels:</p>
+                <ul>
+                    <li>Outliers (label 1): 3.1, 7.2</li>
+                    <li>Inliers (label 0): 1.1, 1.6, 2.1, 2.3, 2.5, 2.8, 3.3, 3.7</li>
+                </ul>
+                
+                <p>Now we need to check each outlier-inlier pair to see if they are concordant or discordant:</p>
+                
+                <p><strong>First outlier (3.1):</strong></p>
+                <ul>
+                    <li>Compared with inliers with scores less than 3.1 (1.1, 1.6, 2.1, 2.3, 2.5, 2.8): These are concordant because outlier has higher score and higher label (1 > 0)</li>
+                    <li>Compared with inliers with scores greater than 3.1 (3.3, 3.7): These are discordant because inlier has higher score but lower label</li>
+                </ul>
+                <p>For first outlier: 6 concordant, 2 discordant</p>
+                
+                <p><strong>Second outlier (7.2):</strong></p>
+                <ul>
+                    <li>Compared with all 8 inliers: All are concordant because outlier has higher score and higher label</li>
+                </ul>
+                <p>For second outlier: 8 concordant, 0 discordant</p>
+                
+                <p>Total concordant pairs: 6 + 8 = 14</p>
+                <p>Total discordant pairs: 2 + 0 = 2</p>
+                <p>Total pairs: 16</p>
+                
+                <div class="equation">
+                    \[\hat{\tau}_{XY}^{(0/1)}=\frac{14-2}{16}=\frac{12}{16}=0.75\]
+                </div>
+                
+                <p>Therefore, the modified Kendall rank correlation coefficient is 0.75, which is quite high.</p>
+                
+                <p>One can also convert this measure to a probability of correct ranking of scores of randomly sampled outlier-inlier pairs as \((1+0.75)/2=0.875\).</p>
+                
+                <p>In other words, if an outlier-inlier pair is selected at random, the algorithm will correctly give a higher score to the outlier with probability 0.875.</p>
+            </div>
+        </section>
+
+        <section id="slide56" class="slide">
+            <h2>Slide 56 - Multiple Attributes Correlation
+                <audio class="audio-control" controls>
+                    <source src="Slide56.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Correlations among Multiple Attributes</h3>
+                
+                <p>The aforementioned discussion is focused on two attributes, and therefore it is designed to find associations between pairs of attributes.</p>
+                
+                <p>However, most machine learning applications have multiple variables, and it may be desirable to simultaneously quantify the correlations among different attributes.</p>
+                
+                <p>While such higher-order measures of correlation do exist, they tend to be cumbersome to compute.</p>
+                
+                <p>Nevertheless, even the second-order relationships (i.e., covariances) across all pairs of attributes can be used to obtain some understanding of the relationships between multiple attributes via the use of a process from linear algebra, referred to as <span class="highlight">eigendecomposition</span>.</p>
+                
+                <p>Although this type of quantification is a simplified one (relative to higher-order correlations), it has significant practical use in real-world applications.</p>
+                
+                <p>Consider an \(n\times d\) data matrix \(D\) with \(n\) observations and \(d\) attributes. In such cases, one can compute a \(d\times d\) <span class="highlight">matrix</span> of covariances, where the \((i,j)\)th entry is the covariance between feature \(i\) and feature \(j\).</p>
+                
+                <p>This matrix is also referred to as the <span class="highlight">covariance matrix</span>.</p>
+                
+                <div class="figure">
+                    <!-- Placeholder for covariance matrix visualization -->
+                    <div style="background-color: #f0f0f0; height: 200px; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc;">
+                        <p>Figure 2.6: Visualization of a covariance matrix</p>
+                    </div>
+                    <p class="figure-caption">The covariance matrix captures pairwise relationships between all attributes</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide57" class="slide">
+            <h2>Slide 57 - Covariance Matrix
+                <audio class="audio-control" controls>
+                    <source src="Slide57.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Covariance Matrix</h3>
+                
+                <p>The covariance matrix is defined without the Bessel correction. Such a matrix is symmetric because its \((i,j)\)th entry and \((j,i)\)th entry are both equal to the covariance between the attributes \(i\) and \(j\).</p>
+                
+                <p>Furthermore, the diagonal elements of the covariance matrix are always positive because they contain the variances of the corresponding attributes.</p>
+                
+                <p>It is common to use unadjusted covariances (without the Bessel correction) to retain simplicity in notation. In most cases, such matrix-based techniques are used only when there are sufficient data points (which precludes the need for the Bessel correction in the first place).</p>
+                
+                <div class="definition">
+                    <h4>Observation 2.2 (Covariance Matrix)</h4>
+                    <p>Let \(D\) be an \(n\times d\) data matrix, and let \(D_{c}\) be the mean-centered data matrix obtained by subtracting the mean of each column from each element of the corresponding column. Then, the covariance matrix \(C\) (without Bessel correction) can be computed as \(C=\frac{D_{c}^{T}D_{c}}{n}\).</p>
+                </div>
+                
+                <p>The covariance matrix is a very useful construct in machine learning, because it has a key linear-algebra property (referred to as the <span class="highlight">positive semi-definite property</span>), which allows it to be decomposed into different matrices, including one that can be used to visualize the key directions of correlation in the data.</p>
+                
+                <div class="example">
+                    <p><strong>Example of a 3×3 covariance matrix:</strong></p>
+                    <div class="equation">
+                        \[C = \begin{bmatrix}
+                        \sigma_{1}^2 & \sigma_{12} & \sigma_{13} \\
+                        \sigma_{21} & \sigma_{2}^2 & \sigma_{23} \\
+                        \sigma_{31} & \sigma_{32} & \sigma_{3}^2
+                        \end{bmatrix}\]
+                    </div>
+                    <p>Where \(\sigma_{i}^2\) is the variance of attribute i, and \(\sigma_{ij}\) is the covariance between attributes i and j.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide58" class="slide">
+            <h2>Slide 58 - Principal Component Analysis
+                <audio class="audio-control" controls>
+                    <source src="Slide58.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Principal Component Analysis</h3>
+                
+                <p>In particular, the \(d\times d\) covariance matrix can be decomposed in order to identify the <span class="highlight">principal component directions</span> in the data, which happen to be mutually orthogonal vectors.</p>
+                
+                <p>The principal component directions are <span class="highlight">eigenvectors</span> of the matrix \(C\).</p>
+                
+                <div class="definition">
+                    <h4>Eigenvector and Eigenvalue</h4>
+                    <p>Formally, a \(d\)-dimensional vector \(\vec{e}\) is an eigenvector of matrix \(C\), if it satisfies the following condition:</p>
+                    <div class="equation">
+                        \[C\vec{e}=\lambda\vec{e}\]
+                    </div>
+                    <p>Here, \(\lambda\) is a scalar, which is referred to as an <span class="highlight">eigenvalue</span>.</p>
+                </div>
+                
+                <p>A \(d\times d\) matrix can have at most \(d\) eigenvectors (that cannot be expressed as linear combinations of other eigenvectors).</p>
+                
+                <p>Symmetric matrices like \(C\) are guaranteed to have exactly \(d\) <span class="highlight">orthonormal</span> eigenvectors.</p>
+                
+                <p>Furthermore, covariance matrices are guaranteed to have nonnegative eigenvalues because of the property of positive semidefiniteness.</p>
+                
+                <p>These eigenvectors define the principal component directions in the data.</p>
+                
+                <div class="figure">
+                    <!-- Placeholder for PCA visualization -->
+                    <div style="background-color: #f0f0f0; height: 200px; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc;">
+                        <p>Figure 2.7: Principal components of a 2D dataset</p>
+                    </div>
+                    <p class="figure-caption">The eigenvectors show the directions of maximum variance in the data</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide59" class="slide">
+            <h2>Slide 59 - Eigendecomposition
+                <audio class="audio-control" controls>
+                    <source src="Slide59.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Eigendecomposition of Covariance Matrix</h3>
+                
+                <div class="definition">
+                    <h4>Definition 2.14 (Principal Component Directions)</h4>
+                    <p>The \(d\times d\) covariance matrix of data matrix \(D\) can be decomposed as \(C=P\Delta P^{T}\), where \(P\) is an orthogonal matrix whose columns contain the orthonormal eigenvectors and \(\Delta\) is a diagonal matrix containing the nonnegative eigenvalues. The orthogonal eigenvectors with the top-\(k\) eigenvalues (for any \(k<d\)) represent the principal component directions in the data, so that projecting the data onto these directions results in the representation with the maximum aggregate variance along these \(k\) directions.</p>
+                </div>
+                
+                <p>Since \(P\) is orthogonal with mutually perpendicular column vectors, \(DP\) is an \(n\times d\) matrix containing a rotated and reflected version of the data points in \(D\) in its rows.</p>
+                
+                <p>Observe that \(DP\) contains dot products of the rows of \(D\) with the columns of \(P\), which correspond to the coordinates of the rows of \(D\) in this new orthogonal axis system.</p>
+                
+                <p>An important property of this new data set is that the pairwise covariances among the columns of \(DP\) are \(0\), and the variances of the columns in \(DP\) are the corresponding eigenvalues.</p>
+                
+                <p>However, \(DP_{k}\) selects and retains only \(k\) of the \(d\) coordinates contained in \(DP\).</p>
+                
+                <p>Intuitively, these \(d\)-dimensional vectors are the "important" multivariate directions of correlation in the data. This is because the variances along the small eigenvalues are small and the attribute values along those directions in \(DP\) will be roughly constant (and not very informative).</p>
+            </div>
+        </section>
+
+        <section id="slide60" class="slide">
+            <h2>Slide 60 - Principal Component Directions
+                <audio class="audio-control" controls>
+                    <source src="Slide60.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Principal Component Directions</h3>
+                
+                <p>Dropping these directions from the data representation will not change the pairwise Euclidean distances between points very much, and therefore many machine learning algorithms will provide similar results on the \(k\)-dimensional representations of points contained in the \(n\) rows of \(DP_{k}\).</p>
+                
+                <p>Let \(P_{k}\) be the \(d\times k\) matrix containing the top-\(k\) eigenvectors. Then, a <span class="highlight">reduced</span> \(n\times k\) data matrix with the maximum <span class="highlight">residual</span> variance can be represented in the \(n\times k\) matrix \(D_{k}=DP_{k}\).</p>
+                
+                <p>The matrix \(D_{k}\) represents a rotated and reflected version of the data matrix \(D\) (with \((n-k)\) dimensions dropped), and the pairwise covariances between the columns of \(D_{k}\) are 0.</p>
+                
+                <p>The rows of \(D_{k}\) contain the transformed \(k\)-dimensional representation of the data.</p>
+                
+                <p>In order to provide an understanding of how the eigenvectors of a matrix relate to the directions of correlation in the data, the eigenvectors of the covariance matrix for a 3-dimensional data set are illustrated in Figure 2.1.</p>
+                
+                <p>It is evident that most of the variance of the data is captured along the first two eigenvectors, and there is little variation along the third eigenvector.</p>
+                
+                <p>In other words, dropping the smallest eigenvectors does not have any significant effect on important statistical properties of the data, such as inter-point distances, which allows their use for machine learning and search applications.</p>
+                
+                <div class="figure">
+                    <!-- Placeholder for PCA application -->
+                    <div style="background-color: #f0f0f0; height: 200px; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc;">
+                        <p>Figure 2.8: Data projection onto principal components</p>
+                    </div>
+                    <p class="figure-caption">Projecting data onto the first two principal components reduces dimensionality while preserving most information</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Add smooth scrolling for navigation links
+        document.querySelectorAll('.toc-sidebar a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                document.querySelector(targetId).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Initialize MathJax
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+</body>
+</html>

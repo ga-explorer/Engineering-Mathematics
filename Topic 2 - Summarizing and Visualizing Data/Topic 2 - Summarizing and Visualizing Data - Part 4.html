@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 2: Summarizing and Visualizing Data - Part 4</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .toc-sidebar {
+            width: 300px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+            overflow-y: auto;
+            position: fixed;
+            height: 100vh;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+        
+        .toc-sidebar h2 {
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .toc-sidebar ul {
+            list-style-type: none;
+        }
+        
+        .toc-sidebar li {
+            margin-bottom: 10px;
+        }
+        
+        .toc-sidebar a {
+            color: var(--light-color);
+            text-decoration: none;
+            display: block;
+            padding: 8px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        .toc-sidebar a:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: 300px;
+            padding: 30px;
+        }
+        
+        .slide {
+            background-color: white;
+            margin-bottom: 30px;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            page-break-inside: avoid;
+        }
+        
+        .slide h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .audio-control {
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+        
+        .content {
+            margin-top: 20px;
+        }
+        
+        .definition {
+            background-color: #e8f4fd;
+            border-left: 4px solid var(--secondary-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .example {
+            background-color: #f9f9f9;
+            border-left: 4px solid var(--accent-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .problem {
+            background-color: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .equation {
+            text-align: center;
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        
+        .figure {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .figure img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .figure-caption {
+            font-style: italic;
+            margin-top: 10px;
+            color: #666;
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .table th, .table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .table th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .highlight {
+            background-color: #fffacd;
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+        
+        .code-block {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            
+            .toc-sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="toc-sidebar">
+        <h2>Table of Contents</h2>
+        <ul>
+            <li><a href="#slide61">Slide 61 - PCA Properties</a></li>
+            <li><a href="#slide62">Slide 62 - Example 2.13</a></li>
+            <li><a href="#slide63">Slide 63 - Problem 2.9</a></li>
+            <li><a href="#slide64">Slide 64 - Problem 2.10</a></li>
+            <li><a href="#slide65">Slide 65 - Contingency Tables</a></li>
+            <li><a href="#slide66">Slide 66 - Contingency Table Example</a></li>
+            <li><a href="#slide67">Slide 67 - Problem 2.11</a></li>
+            <li><a href="#slide68">Slide 68 - Data Visualization</a></li>
+            <li><a href="#slide69">Slide 69 - Univariate Visualization</a></li>
+            <li><a href="#slide70">Slide 70 - Histograms</a></li>
+            <li><a href="#slide71">Slide 71 - Histogram Types</a></li>
+            <li><a href="#slide72">Slide 72 - Skewness</a></li>
+            <li><a href="#slide73">Slide 73 - Modality</a></li>
+            <li><a href="#slide74">Slide 74 - Problem 2.12</a></li>
+            <li><a href="#slide75">Slide 75 - Box Plots</a></li>
+            <li><a href="#slide76">Slide 76 - Box Plot Example</a></li>
+            <li><a href="#slide77">Slide 77 - Box Plots Comparison</a></li>
+            <li><a href="#slide78">Slide 78 - Example 2.14</a></li>
+            <li><a href="#slide79">Slide 79 - Problem 2.13</a></li>
+            <li><a href="#slide80">Slide 80 - Multivariate Visualization</a></li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        <section id="slide61" class="slide">
+            <h2>Slide 61 - PCA Properties
+                <audio class="audio-control" controls>
+                    <source src="Slide61.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Properties of Principal Component Analysis</h3>
+                
+                <p>We make some important observations that are relevant to the use of principal component analysis in machine learning.</p>
+                
+                <div class="definition">
+                    <h4>Observation 2.3 (Properties of Principal Component Analysis)</h4>
+                    <p>The principal component analysis of an \(n\times d\) data matrix \(D\) with covariance matrix \(C=P\Delta P^{T}\) (with \(d\times d\) eigenvector matrix \(P\) and diagonal eigenvalue matrix \(\Delta\)) satisfies the following properties:</p>
+                    <ol>
+                        <li>If the \( d \)-dimensional points (rows) of data matrix \( D \) are projected along a single eigenvector direction \( \vec{e_i} \) as \( DE_i \) (i.e., projected along the \( i \)th column vector of \( P \)), then the variance of this 1-dimensional data set is the corresponding eigenvalue (i.e., \( i \)th diagonal element in \( \Delta \)).</li>
+                        <li>If the data \( D \) is projected along any pair of eigenvectors to create a 2-dimensional data set, the corresponding covariance between the resulting pairs of dimensions is 0. As a result, principal component analysis is often used for decorrelating transformations in data preprocessing.</li>
+                        <li>If the top-\( k \) eigenvectors are selected for data representation, the aggregate variance of the resulting data set is greater than or equal to any rotated representation of data set \( D \) in which only \( k \) transformed dimensions are retained. This is because the values on each of the remaining (\( n - k \)) dimensions are roughly constant across different data points. As a result, principal component analysis is often used for dimensionality reduction.</li>
+                    </ol>
+                </div>
+                
+                <p>Principal component analysis is one of the most fundamental operations in machine learning, and it arises in all sorts of applications.</p>
+                
+                <div class="figure">
+                    <!-- Placeholder for PCA properties visualization -->
+                    <div style="background-color: #f0f0f0; height: 200px; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc;">
+                        <p>Figure 2.9: How eigenvectors relate to the data distribution</p>
+                    </div>
+                    <p class="figure-caption">The principal components capture the directions of maximum variance</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide62" class="slide">
+            <h2>Slide 62 - Example 2.13
+                <audio class="audio-control" controls>
+                    <source src="Slide62.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Example 2.13</h3>
+                
+                <div class="example">
+                    <h4>Example 2.13</h4>
+                    <p>Consider a mean-centered data set with the following points:</p>
+                    <div class="equation">
+                        \[\{(4,4),(3,3),(2,2),(1,1),(-1,-1),(-2,-2),(-3,-3),(-4,-4),(1,-1),(-1,1)\}\]
+                    </div>
+                    <p>Compute the covariance matrix, principal components, and eigenvalues. Use any Web calculator for eigenvector computation. Find a 1-dimensional representation of the points that loses the least variance.</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <p>Since the data is mean centered, the covariance is obtained by computing the dot product between the X-coordinate vector \([4,3,2,1,-1,-2,-3,-4,1,-1]\) and the Y-coordinate vector \([4,3,2,1,-1,-2,-3,-4,-1,1]\), and then dividing by the number of points (which is 10).</p>
+                
+                <p>The result is 5.8. Similarly, the variance (self-covariance) of each attribute can be shown to be 6.2 by scaling the self-dot products of the aforementioned vectors by 10.</p>
+                
+                <p>The covariance matrix of this data set is therefore the following:</p>
+                <div class="equation">
+                    \[C = 
+                    \begin{bmatrix}
+                    6.2 & 5.8 \\
+                    5.8 & 6.2
+                    \end{bmatrix}\]
+                </div>
+                
+                <p>The two eigenvectors of this covariance matrix are:</p>
+                <div class="equation">
+                    \[ \vec{e_1} = [1/\sqrt{2},1/\sqrt{2}]^T \quad \text{and} \quad \vec{e_2} = [1/\sqrt{2},-1/\sqrt{2}]^T \]
+                </div>
+                
+                <p>The corresponding eigenvalues are \( \lambda_1 = 12 \) and \( \lambda_2 = 0.4 \), which can be verified using the condition \( A\vec{e_i} = \lambda_i\vec{e_i} \) for each eigenvector \( \vec{e_i} \).</p>
+                
+                <p>Most of the points are primarily aligned along the \(\vec{e}_{1}\).</p>
+            </div>
+        </section>
+
+        <section id="slide63" class="slide">
+            <h2>Slide 63 - Problem 2.9
+                <audio class="audio-control" controls>
+                    <source src="Slide63.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Problem 2.9</h3>
+                
+                <div class="problem">
+                    <h4>Problem 2.9</h4>
+                    <p>Consider the 2-dimensional data set showing the distribution of the points in the scatter plot of Figure 1.2 of Chapter 1. Make an approximate estimation of the vector representing the first principal component direction by placing a straight edge across the figure.</p>
+                </div>
+                
+                <p><strong>Solution Approach:</strong></p>
+                
+                <p>To estimate the first principal component direction from a scatter plot:</p>
+                
+                <ol>
+                    <li>Visualize the overall "direction" of the data cloud - the direction along which the data appears most spread out.</li>
+                    <li>Place a straight edge (ruler) along this direction.</li>
+                    <li>The first principal component is the direction along this line.</li>
+                </ol>
+                
+                <div class="figure">
+                    <!-- Placeholder for scatter plot with PC direction -->
+                    <div style="background-color: #f0f0f0; height: 200px; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc;">
+                        <p>Figure 2.10: Scatter plot with estimated first principal component</p>
+                    </div>
+                    <p class="figure-caption">The first principal component follows the direction of maximum variance</p>
+                </div>
+                
+                <p><strong>Key Insight:</strong></p>
+                <p>The first principal component direction is the direction along which the data has the maximum variance. In a scatter plot, this is typically the direction along which the data points appear most spread out.</p>
+                
+                <div class="example">
+                    <p><strong>Example:</strong> If the data points form an elliptical cloud that is elongated along a diagonal line from bottom-left to top-right, then the first principal component would be approximately along the direction (1,1) or normalized as (1/√2, 1/√2).</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide64" class="slide">
+            <h2>Slide 64 - Problem 2.10
+                <audio class="audio-control" controls>
+                    <source src="Slide64.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Problem 2.10</h3>
+                
+                <div class="problem">
+                    <h4>Problem 2.10</h4>
+                    <p>Consider a covariance matrix in which all non-diagonal elements are 0s. What will be the eigenvectors and eigenvalues of this covariance matrix? Make a guess on the eigenvectors and eigenvalues (by using the properties of principal components discussed above) if you do not know much linear algebra. Provide an explanation of why you obtain these eigenvectors in terms of one of the key properties of the principal components.</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <p>A covariance matrix with all non-diagonal elements equal to 0 is a diagonal matrix:</p>
+                <div class="equation">
+                    \[C = 
+                    \begin{bmatrix}
+                    \sigma_1^2 & 0 & \cdots & 0 \\
+                    0 & \sigma_2^2 & \cdots & 0 \\
+                    \vdots & \vdots & \ddots & \vdots \\
+                    0 & 0 & \cdots & \sigma_d^2
+                    \end{bmatrix}\]
+                </div>
+                
+                <p>For a diagonal matrix:</p>
+                <ul>
+                    <li>The eigenvectors are the standard basis vectors: \( \vec{e_1} = [1, 0, \ldots, 0]^T \), \( \vec{e_2} = [0, 1, \ldots, 0]^T \), ..., \( \vec{e_d} = [0, 0, \ldots, 1]^T \)</li>
+                    <li>The eigenvalues are the diagonal elements: \( \lambda_1 = \sigma_1^2 \), \( \lambda_2 = \sigma_2^2 \), ..., \( \lambda_d = \sigma_d^2 \)</li>
+                </ul>
+                
+                <p><strong>Explanation:</strong></p>
+                <p>When all non-diagonal elements of the covariance matrix are 0, it means there is no covariance between any pair of different attributes. The attributes are uncorrelated.</p>
+                
+                <p>In this case, the original coordinate axes (the standard basis vectors) are already the principal component directions because:</p>
+                <ol>
+                    <li>The variance along each axis is exactly the variance of that attribute</li>
+                    <li>Since there's no correlation between attributes, there's no "mixed" direction that would capture variance from multiple attributes</li>
+                    <li>The directions of maximum variance are simply the original attribute directions, ordered by their individual variances</li>
+                </ol>
+                
+                <div class="example">
+                    <p><strong>Example:</strong> If we have a 2D dataset with covariance matrix:</p>
+                    <div class="equation">
+                        \[C = 
+                        \begin{bmatrix}
+                        4 & 0 \\
+                        0 & 1
+                        \end{bmatrix}\]
+                    </div>
+                    <p>Then the eigenvectors are [1,0] and [0,1] with eigenvalues 4 and 1 respectively. The first principal component is the x-axis direction.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide65" class="slide">
+            <h2>Slide 65 - Contingency Tables
+                <audio class="audio-control" controls>
+                    <source src="Slide65.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>2.2.2.4 Contingency Tables for Categorical Data</h3>
+                
+                <p>All the forms of summarization described in the chapter thus far are designed for numeric data.</p>
+                
+                <p>A natural question arises as to how one can address categorical data or a mixture of categorical and numeric data.</p>
+                
+                <p>Categorical data are best summarized with the use of <span class="highlight">contingency tables</span>.</p>
+                
+                <div class="definition">
+                    <h4>Contingency Table</h4>
+                    <p>For two categorical attributes containing \(p\) and \(q\) possible categorical values, a \(p\times q\) table is created, where the \((i,j)\)th entry of the table is the frequency of the combination of the \(i\)th value of the first attribute and the \(j\)th value of the second attribute.</p>
+                </div>
+                
+                <div class="example">
+                    <p><strong>Example:</strong> Imagine a company that manufactures umbrellas in three different colors and sells them in two different countries. Each observation contains the country of sale as an attribute along with the color of the umbrella.</p>
+                    
+                    <p>The retailer wants to know if there are differences in the sales patterns of the different colors in different countries.</p>
+                    
+                    <p>The contingency table provides a natural way to summarize the frequency of sales of different colors and countries.</p>
+                </div>
+                
+                <p>In such a case, one can create a \(2\times 3\) contingency table containing the frequency of sales of the different umbrellas.</p>
+                
+                <p>Additional rows and columns are added to the table showing the totals across colors and countries.</p>
+            </div>
+        </section>
+
+        <section id="slide66" class="slide">
+            <h2>Slide 66 - Contingency Table Example
+                <audio class="audio-control" controls>
+                    <source src="Slide66.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Contingency Table Example</h3>
+                
+                <p>Contingency tables can also be written in terms of relative frequencies in either row-wise or column-wise form.</p>
+                
+                <ul>
+                    <li>The <span class="highlight">row-wise form</span> of relative frequencies divides the table entries with the row sum, so that each row sums to 1.</li>
+                    <li>The <span class="highlight">column-wise form</span> of relative frequencies divides the table entries with the column sum, so that each column sums to 1.</li>
+                </ul>
+                
+                <p>Such fractional values can be viewed as statistical estimates of <span class="highlight">conditional probabilities</span> of different categorical attribute values with respect to one another.</p>
+                
+                <div class="example">
+                    <p><strong>Example Contingency Table:</strong></p>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th><strong>Black</strong></th>
+                                <th><strong>Blue</strong></th>
+                                <th><strong>Red</strong></th>
+                                <th><strong>Totals</strong></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Country A</strong></td>
+                                <td>134</td>
+                                <td>82</td>
+                                <td>105</td>
+                                <td>321</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Country B</strong></td>
+                                <td>75</td>
+                                <td>102</td>
+                                <td>33</td>
+                                <td>210</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Totals</strong></td>
+                                <td>209</td>
+                                <td>184</td>
+                                <td>138</td>
+                                <td>531</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p class="figure-caption">Table 2.1: Contingency table of umbrella sale frequency (thousands) across countries and colors</p>
+                </div>
+                
+                <p>Is there a way of finding out whether the two attributes are associated with one another in a <span class="highlight">statistically significant</span> manner?</p>
+                
+                <p>One can quantify the level of association between categorical attributes with the use of a measure referred to as the \(\chi^{2}\)-statistic.</p>
+                
+                <p>A detailed discussion of the use of the \(\chi^{2}\)-statistic to quantify "statistical association" between pairs of categorical attributes is provided in section 5.6.3 of Chapter 5.</p>
+            </div>
+        </section>
+
+        <section id="slide67" class="slide">
+            <h2>Slide 67 - Problem 2.11
+                <audio class="audio-control" controls>
+                    <source src="Slide67.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Problem 2.11</h3>
+                
+                <div class="problem">
+                    <h4>Problem 2.11</h4>
+                    <p>Generate a relative-frequency version of the contingency table of Table 2.1 in which each row sums to 100 percent. Generate a relative-frequency version of the contingency table of Table 2.1 in which each column sums to 100 percent.</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <p><strong>Row-wise relative frequency table (each row sums to 100%):</strong></p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th><strong>Black</strong></th>
+                            <th><strong>Blue</strong></th>
+                            <th><strong>Red</strong></th>
+                            <th><strong>Totals</strong></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Country A</strong></td>
+                            <td>134/321 ≈ 41.7%</td>
+                            <td>82/321 ≈ 25.5%</td>
+                            <td>105/321 ≈ 32.7%</td>
+                            <td>100%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Country B</strong></td>
+                            <td>75/210 ≈ 35.7%</td>
+                            <td>102/210 ≈ 48.6%</td>
+                            <td>33/210 ≈ 15.7%</td>
+                            <td>100%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Totals</strong></td>
+                            <td>209/531 ≈ 39.4%</td>
+                            <td>184/531 ≈ 34.7%</td>
+                            <td>138/531 ≈ 26.0%</td>
+                            <td>100%</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <p><strong>Column-wise relative frequency table (each column sums to 100%):</strong></p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th><strong>Black</strong></th>
+                            <th><strong>Blue</strong></th>
+                            <th><strong>Red</strong></th>
+                            <th><strong>Totals</strong></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Country A</strong></td>
+                            <td>134/209 ≈ 64.1%</td>
+                            <td>82/184 ≈ 44.6%</td>
+                            <td>105/138 ≈ 76.1%</td>
+                            <td>321/531 ≈ 60.5%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Country B</strong></td>
+                            <td>75/209 ≈ 35.9%</td>
+                            <td>102/184 ≈ 55.4%</td>
+                            <td>33/138 ≈ 23.9%</td>
+                            <td>210/531 ≈ 39.5%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Totals</strong></td>
+                            <td>100%</td>
+                            <td>100%</td>
+                            <td>100%</td>
+                            <td>100%</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <p><strong>Interpretation:</strong></p>
+                <ul>
+                    <li>The row-wise table shows the distribution of color preferences within each country.</li>
+                    <li>The column-wise table shows the distribution of countries for each color.</li>
+                    <li>We can observe that Country A has a stronger preference for black and red umbrellas, while Country B has a stronger preference for blue umbrellas.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="slide68" class="slide">
+            <h2>Slide 68 - Data Visualization
+                <audio class="audio-control" controls>
+                    <source src="Slide68.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>2.3 Data Visualization</h3>
+                
+                <p>Data visualization is often a key step that is used by analysts before applying more detailed machine learning techniques to data.</p>
+                
+                <p>There are numerous types of visualizations that are leveraged for univariate data and for multivariate data.</p>
+                
+                <p>This chapter will provide an overview of some of the most important methods for both types of visualizations.</p>
+                
+                <div class="definition">
+                    <h4>Data Visualization</h4>
+                    <p>The graphical representation of information and data. By using visual elements like charts, graphs, and maps, data visualization tools provide an accessible way to see and understand trends, outliers, and patterns in data.</p>
+                </div>
+                
+                <p>Visualization techniques help in:</p>
+                <ul>
+                    <li>Understanding the distribution and patterns in data</li>
+                    <li>Identifying outliers and anomalies</li>
+                    <li>Communicating findings to stakeholders</li>
+                    <li>Guiding the selection of appropriate machine learning models</li>
+                </ul>
+                
+                <div class="figure">
+                    <!-- Placeholder for data visualization examples -->
+                    <div style="background-color: #f0f0f0; height: 200px; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc;">
+                        <p>Figure 2.11: Examples of different data visualization techniques</p>
+                    </div>
+                    <p class="figure-caption">Different visualization techniques reveal different aspects of data</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide69" class="slide">
+            <h2>Slide 69 - Univariate Visualization
+                <audio class="audio-control" controls>
+                    <source src="Slide69.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>2.3.1 Univariate Visualization</h3>
+                
+                <p>Univariate visualization methods provide a visual illustration of a single attribute of the data at one time.</p>
+                
+                <p>In this section, two important forms of univariate data visualization, which are the histogram and the box plot, will be introduced.</p>
+                
+                <div class="definition">
+                    <h4>Univariate Visualization</h4>
+                    <p>Visualization techniques that display the distribution of a single variable. These help understand the central tendency, dispersion, and shape of the distribution of individual variables.</p>
+                </div>
+                
+                <p>Common univariate visualization techniques include:</p>
+                <ul>
+                    <li><strong>Histograms:</strong> Show the frequency distribution of a variable</li>
+                    <li><strong>Box plots:</strong> Show the five-number summary and outliers</li>
+                    <li><strong>Density plots:</strong> Show the probability density function</li>
+                    <li><strong>Bar charts:</strong> For categorical variables</li>
+                </ul>
+                
+                <div class="example">
+                    <p><strong>When to use univariate visualization:</strong></p>
+                    <ul>
+                        <li>When you want to understand the distribution of a single variable</li>
+                        <li>When checking for outliers or anomalies in individual variables</li>
+                        <li>When preparing data for machine learning (understanding feature distributions)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide70" class="slide">
+            <h2>Slide 70 - Histograms
+                <audio class="audio-control" controls>
+                    <source src="Slide70.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>2.3.1.1 Histogram</h3>
+                
+                <p>The simplest univariate form of a data distribution is that of a histogram.</p>
+                
+                <p>A histogram divides the range between the minimum and maximum values of the attribute into \(b\) intervals, which are referred to as <span class="highlight">bins</span>.</p>
+                
+                <p>The value of \(b\) is a parameter, which is selected by the user.</p>
+                
+                <p>The frequency of the number of points in each bin is computed and then plotted on the \(Y\)-axis, whereas the \(X\)-axis contains the bin ranges of the variable of interest.</p>
+                
+                <div class="figure">
+                    <!-- Placeholder for histogram examples -->
+                    <div style="background-color: #f0f0f0; height: 200px; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc;">
+                        <p>Figure 2.12: Histograms of the same data set with 200 points and varying numbers of bins</p>
+                    </div>
+                    <p class="figure-caption">Different bin sizes reveal different aspects of the data distribution</p>
+                </div>
+                
+                <p>Examples of histograms of a data set containing the salaries of 200 individuals are shown in Figure 2.2 for varying numbers of bins.</p>
+                
+                <p>It is evident from the figure that using 5 bins does not provide sufficient details of the frequency variations across the range of salaries, whereas using 100 bins is excessive because only a few individuals fall in each bin on average (resulting in many empty bins or bins with noisy and irrelevant details).</p>
+                
+                <p>What we want is a histogram containing sufficient detail about the broad trends in the data distribution without its shape being too sensitive to the specific sample of the population that the analyst might have collected.</p>
+            </div>
+        </section>
+
+        <section id="slide71" class="slide">
+            <h2>Slide 71 - Histogram Types
+                <audio class="audio-control" controls>
+                    <source src="Slide71.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Types of Histograms</h3>
+                
+                <p>In general, choosing the correct number of bins is often achieved by repeatedly plotting the data with different values of \(b\) and selecting the most informative option based on visual estimation.</p>
+                
+                <p>A good rule of thumb is to choose a number of bins that is less than the number of points by a factor of 10.</p>
+                
+                <p>It is noteworthy that all histograms shown in Figure 2.2 are <span class="highlight">absolute frequency histograms</span>, because the scale of the \(Y\)-axis contains the absolute number of samples.</p>
+                
+                <p>There are two other common approaches for illustrating histograms:</p>
+                
+                <div class="figure">
+                    <!-- Placeholder for different histogram types -->
+                    <div style="background-color: #f0f0f0; height: 200px; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc;">
+                        <p>Figure 2.13: Histograms of different types for the same data set with 200 points and 20 bins</p>
+                    </div>
+                    <p class="figure-caption">Different histogram representations: (a) absolute frequency, (b) relative frequency, (c) density</p>
+                </div>
+                
+                <ol>
+                    <li><strong>Relative frequency histogram:</strong> The \(Y\)-axis is scaled so that the bars add up to 100 percent. In other words, the value of each bar corresponds to the <em>percentage</em> of items falling in each bin.</li>
+                    <li><strong>Density plot:</strong> The area of the histogram sums to 1. This is the most mathematically rigorous representation. The significance of the area summing to 1 is that each bar represents a statistical estimate of the <em>probability distribution</em> from which the data was drawn.</li>
+                </ol>
+                
+                <p>A density histogram is a statistical estimate of the probability density of the population using a sample of the data.</p>
+            </div>
+        </section>
+
+        <section id="slide72" class="slide">
+            <h2>Slide 72 - Skewness
+                <audio class="audio-control" controls>
+                    <source src="Slide72.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Skewness in Distributions</h3>
+                
+                <p>The histogram provides an understanding of the overall shape of the data distribution along with the type of <span class="highlight">skew</span> in the data.</p>
+                
+                <div class="definition">
+                    <h4>Skewness</h4>
+                    <p>A measure of the asymmetry of the probability distribution of a real-valued random variable about its mean.</p>
+                </div>
+                
+                <ul>
+                    <li>A distribution is <span class="highlight">right-skewed</span> if the extreme points of the distribution occur towards the right and most of the data lumps to the left of the distribution. In such a case, the few extreme points that occur to the right of the distribution are referred to as its <span class="highlight">tail</span>.</li>
+                    <li>A distribution is <span class="highlight">left-skewed</span> if the extreme points of the distribution occur towards the left and most of the data lumps to the right. In this case, the tail of the distribution occurs to the left.</li>
+                </ul>
+                
+                <div class="figure">
+                    <!-- Placeholder for skewness examples -->
+                    <div style="background-color: #f0f0f0; height: 200px; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc;">
+                        <p>Figure 2.14: Histogram representations of left-skewed, right-skewed, and symmetric distributions</p>
+                    </div>
+                    <p class="figure-caption">Examples of different types of skewness in distributions</p>
+                </div>
+                
+                <p>Examples of left-skewed, symmetric, and right-skewed distributions are shown in Figures 2.4(a), (b), and (c), respectively.</p>
+                
+                <p>Skewed distributions are common in real-world data, because outliers tend to occur at one end of the distribution in many cases.</p>
+                
+                <div class="example">
+                    <p><strong>Example:</strong> If the frequency distribution of the net worth of the US population were to be represented by a histogram, the majority of the US population would occur in bins with ranges that are subsets of \([0,100000]\). Less than 5% of the population would lie in bins corresponding to a net worth over a million dollars and a handful of people would lie in bins corresponding to a net worth over 10 billion dollars.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide73" class="slide">
+            <h2>Slide 73 - Modality
+                <audio class="audio-control" controls>
+                    <source src="Slide73.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Modality of Distributions</h3>
+                
+                <p>One heuristic way of identifying the nature of the skewness on the distributions (without explicitly visualizing the data) is to examine the relative effects on the mean and the median by the type of skew.</p>
+                
+                <ul>
+                    <li>The mean of a right-skewed distribution gets pulled to the right (relative to the median) by the few extreme points on the right</li>
+                    <li>The mean of a left-skewed distribution gets pulled to the left (relative to the median) by the few extreme points on the left</li>
+                </ul>
+                
+                <p>Therefore:</p>
+                <ul>
+                    <li>The mean of a right-skewed distribution is typically greater than the median</li>
+                    <li>The mean of a left-skewed distribution is typically less than the median</li>
+                    <li>In the case of symmetric distributions, the mean and median are situated at roughly similar places</li>
+                </ul>
+                
+                <p>This approach is only a heuristic, because small differences between the mean and the median may not necessarily provide a clear indicator of the nature of the skew in the distribution.</p>
+                
+                <p>Finally, histograms can be used to identify unimodal, bimodal, or multimodal distributions.</p>
+                
+                <div class="definition">
+                    <h4>Modality</h4>
+                    <p>A histogram is unimodal, bimodal, or multimodal, depending on whether it has one peak, two peaks, or more than two peaks in the underlying histogram.</p>
+                </div>
+                
+                <div class="figure">
+                    <!-- Placeholder for modality examples -->
+                    <div style="background-color: #f0f0f0; height: 200px; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc;">
+                        <p>Figure 2.15: Histogram representations of data generated from unimodal, bimodal, and multimodal distributions</p>
+                    </div>
+                    <p class="figure-caption">Examples of different modalities in distributions</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide74" class="slide">
+            <h2>Slide 74 - Problem 2.12
+                <audio class="audio-control" controls>
+                    <source src="Slide74.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Problem 2.12</h3>
+                
+                <div class="problem">
+                    <h4>Problem 2.12</h4>
+                    <p>Provide an example of how the careless placement of bins can cause misleading results if the data is numeric but takes on a few discrete values. [This is one of the reasons that discrete numeric data are often treated differently from continuous numeric data by histogram-plotting software.]</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <p>Consider a dataset of exam scores that can only take integer values from 0 to 100, but most scores are clustered around specific values like 60, 70, 80, and 90.</p>
+                
+                <p><strong>Example dataset:</strong> Scores: 60, 60, 60, 70, 70, 80, 80, 80, 80, 90, 90</p>
+                
+                <p><strong>Poor bin placement:</strong> If we create bins with boundaries that don't align with the actual data values:</p>
+                <ul>
+                    <li>Bin 1: 55-65 (contains scores 60, 60, 60)</li>
+                    <li>Bin 2: 65-75 (contains scores 70, 70)</li>
+                    <li>Bin 3: 75-85 (contains scores 80, 80, 80, 80)</li>
+                    <li>Bin 4: 85-95 (contains scores 90, 90)</li>
+                </ul>
+                
+                <p>This bin placement would create a histogram that suggests a continuous distribution with smooth transitions between scores, when in reality the scores are discrete and clustered at specific values.</p>
+                
+                <p><strong>Better approach:</strong> For discrete numeric data, it's often better to:</p>
+                <ol>
+                    <li>Create bins that align with the actual discrete values</li>
+                    <li>Use a bar chart instead of a histogram</li>
+                    <li>Ensure that bin boundaries don't split natural groupings of the data</li>
+                </ol>
+                
+                <div class="example">
+                    <p><strong>Real-world example:</strong> Age data is often collected as integers (whole years). If we create bins like 20-30, 30-40, etc., we face the problem of where to place people who are exactly 30 years old. Should they go in the 20-30 bin or the 30-40 bin?</p>
+                    
+                    <p>This is why it's important to be careful with bin boundaries for discrete data, and why many software packages treat discrete numeric data differently from continuous numeric data.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide75" class="slide">
+            <h2>Slide 75 - Box Plots
+                <audio class="audio-control" controls>
+                    <source src="Slide75.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>2.3.1.2 Box Plot</h3>
+                
+                <p>A second useful form of visualization is the <span class="highlight">box plot</span>, and it is sometimes also referred to as the box-and-whisker plot.</p>
+                
+                <p>A box-and-whisker plot is not as effective at identifying the key details of a data distribution (as the histogram is), but it succinctly summarizes various quartiles and extreme points.</p>
+                
+                <p>It can be viewed as a representation of the extent of variation on both sides of the median, but it gives much less detail than a histogram does.</p>
+                
+                <p>It is, nevertheless, extremely popular with analysts because of its simplicity and the ability to merge it with other types of plots, when the quantity on the \(Y\)-axis has a randomized element to it.</p>
+                
+                <div class="example">
+                    <p><strong>Example use case:</strong> Multiple runs of the same machine learning algorithms may sometimes lead to different accuracy values depending on the choice of random seed or chosen data subset. A box plot is sometimes used as a more informative marker in straightforward algorithmic performance charts showing the accuracy of a particular machine learning algorithm against an algorithm parameter.</p>
+                </div>
+                
+                <div class="definition">
+                    <h4>Box Plot</h4>
+                    <p>A method for graphically depicting groups of numerical data through their quartiles. Box plots may also have lines extending vertically from the boxes (whiskers) indicating variability outside the upper and lower quartiles.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide76" class="slide">
+            <h2>Slide 76 - Box Plot Example
+                <audio class="audio-control" controls>
+                    <source src="Slide76.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Box Plot Construction</h3>
+                
+                <p>In a box plot, the statistics of a univariate data set are summarized in terms of five quantities representing different values along the \(Y\)-axis.</p>
+                
+                <p>As the name suggests, a box-plot uses a box, two whiskers, and a horizontal line in the interior of the box to represent these quantities.</p>
+                
+                <p>The five key quantities in the box-plot are:</p>
+                <ol>
+                    <li>The "minimum/maximum values" (whisker locations)</li>
+                    <li>The upper and lower quartiles (the location of the upper and lower ends of the box)</li>
+                    <li>The median (line in middle of box)</li>
+                </ol>
+                
+                <p>We have enclosed quotations around two of these quantities because they are defined in a non-standard way.</p>
+                
+                <p>The distance between the upper and lower quartiles is the inter-quartile range (IQR) introduced earlier in this chapter.</p>
+                
+                <div class="figure">
+                    <!-- Placeholder for box plot diagram -->
+                    <div style="background-color: #f0f0f0; height: 200px; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc;">
+                        <p>Figure 2.16: Anatomy of a box plot</p>
+                    </div>
+                    <p class="figure-caption">The components of a box plot and what they represent</p>
+                </div>
+                
+                <p>The "minimum" and "maximum" are defined in a (non-standard) trimmed way in order to define the location of the whiskers.</p>
+                
+                <ul>
+                    <li>If there are no points more than 1.5 IQR above the top quartile value (upper end of the box), then the upper whisker is the true maximum.</li>
+                    <li>Otherwise, the upper whisker is set at 1.5 times the IQR from the upper end of the box.</li>
+                </ul>
+                
+                <p>An exactly analogous rule holds true for the lower whisker.</p>
+            </div>
+        </section>
+
+        <section id="slide77" class="slide">
+            <h2>Slide 77 - Box Plots Comparison
+                <audio class="audio-control" controls>
+                    <source src="Slide77.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Box Plots for Different Distributions</h3>
+                
+                <p>Furthermore, any extreme points that do not lie between the upper and lower whiskers are shown explicitly with markers. These are the outliers in the data set, and they are also referred to as <span class="highlight">fliers</span> in the box plot.</p>
+                
+                <div class="example">
+                    <p><strong>Example of a box plot:</strong> In this case, we have shown 100 data points, which were generated by repeatedly sampling points from:</p>
+                    <ol>
+                        <li>A uniform distribution with zero mean and unit variance</li>
+                        <li>A standard normal distribution with zero mean and unit variance</li>
+                        <li>An exponential distribution with unit mean</li>
+                    </ol>
+                </div>
+                
+                <div class="figure">
+                    <!-- Placeholder for box plots of different distributions -->
+                    <div style="background-color: #f0f0f0; height: 200px; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc;">
+                        <p>Figure 2.17: Visualizing univariate data with box plots</p>
+                    </div>
+                    <p class="figure-caption">Box plots for uniform, normal, and exponential distributions</p>
+                </div>
+                
+                <p>The last of these distributions has not yet been introduced — the exponential distribution has non-zero probability density only over non-negative values of the variable \(x\), and decays exponentially at a rate equal to \(\lambda\exp(-\lambda x)\) based on a decay-parameter \(\lambda>0\), causing a right-skewed distribution.</p>
+                
+                <p>Note that the first two distributions are symmetric about the mean, whereas the last distribution is not.</p>
+                
+                <p>The choice of these distributions shows the effect of different underlying data distributions on the box plot.</p>
+                
+                <p>Another interesting observation is the asymmetric nature of the placement of the quartiles and whiskers for a right-skewed distribution.</p>
+            </div>
+        </section>
+
+        <section id="slide78" class="slide">
+            <h2>Slide 78 - Example 2.14
+                <audio class="audio-control" controls>
+                    <source src="Slide78.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Example 2.14</h3>
+                
+                <div class="example">
+                    <h4>Example 2.14</h4>
+                    <p>Is it possible for a Tukey box plot to have no box (i.e., collapsed box with thickness 0) but to have clear whiskers at some distance on either side of the collapsed box? If not, explain why not. If so, provide an example.</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <p>It is not possible for such a situation to occur because the whiskers are placed at distances of at most 1.5 IQR from box ends.</p>
+                
+                <p>In this case, the collapsed box indicates that the IQR is 0.</p>
+                
+                <p>If IQR = 0, then:</p>
+                <ul>
+                    <li>The upper quartile (Q3) equals the lower quartile (Q1)</li>
+                    <li>This means that at least 50% of the data points have the same value</li>
+                    <li>The whiskers would be placed at Q1 - 1.5×0 = Q1 and Q3 + 1.5×0 = Q3</li>
+                    <li>So both whiskers would be at the same position as the collapsed box</li>
+                </ul>
+                
+                <p>Therefore, it's impossible to have a collapsed box (IQR = 0) with whiskers at some distance from the box.</p>
+                
+                <div class="example">
+                    <p><strong>Example of when IQR = 0:</strong> Consider the dataset: {5, 5, 5, 5, 5}</p>
+                    <ul>
+                        <li>Q1 = 5, Q3 = 5, so IQR = 0</li>
+                        <li>The box collapses to a single line at y=5</li>
+                        <li>The whiskers would also be at y=5</li>
+                        <li>There would be no visible whiskers extending from the box</li>
+                    </ul>
+                </div>
+                
+                <p>This example illustrates an important property of the Tukey box plot construction: the whiskers' positions are directly determined by the IQR.</p>
+            </div>
+        </section>
+
+        <section id="slide79" class="slide">
+            <h2>Slide 79 - Problem 2.13
+                <audio class="audio-control" controls>
+                    <source src="Slide79.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Problem 2.13</h3>
+                
+                <div class="problem">
+                    <h4>Problem 2.13</h4>
+                    <p>In what type of data set would the lower whisker of the box plot align with the lower end of the box in the box plot? Give an example.</p>
+                    <p>A hint for solving this problem is to examine cases in which the lower quartile of a data set is the same as the minimum value.</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <p>The lower whisker aligns with the lower end of the box when there are no data points between the lower quartile (Q1) and Q1 - 1.5×IQR.</p>
+                
+                <p>This happens when the minimum value of the dataset is exactly equal to the lower quartile (Q1), or when all data points below Q1 are within 1.5×IQR of Q1.</p>
+                
+                <div class="example">
+                    <p><strong>Example 1: Minimum equals Q1</strong></p>
+                    <p>Dataset: {2, 2, 3, 4, 5, 6, 7, 8, 9, 10}</p>
+                    <ul>
+                        <li>Q1 = 3 (the 3rd value when sorted)</li>
+                        <li>Minimum = 2</li>
+                        <li>IQR = Q3 - Q1 = 7 - 3 = 4</li>
+                        <li>Lower whisker position: max(Minimum, Q1 - 1.5×IQR) = max(2, 3 - 6) = max(2, -3) = 2</li>
+                    </ul>
+                    <p>In this case, the lower whisker (2) does not align with the lower end of the box (3).</p>
+                </div>
+                
+                <div class="example">
+                    <p><strong>Example 2: All data within 1.5×IQR of Q1</strong></p>
+                    <p>Dataset: {3, 3, 3, 4, 5, 6, 7, 8, 9, 10}</p>
+                    <ul>
+                        <li>Q1 = 3 (average of 3rd and 4th values: (3+3)/2 = 3)</li>
+                        <li>Minimum = 3</li>
+                        <li>IQR = Q3 - Q1 = 7 - 3 = 4</li>
+                        <li>Lower whisker position: max(Minimum, Q1 - 1.5×IQR) = max(3, 3 - 6) = max(3, -3) = 3</li>
+                    </ul>
+                    <p>In this case, the lower whisker (3) aligns with the lower end of the box (3).</p>
+                </div>
+                
+                <p><strong>General case:</strong> The lower whisker aligns with the lower end of the box when:</p>
+                <div class="equation">
+                    \[ \text{Minimum} \geq Q1 - 1.5 \times IQR \]
+                </div>
+                <p>And specifically, the whisker is at the lower end of the box when the minimum equals Q1 or when the minimum is greater than Q1 - 1.5×IQR but there are no data points between Q1 - 1.5×IQR and Q1.</p>
+            </div>
+        </section>
+
+        <section id="slide80" class="slide">
+            <h2>Slide 80 - Multivariate Visualization
+                <audio class="audio-control" controls>
+                    <source src="Slide80.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>2.3.2 Multivariate Visualization</h3>
+                
+                <p>In multivariate data, the data has multiple attributes, and one would often like to know how the different attributes are associated with one another.</p>
+                
+                <p>This section will discuss the three most popular visualization techniques, which correspond to the line plot, the scatter plot and the bar chart.</p>
+                
+                <div class="definition">
+                    <h4>Multivariate Visualization</h4>
+                    <p>Visualization techniques that display relationships between two or more variables. These help understand correlations, clusters, and patterns in multidimensional data.</p>
+                </div>
+                
+                <p>Common multivariate visualization techniques include:</p>
+                <ul>
+                    <li><strong>Scatter plots:</strong> Show relationship between two numeric variables</li>
+                    <li><strong>Line plots:</strong> Show how a variable changes with respect to another (often time)</li>
+                    <li><strong>Bar charts:</strong> Show relationships between categorical and numeric variables</li>
+                    <li><strong>Heat maps:</strong> Show matrix-like data with color coding</li>
+                    <li><strong>Parallel coordinates:</strong> For visualizing high-dimensional data</li>
+                </ul>
+                
+                <div class="example">
+                    <p><strong>When to use multivariate visualization:</strong></p>
+                    <ul>
+                        <li>When exploring relationships between variables</li>
+                        <li>When identifying clusters or groups in data</li>
+                        <li>When preparing data for multivariate machine learning models</li>
+                        <li>When communicating complex relationships to stakeholders</li>
+                    </ul>
+                </div>
+                
+                <div class="figure">
+                    <!-- Placeholder for multivariate visualization examples -->
+                    <div style="background-color: #f0f0f0; height: 200px; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc;">
+                        <p>Figure 2.18: Examples of multivariate visualization techniques</p>
+                    </div>
+                    <p class="figure-caption">Different techniques for visualizing relationships between multiple variables</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Add smooth scrolling for navigation links
+        document.querySelectorAll('.toc-sidebar a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                document.querySelector(targetId).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Initialize MathJax
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+</body>
+</html>

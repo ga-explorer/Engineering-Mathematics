@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 2: Summarizing and Visualizing Data - Part 1</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .toc-sidebar {
+            width: 300px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+            overflow-y: auto;
+            position: fixed;
+            height: 100vh;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+        
+        .toc-sidebar h2 {
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .toc-sidebar ul {
+            list-style-type: none;
+        }
+        
+        .toc-sidebar li {
+            margin-bottom: 10px;
+        }
+        
+        .toc-sidebar a {
+            color: var(--light-color);
+            text-decoration: none;
+            display: block;
+            padding: 8px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        .toc-sidebar a:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: 300px;
+            padding: 30px;
+        }
+        
+        .slide {
+            background-color: white;
+            margin-bottom: 30px;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            page-break-inside: avoid;
+        }
+        
+        .slide h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .audio-control {
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+        
+        .content {
+            margin-top: 20px;
+        }
+        
+        .definition {
+            background-color: #e8f4fd;
+            border-left: 4px solid var(--secondary-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .example {
+            background-color: #f9f9f9;
+            border-left: 4px solid var(--accent-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .problem {
+            background-color: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .equation {
+            text-align: center;
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        
+        .figure {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .figure img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .figure-caption {
+            font-style: italic;
+            margin-top: 10px;
+            color: #666;
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .table th, .table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .table th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .highlight {
+            background-color: #fffacd;
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+        
+        .code-block {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            
+            .toc-sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="toc-sidebar">
+        <h2>Table of Contents</h2>
+        <ul>
+            <li><a href="#slide1">Slide 1 - Chapter Introduction</a></li>
+            <li><a href="#slide2">Slide 2 - Data Summarization</a></li>
+            <li><a href="#slide3">Slide 3 - Data Visualization</a></li>
+            <li><a href="#slide4">Slide 4 - Data Preprocessing</a></li>
+            <li><a href="#slide5">Slide 5 - Chapter Organization</a></li>
+            <li><a href="#slide6">Slide 6 - Summarizing Data</a></li>
+            <li><a href="#slide7">Slide 7 - Univariate Summarization</a></li>
+            <li><a href="#slide8">Slide 8 - Measures of Central Tendency</a></li>
+            <li><a href="#slide9">Slide 9 - Sample Mean</a></li>
+            <li><a href="#slide10">Slide 10 - Mean Example</a></li>
+            <li><a href="#slide11">Slide 11 - Sample Median</a></li>
+            <li><a href="#slide12">Slide 12 - Median Example</a></li>
+            <li><a href="#slide13">Slide 13 - Mean vs Median</a></li>
+            <li><a href="#slide14">Slide 14 - Example 2.1</a></li>
+            <li><a href="#slide15">Slide 15 - Problem 2.1</a></li>
+            <li><a href="#slide16">Slide 16 - Percentiles</a></li>
+            <li><a href="#slide17">Slide 17 - Sample Percentile Definition</a></li>
+            <li><a href="#slide18">Slide 18 - Percentile Example</a></li>
+            <li><a href="#slide19">Slide 19 - Quartiles and IQR</a></li>
+            <li><a href="#slide20">Slide 20 - Example 2.2</a></li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        <section id="slide1" class="slide">
+            <h2>Slide 1 - Chapter Introduction
+                <audio class="audio-control" controls>
+                    <source src="Slide1.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Chapter 2: Summarizing and Visualizing Data</h3>
+                <p>"A picture is worth a thousand words." — Frederick Barnard</p>
+                
+                <h4>2.1 Introduction</h4>
+                <p>In the modern era, statisticians and analysts are often faced with large amounts of data, which creates the need to summarize and visualize the data before analysis. Therefore, methods are required for creating easily digestible summaries and visual representations of data.</p>
+                
+                <p>The creation of easily digestible summaries and visual representations enables the analyst to obtain a better idea of the broad patterns in the data. This chapter will introduce algorithms for summarizing and visualizing data.</p>
+                
+                <p>The discussions in these chapters primarily address two issues:</p>
+                <ul>
+                    <li><strong>Summarizing data:</strong> Data summarization discusses the generation of key statistical properties of the data, such as its measures of <em>central tendency</em> or measures of <em>dispersion</em>.</li>
+                    <li><strong>Data visualization:</strong> The analyst can often obtain a better understanding of the data with the use of data visualization techniques.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="slide2" class="slide">
+            <h2>Slide 2 - Data Summarization
+                <audio class="audio-control" controls>
+                    <source src="Slide2.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Data Summarization</h3>
+                
+                <p>Data summarization discusses the generation of key statistical properties of the data:</p>
+                
+                <ul>
+                    <li>Measures of <span class="highlight">central tendency</span> try to quantify measures of central location with respect to the data values.</li>
+                    <li>Measures of <span class="highlight">dispersion</span> quantify how much the data is spread around these central locations.</li>
+                    <li>Other forms of data summarization include:
+                        <ul>
+                            <li>Measures of association between numeric variables</li>
+                            <li>Generation of contingency tables for categorical data</li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <div class="definition">
+                    <h4>Key Concepts:</h4>
+                    <p><strong>Central Tendency:</strong> A central value that represents the entire data set (mean, median, mode).</p>
+                    <p><strong>Dispersion:</strong> Measures how spread out the data is (range, variance, standard deviation).</p>
+                </div>
+                
+                <p>Beyond providing insights about the data distribution, data summarization can be used for various types of preprocessing that are used before machine learning applications.</p>
+            </div>
+        </section>
+
+        <section id="slide3" class="slide">
+            <h2>Slide 3 - Data Visualization
+                <audio class="audio-control" controls>
+                    <source src="Slide3.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Data Visualization</h3>
+                
+                <p>The analyst can often obtain a better understanding of the data with the use of data visualization techniques.</p>
+                
+                <p>Examples of such visualization techniques include:</p>
+                <ul>
+                    <li>Histograms</li>
+                    <li>Scatter plots</li>
+                    <li>Bar charts</li>
+                    <li>Box plots</li>
+                    <li>Line plots</li>
+                </ul>
+                
+                <p>Visualization techniques often help the analyst get a better understanding of the details of how the data is distributed (e.g., regions of high frequency and low frequency).</p>
+                
+                <div class="example">
+                    <p><strong>Example:</strong> In some cases, this type of understanding can provide insights about the type of model that will work best in a particular machine learning application.</p>
+                </div>
+                
+                <div class="figure">
+                    <!-- Placeholder for a visualization figure -->
+                    <div style="background-color: #f0f0f0; height: 200px; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc;">
+                        <p>Figure 2.1: Example visualization showing data distribution patterns</p>
+                    </div>
+                    <p class="figure-caption">Different visualization techniques reveal different aspects of data</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide4" class="slide">
+            <h2>Slide 4 - Data Preprocessing
+                <audio class="audio-control" controls>
+                    <source src="Slide4.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Data Preprocessing Applications</h3>
+                
+                <p>Beyond providing insights about the data distribution, data summarization can be used for various types of preprocessing that are used before machine learning applications.</p>
+                
+                <p>For example, the data is often <span class="highlight">standardized</span> with translation and scaling, which requires computation of the measures of central tendency and dispersion on the original data.</p>
+                
+                <p>Such measures help in selecting scaling and translation quantities, so that the standardized data has specific measures of central tendency and dispersion.</p>
+                
+                <div class="equation">
+                    <p>Standardization formula: \( x' = \frac{x - \mu}{\sigma} \)</p>
+                </div>
+                
+                <p>These types of preprocessing methods allow off-the-shelf algorithms to have more robust behavior in real-world applications.</p>
+                
+                <div class="example">
+                    <p><strong>Example:</strong> In machine learning, features with different scales can dominate the model. Standardization ensures all features contribute equally.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide5" class="slide">
+            <h2>Slide 5 - Chapter Organization
+                <audio class="audio-control" controls>
+                    <source src="Slide5.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Chapter Organization</h3>
+                
+                <p>This chapter is organized as follows:</p>
+                
+                <ol>
+                    <li><strong>Section 2.2:</strong> Introduces several important measures of summarization for both univariate and multivariate data.</li>
+                    <li><strong>Section 2.3:</strong> Discusses numerous visualization techniques for univariate and multivariate data.</li>
+                    <li><strong>Section 2.4:</strong> Applications of summary statistics to data preprocessing and standardization.</li>
+                    <li><strong>Section 2.5:</strong> Summary of the chapter.</li>
+                </ol>
+                
+                <div class="definition">
+                    <h4>Key Sections:</h4>
+                    <p><strong>Univariate Data:</strong> Data with a single variable or attribute.</p>
+                    <p><strong>Multivariate Data:</strong> Data with multiple variables or attributes.</p>
+                </div>
+                
+                <p>We'll explore both univariate and multivariate techniques for summarizing and visualizing data.</p>
+            </div>
+        </section>
+
+        <section id="slide6" class="slide">
+            <h2>Slide 6 - Summarizing Data
+                <audio class="audio-control" controls>
+                    <source src="Slide6.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>2.2 Summarizing Data</h3>
+                
+                <p>Various types of univariate and multivariate summary statistics are useful for characterizing important properties of the data.</p>
+                
+                <p>In this section, various methods for constructing summary statistics of the data will be discussed.</p>
+                
+                <div class="definition">
+                    <p><strong>Important Note:</strong> All the summary statistics discussed below are defined with respect to <em>samples</em> of the population, and these are only estimates of their true values in the entire population.</p>
+                </div>
+                
+                <p>Since the entire population can never be collected in most real-world applications, these values provide excellent estimates of their true values across the entire population.</p>
+                
+                <div class="example">
+                    <p><strong>Example of known population parameter:</strong> The number of births is equally partitioned into males and females, and therefore one can directly know the average fraction of females in the population of births.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide7" class="slide">
+            <h2>Slide 7 - Univariate Summarization
+                <audio class="audio-control" controls>
+                    <source src="Slide7.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>2.2.1 Univariate Summarization</h3>
+                
+                <p>The two most common forms of univariate summarization include:</p>
+                
+                <ol>
+                    <li>Generation of measures of <span class="highlight">central tendency</span></li>
+                    <li>Generation of measures of <span class="highlight">dispersion</span></li>
+                </ol>
+                
+                <p>This section will introduce several measures of each type.</p>
+                
+                <div class="definition">
+                    <h4>Univariate Data</h4>
+                    <p>Data that consists of observations on only a single characteristic or attribute.</p>
+                    <p>Examples: Height of students, test scores, temperature readings.</p>
+                </div>
+                
+                <div class="figure">
+                    <!-- Placeholder for univariate data visualization -->
+                    <div style="background-color: #f0f0f0; height: 150px; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc;">
+                        <p>Figure 2.2: Example of univariate data distribution</p>
+                    </div>
+                    <p class="figure-caption">A histogram showing the distribution of a single variable</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide8" class="slide">
+            <h2>Slide 8 - Measures of Central Tendency
+                <audio class="audio-control" controls>
+                    <source src="Slide8.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>2.2.1.1 Measures of Central Tendency</h3>
+                
+                <p>Measures of central tendency try to quantify the central location of a data set.</p>
+                
+                <p>The three main measures of central tendency are:</p>
+                
+                <ol>
+                    <li><strong>Mean:</strong> The arithmetic average</li>
+                    <li><strong>Median:</strong> The middle value when data is sorted</li>
+                    <li><strong>Mode:</strong> The most frequent value</li>
+                </ol>
+                
+                <div class="definition">
+                    <h4>Central Tendency</h4>
+                    <p>A measure of central tendency is a single value that attempts to describe a set of data by identifying the central position within that set of data.</p>
+                </div>
+                
+                <p>Each measure has its own advantages and disadvantages, and the choice of which to use depends on the nature of the data and the purpose of the analysis.</p>
+            </div>
+        </section>
+
+        <section id="slide9" class="slide">
+            <h2>Slide 9 - Sample Mean
+                <audio class="audio-control" controls>
+                    <source src="Slide9.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Sample Mean</h3>
+                
+                <p>The simplest measure of central tendency is the mean of the data, which is a simple arithmetic average of the values in the data:</p>
+                
+                <div class="definition">
+                    <h4>Definition 2.1 (Sample Mean)</h4>
+                    <p>Given a sample of \(n\) values \(x_{1}\), \(x_{2}\), ..., \(x_{n}\), the sample mean \(\hat{\mu}_{X}\) of the values is defined as follows:</p>
+                    <div class="equation">
+                        \[\hat{\mu}_{X}=\frac{\sum_{i=1}^{n}x_{i}}{n}\]
+                    </div>
+                </div>
+                
+                <p>Note the circumflex on top of \( \hat{\mu}_X \) to indicate that it is an estimated value from a sample, and it is not the population mean \( \mu_X \).</p>
+                
+                <p>One can also compute the mean of a set of multivariate values \( \bar{x_1}, \bar{x_2}, \ldots, \bar{x_n} \) by the expression \( \sum_{i=1}^n \bar{x_i}/n \), which yields a multidimensional vector of means in which each entry corresponds to the mean of a particular attribute.</p>
+            </div>
+        </section>
+
+        <section id="slide10" class="slide">
+            <h2>Slide 10 - Mean Example
+                <audio class="audio-control" controls>
+                    <source src="Slide10.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Mean Calculation Example</h3>
+                
+                <div class="example">
+                    <h4>Example:</h4>
+                    <p>The sample mean of the set of values 2, 3, and 7 obtained as instantiations of the random variable \( X \) is given by:</p>
+                    <div class="equation">
+                        \[ \hat{\mu}_X = \frac{2 + 3 + 7}{3} = \frac{12}{3} = 4 \]
+                    </div>
+                </div>
+                
+                <p>One problem with the mean is that it is obtained by averaging the raw values, and therefore it is sensitive to a few extreme values of the points.</p>
+                
+                <p>The addition of a single extreme value (possibly caused by data collection error or an unusual event) can change the mean significantly enough to become unrepresentative of the vast majority of the remaining distribution.</p>
+                
+                <div class="example">
+                    <p><strong>Extreme value example:</strong> If we add the value 100 to our dataset {2, 3, 7}, the new mean becomes:</p>
+                    <div class="equation">
+                        \[ \hat{\mu}_X = \frac{2 + 3 + 7 + 100}{4} = \frac{112}{4} = 28 \]
+                    </div>
+                    <p>This value of 28 is not representative of most of the data points (2, 3, 7).</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide11" class="slide">
+            <h2>Slide 11 - Sample Median
+                <audio class="audio-control" controls>
+                    <source src="Slide11.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Sample Median</h3>
+                
+                <p>A more stable measure of central tendency is the median, which ranks the points and reports the central value of this set of points.</p>
+                
+                <div class="definition">
+                    <h4>Definition 2.2 (Sample Median)</h4>
+                    <p>Given a sample of n values \( x_1, x_2, \ldots, x_n \), the sample median of the values is defined by sorting the points in increasing order and reporting the value of the central point in this sort order.</p>
+                </div>
+                
+                <p>In the event that n is odd, the central point is the \( [(n+1)/2]\)th point in the sort order.</p>
+                
+                <p>On the other hand, if n is even, then any point x between the \( (n/2)\)th number and \( (n/2+1)\)th number is technically a median. A common approach to resolve this ambiguity is to use interpolation tie-breaking, wherein the median is defined as the average of the \( (n/2)\)th and \( (n/2+1)\)th points in the sort order.</p>
+                
+                <div class="example">
+                    <p><strong>Example with odd n:</strong> For the set {2, 3, 7}, n=3 (odd), the median is the 2nd value when sorted: 3.</p>
+                    <p><strong>Example with even n:</strong> For the set {2, 3, 4, 7}, n=4 (even), the median is the average of the 2nd and 3rd values: (3+4)/2 = 3.5.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide12" class="slide">
+            <h2>Slide 12 - Median Example
+                <audio class="audio-control" controls>
+                    <source src="Slide12.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Median Calculation Example</h3>
+                
+                <div class="example">
+                    <h4>Example:</h4>
+                    <p>The median of 2, 3, and 7 is 3, because there are an odd number of points in the data.</p>
+                    <p>However, if we have the four points 2, 3, 4, and 7, then both 3 and 4 are central points. As a result, the value of the median is \( (3 + 4)/2 = 3.5 \).</p>
+                </div>
+                
+                <p>One way to think of this interpolation is as a computation of the \( [(n+1)/2]\)th point in the data in the sort order, where a fractional value of \( (n+1)/2 \) is resolved via interpolation of the values in the two surrounding ranks.</p>
+                
+                <div class="example">
+                    <p><strong>General formula approach:</strong></p>
+                    <p>For n=4, (n+1)/2 = 2.5, so we interpolate between the 2nd and 3rd values.</p>
+                    <p>For n=5, (n+1)/2 = 3, so we take the 3rd value directly.</p>
+                </div>
+                
+                <p>This general principle can be generalized to many other rank-based statistics.</p>
+            </div>
+        </section>
+
+        <section id="slide13" class="slide">
+            <h2>Slide 13 - Mean vs Median
+                <audio class="audio-control" controls>
+                    <source src="Slide13.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Mean vs Median: When to Use Which?</h3>
+                
+                <p>The mean is a preferred measure of central tendency when the data does not have extreme values.</p>
+                
+                <p>On the other hand, since a few extreme values can distort the mean, it is sometimes preferable to use the median as a more stable measure of the central tendency.</p>
+                
+                <div class="example">
+                    <h4>Real-world Example:</h4>
+                    <p>Consider a village of 50 families in which 49 families make 50,000 dollars a year, whereas a single family makes ten million dollars a year.</p>
+                    
+                    <ul>
+                        <li><strong>Median:</strong> 50,000 dollars (excellent measure of central tendency)</li>
+                        <li><strong>Mean:</strong> 249,000 dollars a year (not representative of 98% of villagers)</li>
+                    </ul>
+                    
+                    <p>This single family is not really representative of the village, and the median value of 50,000 dollars is an excellent measure of central tendency of the village.</p>
+                </div>
+                
+                <p>The mean is sensitive to outliers, while the median is robust to outliers.</p>
+            </div>
+        </section>
+
+        <section id="slide14" class="slide">
+            <h2>Slide 14 - Example 2.1
+                <audio class="audio-control" controls>
+                    <source src="Slide14.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Example 2.1</h3>
+                
+                <div class="example">
+                    <h4>Example 2.1</h4>
+                    <p>Consider a very large set of numbers containing repetitions, which are drawn from the set \( \{1, 2, \ldots, 9\} \). Suppose that the frequency of integer i in the set is exactly proportional to \(1/i\), where \(i\) varies between 1 and 9. Compute the sample mean and sample median.</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <p>The total frequency is proportional to \(\sum_{i=1}^{9}(1/i) = 7129/2520 \approx 2.829\).</p>
+                
+                <p>To compute the sample mean, each number is multiplied with its total frequency, added, and then divided by the total frequency. Multiplying each integer \(i\) and its proportional frequency \((1/i)\) and adding, one obtains 9.</p>
+                
+                <div class="equation">
+                    \[\hat{\mu} = 9 * 2520 / 7129 \approx 3.193\]
+                </div>
+                
+                <p>Next, we compute the median. Since the sum of the frequencies is proportional to 2.829, one must find the minimum value of \(r\) for which \(\sum_{i=1}^{r}(1/i) > 2.829/2 = 1.4145\).</p>
+                
+                <p>Note that setting \(r = 2\) yields this minimum value. Therefore, the median is 2.</p>
+                
+                <p>It is noteworthy that the median is less than the mean because the majority of the data points have values 1 and 2 but the few large values like 9 increase the mean significantly.</p>
+            </div>
+        </section>
+
+        <section id="slide15" class="slide">
+            <h2>Slide 15 - Problem 2.1
+                <audio class="audio-control" controls>
+                    <source src="Slide15.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Problem 2.1</h3>
+                
+                <div class="problem">
+                    <h4>Problem 2.1</h4>
+                    <p>Compute the mean and median of the values 2, 2, 2, 3, 3, 3, 100. Reflect on the difference between the computed values of the mean and the median. Which measure is more representative of the central tendency?</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <p><strong>Mean calculation:</strong></p>
+                <div class="equation">
+                    \[ \hat{\mu} = \frac{2 + 2 + 2 + 3 + 3 + 3 + 100}{7} = \frac{115}{7} \approx 16.43 \]
+                </div>
+                
+                <p><strong>Median calculation:</strong></p>
+                <p>Sorted values: 2, 2, 2, 3, 3, 3, 100</p>
+                <p>Since n=7 (odd), the median is the 4th value: 3</p>
+                
+                <p><strong>Reflection:</strong></p>
+                <p>The mean (16.43) is heavily influenced by the extreme value 100, while the median (3) is not affected by this outlier.</p>
+                
+                <p>The median is more representative of the central tendency for this dataset because most values are clustered around 2-3, and the value 100 is an outlier.</p>
+                
+                <p>This example illustrates why the median is often preferred for skewed distributions or datasets with outliers.</p>
+            </div>
+        </section>
+
+        <section id="slide16" class="slide">
+            <h2>Slide 16 - Percentiles
+                <audio class="audio-control" controls>
+                    <source src="Slide16.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Percentiles</h3>
+                
+                <p>The notion of a median can be generalized to that of percentiles in the data.</p>
+                
+                <p>A median can be viewed as a 50th percentile of the data distribution because it is obtained by sorting the data, and selecting (or interpolating) a central point so that 50% of the points lie on either side of it.</p>
+                
+                <p>The notion of a percentile generalizes this concept so that any percentage value \(p \in (0,100)\) can be used, and \(p\%\) of the data lies below the \(p\)th percentile.</p>
+                
+                <div class="definition">
+                    <h4>Percentile</h4>
+                    <p>A percentile is a measure used in statistics indicating the value below which a given percentage of observations in a group of observations falls.</p>
+                </div>
+                
+                <p>It is noteworthy that there are some variations in the definition of the percentile, and the differences can sometimes be quite significant when the data contains fewer than 100 items.</p>
+                
+                <p>This particular exposition works with the convention where the \(0\)th percentile maps to the rank-1 point (i.e., smallest point) in the data and the 100th percentile maps to the rank-\(n\) point (i.e., largest point) in the data.</p>
+            </div>
+        </section>
+
+        <section id="slide17" class="slide">
+            <h2>Slide 17 - Sample Percentile Definition
+                <audio class="audio-control" controls>
+                    <source src="Slide17.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Sample Percentile Definition</h3>
+                
+                <div class="definition">
+                    <h4>Definition 2.3 (Sample Percentile)</h4>
+                    <p>Given a sample of \( n \) values \( x_1, x_2, \ldots, x_n \), the \( pth \) percentile (or \( f = p/100 \) fractional percentile) of the values is defined by sorting the points in increasing order and reporting the value of the \( k = (n \cdot f + 1 - f)th \) item in this sort order. In the event that the calculated value of \( k \) is a fraction, a weighted interpolation from the two immediately surrounding integer ranks with respect to the computed value of \( k \) is used.</p>
+                </div>
+                
+                <p>What does "weighted interpolation" in the aforementioned definition mean?</p>
+                
+                <div class="example">
+                    <p><strong>Example:</strong> If the computed value of \( k \) is 10.3, the corresponding value is a weighted average of the values at the \( 10th \) and \( 11th \) ranks, where the weights of the two ranks are derived from the fractional part of 10.3 as \((1 - 0.3) = 0.7\) and 0.3, respectively.</p>
+                    
+                    <p>The \( 10th \) rank is given the larger weight of 0.7 (since it is closer to 10.3 than the \( 11th \) rank) and the \( 11th \) rank is given the smaller weight of 0.3.</p>
+                    
+                    <p>Then, if \( x_{10}' \) and \( x_{11}' \) are the \( 10th \) and \( 11th \) ranks, the weighted average for the percentile rank is as follows:</p>
+                    <div class="equation">
+                        \[x_{10.3}' = 0.7x_{10}' + 0.3x_{11}'\]
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide18" class="slide">
+            <h2>Slide 18 - Percentile Example
+                <audio class="audio-control" controls>
+                    <source src="Slide18.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Percentile Calculation Example</h3>
+                
+                <p>There are two particular values of the percentile that are extremely important in data analysis:</p>
+                
+                <ul>
+                    <li><strong>First quartile (Q1):</strong> Corresponds to a percentile value of 25%</li>
+                    <li><strong>Third quartile (Q3):</strong> Corresponds to a percentile value of 75%</li>
+                </ul>
+                
+                <p>The difference between the third quartile and the first quartile is a nonnegative value, referred to as the <span class="highlight">inter-quartile range (IQR)</span>.</p>
+                
+                <div class="equation">
+                    \[ \text{IQR} = Q3 - Q1 \]
+                </div>
+                
+                <p>Note that the middle 50% of the data is contained between the first and third quartiles, and it often corresponds to the most "representative" part of the data.</p>
+                
+                <div class="figure">
+                    <!-- Placeholder for IQR visualization -->
+                    <div style="background-color: #f0f0f0; height: 150px; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc;">
+                        <p>Figure 2.3: Visualization of quartiles and IQR</p>
+                    </div>
+                    <p class="figure-caption">The IQR contains the middle 50% of the data</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="slide19" class="slide">
+            <h2>Slide 19 - Quartiles and IQR
+                <audio class="audio-control" controls>
+                    <source src="Slide19.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Quartiles and Inter-Quartile Range</h3>
+                
+                <p>The inter-quartile range (IQR) is a measure of statistical dispersion and is considered a more robust and reliable measure of spread than the range.</p>
+                
+                <div class="definition">
+                    <h4>Inter-Quartile Range (IQR)</h4>
+                    <p>The IQR is the range between the first quartile (25th percentile) and the third quartile (75th percentile). It contains the middle 50% of the data.</p>
+                </div>
+                
+                <p>Like the median, the inter-quartile range is not very sensitive to the points at the extreme ends of the data.</p>
+                
+                <div class="example">
+                    <p><strong>Example:</strong> Increasing the maximum value or decreasing the minimum value in the data sample does not change its inter-quartile range.</p>
+                </div>
+                
+                <p>Furthermore, translating the top 25% of the largest values of the data by positive offsets will also not change the inter-quartile range, even though the data distribution does qualitatively look much more dispersed to most observers.</p>
+                
+                <p>The insensitivity of the inter-quartile range to as much as 50% of the data (on the two ends) can be viewed as both a strength and a weakness of this measure of dispersion.</p>
+            </div>
+        </section>
+
+        <section id="slide20" class="slide">
+            <h2>Slide 20 - Example 2.2
+                <audio class="audio-control" controls>
+                    <source src="Slide20.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </h2>
+            <div class="content">
+                <h3>Example 2.2</h3>
+                
+                <div class="example">
+                    <h4>Example 2.2</h4>
+                    <p>Compute the [100/3]th-percentile of the set of data points 1, 4, 5, 7. Repeat this computation for the set of points 1, 4, 5, 7, 9.</p>
+                </div>
+                
+                <p><strong>Solution:</strong></p>
+                
+                <p>The fractional value of the percentile is \( f = 1/3 \).</p>
+                
+                <p><strong>First case (n=4):</strong></p>
+                <p>One needs to find the \( kth \) item in the sort order of the first set of \( n = 4 \) points, where \( k \) is defined as follows:</p>
+                <div class="equation">
+                    \[k = n \cdot f + 1 - f = 4/3 + 1 - 1/3 = 2\]
+                </div>
+                <p>Therefore, the 2nd point in the sort order is reported, which is 4.</p>
+                
+                <p><strong>Second case (n=5):</strong></p>
+                <p>The value of \( k \) is computed as follows:</p>
+                <div class="equation">
+                    \[k = 5/3 + 1 - 1/3 = 7/3 = 2.333333\]
+                </div>
+                <p>Therefore, one needs to interpolate between the second and third points, where the second point value of 4 is weighted by 2/3 (since 2 is closer to 7/3) and the third point value of 5 is weighted by 1/3.</p>
+                
+                <p>The interpolated value is \( 4(2/3) + 5(1/3) \), which is \( 13/3 \approx 4.33 \).</p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Add smooth scrolling for navigation links
+        document.querySelectorAll('.toc-sidebar a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                document.querySelector(targetId).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Initialize MathJax
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+</body>
+</html>

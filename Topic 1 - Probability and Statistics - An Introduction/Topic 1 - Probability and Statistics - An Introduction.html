@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture: Ch. 1 - Probability and Statistics Introduction</title>
+    
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            processEscapes: true
+          },
+          svg: {
+            fontCache: 'global'
+          }
+        };
+    </script>
+    <style>
+        /* * CSS for the self-contained lecture presentation
+         */
+        
+        /* Basic setup */
+        :root {
+            --sidebar-width: 320px;
+            --header-height: 60px;
+            --main-bg: #ffffff;
+            --slide-bg: #ffffff;
+            --sidebar-bg: #2c3e50;
+            --sidebar-text: #ecf0f1;
+            --sidebar-hover-bg: #34495e;
+            --accent-color: #3498db;
+            --accent-light: #ebf5fb;
+            --text-color: #34495e;
+            --heading-color: #2c3e50;
+            --border-color: #e0e0e0;
+            --shadow-color: rgba(0, 0, 0, 0.07);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f6;
+            color: var(--text-color);
+        }
+
+        /* Layout: Sidebar + Main Content */
+        .container {
+            display: flex;
+        }
+
+        /* Sidebar (Table of Contents) */
+        nav.sidebar {
+            width: var(--sidebar-width);
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            background-color: var(--sidebar-bg);
+            color: var(--sidebar-text);
+            overflow-y: auto;
+            padding: 25px;
+            box-sizing: border-box;
+            border-right: 1px solid var(--border-color);
+        }
+
+        nav.sidebar h2 {
+            margin-top: 0;
+            color: #ffffff;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+            font-size: 1.4rem;
+        }
+
+        nav.sidebar ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        nav.sidebar li a {
+            display: block;
+            color: var(--sidebar-text);
+            text-decoration: none;
+            padding: 8px 10px;
+            border-radius: 5px;
+            transition: background-color 0.2s, color 0.2s;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        nav.sidebar li a:hover,
+        nav.sidebar li a:focus {
+            background-color: var(--sidebar-hover-bg);
+            color: #ffffff;
+        }
+
+        nav.sidebar .sub-menu {
+            padding-left: 20px;
+        }
+        
+        nav.sidebar .sub-menu a {
+            font-size: 0.85rem;
+            color: #bdc3c7;
+            padding-top: 6px;
+            padding-bottom: 6px;
+        }
+        
+        nav.sidebar .sub-menu a:hover {
+            color: #ffffff;
+        }
+
+        /* Main Content Area */
+        main.content {
+            margin-left: var(--sidebar-width);
+            width: calc(100% - var(--sidebar-width));
+            padding: 30px;
+            box-sizing: border-box;
+        }
+
+        /* Slide Styling */
+        .slide {
+            background-color: var(--slide-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 5px 15px var(--shadow-color);
+            padding: 30px 45px;
+            margin-bottom: 30px;
+            min-height: 550px;
+            /* For anchor linking */
+            scroll-margin-top: 20px;
+        }
+
+        .slide:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Slide Content Styling */
+        .slide h1,
+        .slide h2,
+        .slide h3 {
+            color: var(--heading-color);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        /* === MODIFIED: Flexbox for title and audio === */
+        .slide h2 {
+            display: flex;
+            align-items: center;
+            justify-content: space-between; /* Space out the title text and the audio control */
+            font-size: 2rem;
+            color: var(--accent-color);
+            border-bottom: 2px solid var(--border-color); /* Keep the original border */
+            padding-bottom: 10px; /* Keep the original padding */
+        }
+        
+        .slide h2 .title-text {
+            /* Keep the title text from taking up all space */
+            margin-right: 20px; 
+            flex-grow: 1;
+        }
+        
+        .slide h2 audio {
+            /* Styling for the audio control */
+            height: 30px; /* Make controls smaller */
+            width: 150px; /* Control the width of the audio player */
+            flex-shrink: 0; /* Prevent the audio control from shrinking */
+        }
+        
+        /* If h2 contains only text (like in 1.1.1) ensure it doesn't break */
+        .slide h2:not(:has(audio)) {
+            display: block;
+        }
+
+        /* Title Slide */
+        .slide.title-slide {
+            text-align: center;
+            padding-top: 100px;
+        }
+        .slide.title-slide h1 {
+            font-size: 2.8rem;
+            border-bottom: none;
+            color: var(--accent-color);
+        }
+        .slide.title-slide h2 {
+            font-size: 2rem;
+            border-bottom: none;
+            color: var(--heading-color);
+            margin-top: 10px;
+        }
+        .slide.title-slide .subtitle {
+            font-size: 1.3rem;
+            color: var(--text-color);
+            margin-top: 20px;
+            font-style: italic;
+        }
+
+        /* Regular Slide Titles */
+        /* NOTE: h2 styling is now handled by the .slide h2 block above */
+
+        .slide h3 {
+            font-size: 1.6rem;
+            color: var(--heading-color);
+            border-bottom: 1px dashed #ccc;
+            margin-top: 30px;
+        }
+
+        .slide ul,
+        .slide ol {
+            line-height: 1.9;
+            margin-left: 20px;
+            font-size: 1.05rem;
+        }
+
+        .slide li {
+            margin-bottom: 14px;
+        }
+
+        .slide p {
+            line-height: 1.8;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+        
+        .slide code {
+            background-color: #f1f3f4;
+            color: #d6336c;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+        }
+        
+        .slide strong {
+            color: var(--heading-color);
+        }
+
+        /* Special elements */
+        .definition, .key-concept {
+            background-color: var(--accent-light);
+            border-left: 5px solid var(--accent-color);
+            padding: 18px 25px;
+            margin: 25px 0;
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+        .definition strong {
+            color: var(--accent-color);
+        }
+
+        .example {
+            background-color: #fdfbe6;
+            border: 1px solid #f0e68c;
+            border-radius: 5px;
+            padding: 18px 25px;
+            margin: 25px 0;
+        }
+
+        .example-title {
+            font-weight: bold;
+            color: #8a6d3b;
+            display: block;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            border-bottom: 1px dashed #d9c78c;
+            padding-bottom: 10px;
+        }
+
+        .latex-equation {
+            display: block;
+            text-align: center;
+            font-size: 1.25rem;
+            /* Font family for math is now handled by MathJax */
+            margin: 25px 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            overflow-x: auto;
+            color: #333;
+        }
+        
+        .equation-label {
+            float: right;
+            color: #777;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .figure-placeholder {
+            text-align: center;
+            margin: 25px 0;
+            font-style: italic;
+            color: #777;
+            border: 2px dashed var(--border-color);
+            padding: 30px;
+            background: #fafafa;
+            border-radius: 5px;
+        }
+        .figure-placeholder strong {
+            display: block;
+            margin-bottom: 10px;
+            font-style: normal;
+            color: var(--heading-color);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <h2>Lecture: Chapter 1</h2>
+            <ul>
+                <li><a href="#slide1">Slide 1 - Title Slide</a></li>
+                <li><a href="#slide2">Slide 2 - Lecture Agenda</a></li>
+                <li><a href="#slide3">Slide 3 - 1.1 What is Machine Learning?</a></li>
+                <li><a href="#slide4">Slide 4 - 1.1 Why We Need Prob & Stats</a></li>
+                <li><a href="#slide5">Slide 5 - 1.1.1 The Interplay: Prob vs. Stats</a></li>
+                <li><a href="#slide6">Slide 6 - 1.1.1 The Machine Learning Connection</a></li>
+                <li><a href="#slide7">Slide 7 - 1.1.1 Simplifying Assumptions</a></li>
+                <li><a href="#slide8">Slide 8 - 1.2 Representing Data: Tabular Data</a></li>
+                <li><a href="#slide9">Slide 9 - 1.2 Table 1.1: Example Data Set</a></li>
+                <li><a href="#slide10">Slide 10 - 1.2 Formal Definition</a></li>
+                <li><a href="#slide11">Slide 11 - 1.2 Univariate vs. Multivariate</a></li>
+                <li><a href="#slide12">Slide 12 - 1.2.1 Numeric (Quantitative) Data</a></li>
+                <li><a href="#slide13">Slide 13 - 1.2.1 Numeric: Continuous vs. Discrete</a></li>
+                <li><a href="#slide14">Slide 14 - 1.2.2 Categorical & Mixed Data</a></li>
+                <li><a href="#slide15">Slide 15 - 1.2.2 Special Case: Binary Data</a></li>
+                <li><a href="#slide16">Slide 16 - 1.2.2 Data Conversion: Feature Engineering</a></li>
+                <li><a href="#slide17">Slide 17 - 1.2.2 One-Hot Encoding</a></li>
+                <li><a href="#slide18">Slide 18 - 1.2.2 Reference Encoding</a></li>
+                <li><a href="#slide19">Slide 19 - 1.2.2 Example 1.1: Attribute Types</a></li>
+                <li><a href="#slide20">Slide 20 - 1.3 Summarizing & Visualizing Data</a></li>
+                <li><a href="#slide21">Slide 21 - 1.3 Summary Statistics: Types</a></li>
+                <li><a href="#slide22">Slide 22 - 1.3 Why Summary Stats Aren't Enough</a></li>
+                <li><a href="#slide23">Slide 23 - 1.3 Univariate Viz: Histogram (Fig 1.1)</a></li>
+                <li><a href="#slide24">Slide 24 - 1.3 Multivariate Viz: Scatter Plot (Fig 1.2)</a></li>
+                <li><a href="#slide25">Slide 25 - 1.4 Basics of Probability</a></li>
+                <li><a href="#slide26">Slide 26 - 1.4 Discrete Prob: Probability Mass Function</a></li>
+                <li><a href="#slide27">Slide 27 - 1.4 Closed-Form: Binomial (Eq 1.1)</a></li>
+                <li><a href="#slide28">Slide 28 - 1.4 Visualizing a PMF (Fig 1.3)</a></li>
+                <li><a href="#slide29">Slide 29 - 1.4 Continuous Prob: Probability Density Function</a></li>
+                <li><a href="#slide30">Slide 30 - 1.4 PDF Example: Normal Distribution (Eq 1.2, 1.3)</a></li>
+                <li><a href="#slide31">Slide 31 - 1.4 Visualizing a PDF (Fig 1.4)</a></li>
+                <li><a href="#slide32">Slide 32 - 1.4 Multivariate Distributions (Fig 1.5)</a></li>
+                <li><a href="#slide33">Slide 33 - 1.4.1 Populations vs. Samples</a></li>
+                <li><a href="#slide34">Slide 34 - 1.4.1 The Role of Sampling</a></li>
+                <li><a href="#slide35">Slide 35 - 1.4.2 Modeling Populations with Samples</a></li>
+                <li><a href="#slide36">Slide 36 - 1.4.2 The Prob-Stats-ML Framework (Fig 1.6)</a></li>
+                <li><a href="#slide37">Slide 37 - 1.4.2 Warning: Sample Selection Bias</a></li>
+                <li><a href="#slide38">Slide 38 - 1.4.2 Example 1.4: Biased Survey</a></li>
+                <li><a href="#slide39">Slide 39 - 1.5 Hypothesis Testing</a></li>
+                <li><a href="#slide40">Slide 40 - 1.5 Confidence Intervals</a></li>
+                <li><a href="#slide41">Slide 41 - 1.6 Basic Problems in Machine Learning</a></li>
+                <li><a href="#slide42">Slide 42 - 1.6.1 Clustering (Unsupervised)</a></li>
+                <li><a href="#slide43">Slide 43 - 1.6.2 Classification (Supervised)</a></li>
+                <li><a href="#slide44">Slide 44 - 1.6.2 Linear Classification Models</a></li>
+                <li><a href="#slide45">Slide 45 - 1.6.2.1 Regression (Supervised)</a></li>
+                <li><a href="#slide46">Slide 46 - 1.6.2.1 Linear Regression (Eq 1.5, 1.6)</a></li>
+                <li><a href="#slide47">Slide 47 - 1.6.3 Outlier Detection (Unsupervised)</a></li>
+                <li><a href="#slide48">Slide 48 - 1.6.3 Probabilistic Outlier Detection</a></li>
+                <li><a href="#slide49">Slide 49 - 1.6 Example 1.5: Spam (Supervised)</a></li>
+                <li><a href="#slide50">Slide 50 - 1.6 Example 1.6: Spam (Unsupervised)</a></li>
+                <li><a href="#slide51">Slide 51 - 1.6 Example 1.7: Email Organizing</a></li>
+                <li><a href="#slide52">Slide 52 - 1.7 Summary</a></li>
+                <li><a href="#slide53">Slide 53 - Questions?</a></li>
+            </ul>
+        </nav>
+
+        <main class="content">
+
+            <section class="slide title-slide" id="slide1">
+                <h1>Probability and Statistics for Machine Learning</h1>
+                <h2>Chapter 1: An Introduction<audio controls><source src="Slide 1.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                <p class="subtitle">Based on "Probability and Statistics for Machine Learning: A Textbook" (Aggarwal, 2024)</p>
+            </section>
+
+            <section class="slide" id="slide2">
+                <h2><span class="title-text">Lecture Agenda</span><audio controls><source src="Slide 2.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                <ol>
+                    <li><strong>Introduction (1.1):</strong> Why Prob & Stats are crucial for ML.</li>
+                    <li><strong>Representing Data (1.2):</strong> The structure of data (tables, types).</li>
+                    <li><strong>Summarizing & Visualizing Data (1.3):</strong> Getting to know your data.</li>
+                    <li><strong>Basics of Probability (1.4):</strong> Distributions, populations, and samples.</li>
+                    <li><strong>Hypothesis Testing (1.5):</strong> Quantifying confidence.</li>
+                    <li><strong>Basic Problems in ML (1.6):</strong> Clustering, Classification, Regression, etc.</li>
+                    <li><strong>Summary (1.7)</strong></li>
+                </ol>
+            </section>
+
+            <section class="slide" id="slide3">
+                <h2><span class="title-text">1.1 What is Machine Learning?</span><audio controls><source src="Slide 3.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                <p>Machine learning (ML) is about building mathematical models by **learning from data samples** to make predictions.</p>
+                
+                <div class="key-concept">
+                    <p><strong>Why is it "probabilistic"?</strong></p>
+                    <p>Predictions are "naturally probabilistic because the samples only provide an **incomplete view** of the entire data." (Source 7)</p>
+                    <p>We are always working with incomplete information, which introduces uncertainty. Probability is the language we use to describe and manage this uncertainty.</p>
+                </div>
+            </section>
+
+            <section class="slide" id="slide4">
+                <h2><span class="title-text">1.1 Why We Need Prob & Stats</span><audio controls><source src="Slide 4.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                <p>Probability and Statistics are used in ML in several key ways (Source 8):</p>
+                <ul>
+                    <li>
+                        <strong>To Build Probabilistic Models:</strong>
+                        <p>We can model relationships between variables. For example, "Can one model how an individual's credit score is predicted from other attributes?" (Source 11). Probabilistic techniques are used to model these relationships. (Source 12)</p>
+                    </li>
+                    <li>
+                        <strong>To Quantify Confidence:</strong>
+                        <p>We need to measure our trust in a model's predictions. (Source 13) "Are the core conclusions artifacts of specific statistical quirks of a particular data sample, or can they be trusted...?" (Source 15)</p>
+                    </li>
+                    <li>
+                        <strong>To Understand Data:</strong>
+                        <p>We use "statistical summaries and visualization techniques" (Source 17) to explore the data, which is often the first step before any detailed analysis. (Source 18)</p>
+                    </li>
+                </ul>
+            </section>
+
+            <section class="slide" id="slide5">
+                <h2><span class="title-text">1.1.1 The Interplay: Prob vs. Stats</span><audio controls><source src="Slide 5.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <div class="key-concept">
+                    "The difference... is that between modeling the likelihood of <strong>future</strong> events and analyzing the frequency of <strong>past</strong> events." (Source 27)
+                </div>
+
+                <h3>Probability Theory</h3>
+                <ul>
+                    <li>Models <strong>expected</strong> outcomes (Source 31).</li>
+                    <li><strong>Example:</strong> A fair die <em>should</em> land on any given face with a <strong>1/6</strong> probability. (Source 28) This is a theoretical model of a future event.</li>
+                </ul>
+                
+                <h3>Statistics</h3>
+                <ul>
+                    <li>Analyzes <strong>sample</strong> outcomes (Source 31).</li>
+                    <li><strong>Example:</strong> If you throw a die 100 times, the <em>actual</em> fraction of 4s will likely not be exactly 1/6 due to "natural variability." (Source 29) This is an analysis of past events.</li>
+                </ul>
+            </section>
+
+            <section class="slide" id="slide6">
+                <h2><span class="title-text">1.1.1 The Machine Learning Connection</span><audio controls><source src="Slide 6.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                <p>Machine learning uses this interplay to learn from data.</p>
+                
+                <p><strong>Core ML Assumption:</strong> "observed data are assumed to be outcomes of experiments over a probabilistic model with **incompletely specified parameters**." (Source 37)</p>
+
+                <h3>Example: An Irregular Die (Source 33)</h3>
+                <ol>
+                    <li>
+                        <strong>Hypothesize/Model:</strong> We don't know the face probabilities. We create a model where these probabilities are unknown <strong>parameters</strong>. (Source 34)
+                    </li>
+                    <li>
+                        <strong>Estimate/Learn:</strong> We use <strong>data</strong> (e.g., 1000 repeated die throws) to <em>estimate</em> these parameters. (Source 35)
+                    </li>
+                    <li>
+                        <strong>Predict:</strong> We use the final model (with the "filled in" estimated parameters) to predict the most likely outcomes of <em>subsequent</em> throws. (Source 36)
+                    </li>
+                </ol>
+            </section>
+
+            <section class="slide" id="slide7">
+                <h2><span class="title-text">1.1.1 Simplifying Assumptions</span><audio controls><source src="Slide 7.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <p>ML models are "only **approximations** of a highly complex real world." (Source 39)</p>
+                
+                <p>To make modeling possible, we must make <strong>simplifying assumptions</strong>. (Source 39)</p>
+                
+                <div class="key-concept">
+                    <p>This simplifying assumption is a <strong>"hypothesis"</strong>. (Source 40)</p>
+                    <p>The "accuracy of any conclusion... is highly dependent on the <strong>reasonableness</strong> of the underlying assumption." (Source 40)</p>
+                </div>
+                
+                <ul>
+                    <li><strong>Example:</strong> When modeling our die, we might <em>assume</em> the surface it's thrown on doesn't matter. (Source 41)</li>
+                    <li>This is likely a <em>reasonable</em> assumption, as the effect is minimal in the real world. (Source 42)</li>
+                    <li>A key skill for data analysts is "to make reasonable assumptions that work well in practice." (Source 44)</li>
+                </ul>
+            </section>
+
+            <section class="slide" id="slide8">
+                <h2><span class="title-text">1.2 Representing Data: Tabular Data</span><audio controls><source src="Slide 8.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <p>The simplest and most common form of data in ML is **tabular data**, also called <strong>multidimensional data</strong>. (Source 56)</p>
+                
+                <p>It's organized into rows and columns:</p>
+                
+                <ul>
+                    <li>
+                        <strong>Rows:</strong> Represent <strong>observations</strong>. (Source 57)
+                        <ul>
+                            <li>Also called: data point, record, instance, sample, feature-vector, entity, tuple... (Source 58)</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Columns:</strong> Represent <strong>fields</strong>. (Source 59)
+                        <ul>
+                            <li>Also called: attributes, dimensions, variables, features. (Source 59)</li>
+                        </ul>
+                    </li>
+                </ul>
+                <p>These terms will be used interchangeably!</p>
+            </section>
+
+            <section class="slide" id="slide9">
+                <h2><span class="title-text">1.2 Table 1.1: Example Data Set</span><audio controls><source src="Slide 9.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+
+                <div class="figure-placeholder">
+                    <strong>Table 1.1: An example of a multidimensional data set (Source 52)</strong>
+                    <p>[A table with 5 rows (John S., Ahanu C., ...) and 6 columns (Name, Age, Gender, Race, ZIP Code, Education).] (Source 53)</p>
+                </div>
+
+                <ul>
+                    <li>This data set has <strong>5 observations</strong> (rows). (Source 61)</li>
+                    <li>It has <strong>6 features</strong> (columns).</li>
+                    <li>Each row describes the properties of a specific observation (an individual). (Source 60, 62)</li>
+                </ul>
+            </section>
+
+            <section class="slide" id="slide10">
+                <h2><span class="title-text">1.2 Formal Definition</span><audio controls><source src="Slide 10.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+
+                <div class="definition">
+                    <p><strong>Definition 1.1 (Multidimensional Data)</strong> (Source 64)</p>
+                    <p>A multidimensional data set is an $n \times d$ data matrix $D = [x_{ij}]_{n \times d}$. (Source 64)</p>
+                    <ul>
+                        <li>$n$ = number of rows (observations).</li>
+                        <li>$d$ = number of columns (features/dimensions).</li>
+                    </ul>
+                    <p>The $i$-th row is a $d$-dimensional vector: $\vec{x}_{i} = [x_{i1}, ..., x_{id}]$. (Source 65)</p>
+                    <p>The $(i, j)$-th entry, $x_{ij}$, is the $j$-th feature of the $i$-th observation. (Source 75)</p>
+                </div>
+            </section>
+            
+            <section class="slide" id="slide11">
+                <h2><span class="title-text">1.2 Univariate vs. Multivariate</span><audio controls><source src="Slide 11.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <h3>Data Types</h3>
+                <ul>
+                    <li><strong>Univariate Data:</strong> $d = 1$. The data has only a single variable. (Source 68)</li>
+                    <li><strong>Multivariate Data:</strong> $d > 1$. The data has multiple variables. (Source 69)</li>
+                </ul>
+
+                <h3>Analysis Types</h3>
+                <ul>
+                    <li>
+                        <strong>Univariate Analysis:</strong> Analyzing a single dimension (column) at a time. (Source 70)
+                        <ul>
+                            <li><strong>Example:</strong> Finding the average value of <em>each</em> dimension, separately. (Source 71)</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Multivariate Analysis:</strong> Analyzing multiple dimensions <em>together</em>. (Source 72)
+                        <ul>
+                            <li><strong>Example:</strong> Determining if "age" and "education level" are related to each other. (Source 73)</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <section class="slide" id="slide12">
+                <h2><span class="title-text">1.2.1 Numeric (Quantitative) Data</span><audio controls><source src="Slide 12.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+
+                <p>These are attributes with numerical values that have:</p>
+                <ol>
+                    <li>A natural ordering.</li>
+                    <li>Quantifiable distances between values. (Source 82)</li>
+                </ol>
+                
+                <ul>
+                    <li><strong>Example:</strong> "Age" from Table 1.1. (Source 81)</li>
+                    <li>This is the <strong>most common subtype</strong> of data in ML and statistics. (Source 84)</li>
+                    <li><strong>Why?</strong>
+                        <ul>
+                            <li>Most statistical analysis methods are designed for numeric data. (Source 86)</li>
+                            <li>Most other data types can be <strong>converted</strong> to numeric data through "feature engineering." (Source 85, 123)</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <section class="slide" id="slide13">
+                <h2><span class="title-text">1.2.1 Numeric: Continuous vs. Discrete</span><audio controls><source src="Slide 13.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <h3>Discrete Numeric Data</h3>
+                <ul>
+                    <li>Values are drawn from a set of (typically) equidistant numeric values. (Source 87)</li>
+                    <li><strong>Example:</strong> "Birth year" (always an integer). (Source 88)</li>
+                </ul>
+
+                <h3>Continuous Numeric Data</h3>
+                <ul>
+                    <li>Can take on <em>any</em> value over the real number line (e.g., $\pi$, $\sqrt{2}$). (Source 89)</li>
+                    <li><strong>Example:</strong> "Height". (Source 92)</li>
+                </ul>
+                
+                <div class="key-concept">
+                    <p><strong>A Semantic Distinction:</strong> This difference is semantic, not computational. (Source 89)</p>
+                    <p>Finite-precision computers represent <em>all</em> data in discrete form (e.g., $\sqrt{2}$ is rounded). (Source 89, 90)</p>
+                    <p>We call "height" continuous because the measurement is "sufficiently fine-grained" for the application. (Source 92)</p>
+                </div>
+            </section>
+            
+            <section class="slide" id="slide14">
+                <h2><span class="title-text">1.2.2 Categorical & Mixed Data</span><audio controls><source src="Slide 14.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+
+                <h3>Categorical Attributes</h3>
+                <ul>
+                    <li>Take on discrete, <strong>unordered</strong> values. (Source 94)</li>
+                    <li><strong>Examples (from Table 1.1):</strong> "Gender," "Race." (Source 95)</li>
+                    <li><strong>Tricky Example:</strong> "ZIP code." It looks numeric, but it's categorical because there is no inherent ordering or distance. (Source 99)</li>
+                </ul>
+
+                <h3>Ordinal Attributes</h3>
+                <ul>
+                    <li>Have a clear, natural <strong>ordering</strong>, but are not numeric. (Source 100)</li>
+                    <li><strong>Example (from Table 1.1):</strong> "Education" (Bachelors, Masters, Doctorate). (Source 101)</li>
+                    <li>There is an order, but no defined numerical distance (e.g., is $\text{Masters} - \text{Bachelors} = \text{Doctorate} - \text{Masters}$?) (Source 102)</li>
+                </ul>
+                
+                <p><strong>Mixed-Attribute Data:</strong> Contains multiple types of attributes. <strong>Table 1.1 is a mixed-attribute data set.</strong> (Source 104, 105)</p>
+            </section>
+            
+            <section class="slide" id="slide15">
+                <h2><span class="title-text">1.2.2 Special Case: Binary Data</span><audio controls><source src="Slide 15.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <ul>
+                    <li>Categorical data with only <strong>two possible values</strong>. (Source 106)</li>
+                    <li><strong>Example:</strong> "Gender" (M/F) in Table 1.1, or a "Manager Flag" (Yes/No). (Source 106, 139)</li>
+                    <li>It's a special case because it can be treated as:
+                        <ul>
+                            <li><strong>Categorical:</strong> (e.g., 'M' and 'F')</li>
+                            <li><strong>Numeric:</strong> (e.g., 0 and 1) (Source 108)</li>
+                        </ul>
+                    </li>
+                    <li>Binary data acts as a "bridge" to transform other data types into a common format for analysis. (Source 112)</li>
+                </ul>
+            </section>
+            
+            <section class="slide" id="slide16">
+                <h2><span class="title-text">1.2.2 Data Conversion: Feature Engineering</span><audio controls><source src="Slide 16.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <div class="definition">
+                    <p><strong>Feature Engineering:</strong> The process of converting arbitrarily complex data types (like graphs, text, or categorical data) into <strong>numeric multidimensional data</strong>. (Source 122, 123)</p>
+                </div>
+                
+                <p><strong>Why?</strong> "The vast majority of statistical analysis methods are designed for numeric data." (Source 86, 120)</p>
+                
+                <h3>Common Conversion Methods:</h3>
+                <ul>
+                    <li>
+                        <strong>Categorical $\rightarrow$ Binary:</strong>
+                        <ul>
+                            <li><strong>One-Hot Encoding</strong> (Source 113)</li>
+                            <li><strong>Reference Encoding</strong> (Source 126)</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Numeric $\rightarrow$ Binary:</strong>
+                        <ul>
+                            <li><strong>Discretization</strong> (e.g., turn "Age" into binary bins like "0-18", "19-35", "36+"). (Source 117)</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+            
+            <section class="slide" id="slide17">
+                <h2><span class="title-text">1.2.2 One-Hot Encoding</span><audio controls><source src="Slide 17.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <p>Transforms <strong>one</strong> categorical attribute into <strong>many</strong> binary attributes. (Source 113)</p>
+                <p>A new binary attribute is created for <em>each possible value</em> of the original attribute. (Source 113, 114)</p>
+                
+                <h3>Example: Encoding the "Race" Attribute</h3>
+                <p>If the possible values are {African American, Native American, South Asian, Caucasian, East Asian}...</p>
+                <p>...we create <strong>5 new binary columns</strong>.</p>
+                
+                <div class="figure-placeholder">
+                    <p><strong>Original Data (1 column)</strong><br/>"Sayani A." | "South Asian"</p>
+                    <p>$\downarrow$</p>
+                    <p><strong>One-Hot Encoded Data (5 columns)</strong><br/>
+                    "Sayani A." | 0 | 0 | 1 | 0 | 0</p>
+                </div>
+
+                <p>For any given row, <strong>exactly one</strong> of these new binary attributes will be 1, and all others will be 0. (Source 116)</p>
+            </section>
+            
+            <section class="slide" id="slide18">
+                <h2><span class="title-text">1.2.2 Reference Encoding</span><audio controls><source src="Slide 18.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <p>An alternative to one-hot encoding, common in statistics. (Source 126)</p>
+                
+                <ul>
+                    <li><strong>Problem:</strong> One-hot encoding is <em>redundant</em>. If you have $m$ columns, you only need to see $m-1$ of them. If all $m-1$ are 0, you <em>know</em> the $m$-th must be 1. (Source 124)</li>
+                    <li><strong>Solution:</strong> Use only <strong>$(m-1)$</strong> binary attributes. (Source 125)</li>
+                    <li>The "missing" value is treated as the <strong>reference attribute</strong>. (Source 125)</li>
+                </ul>
+                
+                <h3>Example: Encoding "Race" (Reference = "Caucasian")</h3>
+                <p>We create only <strong>4 new binary columns</strong>.</p>
+                
+                <div class="figure-placeholder">
+                    <p><strong>"Sayani A." (South Asian):</strong><br/>
+                    0 | 0 | 1 | 0</p>
+                    <p><strong>"Jack M." (Caucasian - the reference):</strong><br/>
+                    0 | 0 | 0 | 0</p>
+                </div>
+                
+                <p>When all $m-1$ columns are 0, we know the observation has the reference value. (Source 126) This "retains better interpretability" in models like regression. (Source 127)</p>
+            </section>
+
+            <section class="slide" id="slide19">
+                <h2><span class="title-text">1.2.2 Example 1.1: Attribute Types</span><audio controls><source src="Slide 19.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <div class="example">
+                    <span class="example-title">Example 1.1 (Source 129)</span>
+                    <p>In an employee database, identify the attribute types for:</p>
+                    <ul>
+                        <li><strong>(i) Years of employment:</strong> <strong>Discrete numeric</strong> (if integers) or <strong>continuous numeric</strong> (if granular, e.g., 2.5 years). (Source 131, 132)</li>
+                        <li><strong>(ii) Salary:</strong> <strong>Continuous-valued numeric</strong> (has sufficient granularity). (Source 133)</li>
+                        <li><strong>(iii) Department identifier:</strong> <strong>Categorical</strong> (no ordering or distance between departments). (Source 134, 137)</li>
+                        <li><strong>(iv) Seniority in level number:</strong> <strong>Ordinal</strong> (there is an ordering, but it's hard to define a distance, e.g., L4 $\rightarrow$ L5 vs L5 $\rightarrow$ L6). (Source 138)</li>
+                        <li><strong>(v) Manager flag:</strong> <strong>Binary</strong> (a special case of both categorical and discrete numeric). (Source 139, 140)</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <section class="slide" id="slide20">
+                <h2><span class="title-text">1.3 Summarizing & Visualizing Data</span><audio controls><source src="Slide 20.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <p>When faced with large volumes of data, we need simple overviews, or <strong>summary statistics</strong>. (Source 148)</p>
+                
+                <p>This is often the first step: <strong>Exploratory Data Analysis (EDA)</strong>.</p>
+                
+                <p>EDA helps us understand the data's "true distribution" (Source 188) and shape (Source 195) before choosing a complex model.</p>
+            </section>
+            
+            <section class="slide" id="slide21">
+                <h2><span class="title-text">1.3 Summary Statistics: Types</span><audio controls><source src="Slide 21.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                <p>Two common forms of <strong>univariate</strong> summaries (Source 149, 162):</p>
+                
+                <h3>1. Measures of Central Tendency</h3>
+                <p>Identify "representative points corresponding to central regions of the data." (Source 150)</p>
+                <ul>
+                    <li><strong>Mean:</strong> The average value. (Source 151)</li>
+                    <li><strong>Median:</strong> The middle value (50th percentile). (Source 152, 153)</li>
+                    <li><strong>Percentiles:</strong> Rank-based measures (e.g., 90th percentile). (Source 154)</li>
+                </ul>
+
+                <h3>2. Measures of Dispersion</h3>
+                <p>Model the "degree of spread of the distribution from the center." (Source 156)</p>
+                <ul>
+                    <li><strong>Mean Absolute Deviation:</strong> Average <em>absolute</em> distance from the mean. (Source 157, 158)</li>
+                    <li><strong>Variance:</strong> Average <em>squared</em> distance from the mean. (More common as it's easier for calculus). (Source 159)</li>
+                    <li><strong>Inter-quartile Range (IQR):</strong> Distance between the 75th and 25th percentiles (width of the middle 50% of data). (Source 160, 161)</li>
+                </ul>
+            </section>
+            
+            <section class="slide" id="slide22">
+                <h2><span class="title-text">1.3 Why Summary Stats Aren't Enough</span><audio controls><source src="Slide 22.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <p>Summary statistics provide an <strong>incomplete understanding</strong>. (Source 184)</p>
+                
+                <p>They don't tell us about the <em>shape</em> of the data or the <em>frequencies</em> in different ranges. (Source 184, 185)</p>
+                
+                <h3>Example: Firm Salaries (Source 189)</h3>
+                <ul>
+                    <li>A firm with 500 employees has a <strong>mean annual salary of $64,300</strong>. (Source 189)</li>
+                    <li>This <em>sounds</em> reasonable. (Source 190)</li>
+                    <li>But a <strong>visualization</strong> (Figure 1.1) tells a very different story...</li>
+                </ul>
+            </section>
+
+            <section class="slide" id="slide23">
+                <h2><span class="title-text">1.3 Univariate Viz: Histogram (Fig 1.1)</span><audio controls><source src="Slide 23.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <p>A <strong>histogram</strong> partitions a variable into bins and plots the frequency for each bin. (Source 191)</p>
+                
+                <div class="figure-placeholder">
+                    <strong>Figure 1.1: Distribution of salaries (Source 181)</strong>
+                    <p></p>
+                    <p><strong>X-axis:</strong> Annual Salary (Thousands of Dollars) (Source 180)<br/>
+                       <strong>Y-axis:</strong> Frequency (Source 173)</p>
+                </div>
+                
+                <p><strong>Insight:</strong> "more than 70% of the employees make between 20,000 and 50,000." (Source 193)</p>
+                <p>The high mean is just an "artifact of a few employees making very large salaries." (Source 193)</p>
+            </section>
+
+            <section class="slide" id="slide24">
+                <h2><span class="title-text">1.3 Multivariate Viz: Scatter Plot (Fig 1.2)</span><audio controls><source src="Slide 24.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <p>How do we visualize the association between <em>two</em> attributes, like Age and Salary? (Source 198, 199)</p>
+                <p>Use a <strong>scatter plot</strong>. (Source 200) Each (x, y) point represents one observation. (Source 201)</p>
+                
+                <div class="figure-placeholder">
+                    <strong>Figure 1.2: A scatter plot of salary and age (Source 216)</strong>
+                    <p></p>
+                    <p><strong>X-axis:</strong> Age (Source 215)<br/>
+                       <strong>Y-axis:</strong> Salary (Thousands of Dollars) (Source 206)</p>
+                </div>
+                
+                <p><strong>Insight:</strong> "It becomes immediately evident... that <strong>age is positively associated with the salary</strong>." (Source 202, 217)</p>
+                <p>This is an example of <strong>multivariate visualization</strong>. (Source 218)</p>
+            </section>
+
+            <section class="slide" id="slide25">
+                <h2><span class="title-text">1.4 Basics of Probability</span><audio controls><source src="Slide 25.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+
+                <ul>
+                    <li>Probabilities quantify how often specific <strong>outcomes</strong> are expected in <strong>experiments</strong> (or <strong>trials</strong>). (Source 224)</li>
+                    <li>
+                        <strong>Sample Space ($\Omega$):</strong> The set of *all possible* outcomes. (Source 225)
+                        <ul>
+                            <li>Example (Die Throw): $\Omega = \{1, 2, 3, 4, 5, 6\}$ (Source 227)</li>
+                        </ul>
+                    </li>
+                    <li>Each outcome has a probability value in $[0, 1]$. (Source 225)</li>
+                    <li>The sum of probabilities over the entire sample space $\Omega$ must be <strong>1</strong>. (Source 226)</li>
+                    <span class="latex-equation">
+                        $\sum_{x_i \in \Omega} p(x_i) = 1$
+                    </span>
+                </ul>
+            </section>
+
+            <section class="slide" id="slide26">
+                <h2><span class="title-text">1.4 Discrete Prob: Probability Mass Function</span><audio controls><source src="Slide 26.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <p>For <strong>discrete</strong> outcomes, the probability distribution is called a <strong>Probability Mass Function (PMF)</strong>. (Source 231, 254)</p>
+                
+                <p>It can be a simple table pairing outcomes with their probabilities.</p>
+                
+                <div class="figure-placeholder">
+                    <strong>Table 1.2: Outcomes for a fair die throw (Source 238)</strong>
+                    <p>[A table with two columns: "Face" and "Probability". Each face (1-6) has a probability of $1/6$.] (Source 239)</p>
+                </div>
+                
+                <p>This table <em>is</em> the probability distribution (or PMF). (Source 231)</p>
+            </section>
+
+            <section class="slide" id="slide27">
+                <h2><span class="title-text">1.4 Closed-Form: Binomial (Eq 1.1)</span><audio controls><source src="Slide 27.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <p>What about a more complex experiment, like "number of successes (e.g., rolling a '2') in 10 die throws"? (Source 232)</p>
+                
+                <p>The sample space is $\Omega = \{0, 1, ..., 10\}$ successes. (Source 234) We could make a table (like <strong>Table 1.3</strong>), but it's cumbersome. (Source 240, 251)</p>
+                
+                <p>A <strong>closed-form probability distribution</strong> (a formula) is far more concise and useful for analysis. (Source 249, 253)</p>
+                
+                <div class="definition">
+                    <p><strong>Equation 1.1: Binomial Distribution</strong> (Source 246, 250)</p>
+                    <p>Gives the probability of $k$ successes in $n$ trials, where $p$ is the success probability of one trial.</p>
+                </div>
+                
+                <span class="latex-equation">
+                    <span class="equation-label">(1.1)</span>
+                    Probability($k$ successes) = $\frac{n!}{(n-k)!k!}p^{k}(1-p)^{(n-k)}$
+                </span>
+                
+                <p>For our example: $n=10$, $p=1/6$.</p>
+            </section>
+            
+            <section class="slide" id="slide28">
+                <h2><span class="title-text">1.4 Visualizing a PMF (Fig 1.3)</span><audio controls><source src="Slide 28.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <p>We can visualize the Binomial PMF (Table 1.3) as a histogram.</p>
+                
+                <div class="figure-placeholder">
+                    <strong>Figure 1.3: PMF for Binomial (n=10, p=1/6) (Source 272)</strong>
+                    <p></p>
+                    <p><strong>X-axis:</strong> Number of Successes (Source 269)<br/>
+                       <strong>Y-axis:</strong> Probability (Source 259)</p>
+                </div>
+                
+                <p>This "shows the relationship between probability distributions and visual statistical methods." (Source 256)</p>
+            </section>
+
+            <section class="slide" id="slide29">
+                <h2><span class="title-text">1.4 Continuous Prob: Probability Density Function</span><audio controls><source src="Slide 29.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <p>What if outcomes are <strong>continuous</strong> (e.g., any real number from 0 to 10)? (Source 279, 280)</p>
+                
+                <ul>
+                    <li>The sample space $\Omega$ is infinitely large. (Source 279)</li>
+                    <li>The probability of any <em>single, exact</em> outcome (e.g., hitting <em>exactly</em> 1.25) is essentially <strong>0</strong>. (Source 281, 283)</li>
+                    <li>We can only define probabilities over <strong>ranges</strong> of outcomes (e.g., hitting between 1.2 and 1.3). (Source 282)</li>
+                </ul>
+                
+                <p>We use a <strong>Probability Density Function (PDF)</strong>, $f(x)$. (Source 284)</p>
+                
+                <div class="key-concept">
+                    The <strong>area under the curve</strong> of $f(x)$ between $a$ and $b$ gives the probability that the outcome falls in the range $(a, b)$. (Source 284)
+                </div>
+                
+                <span class="latex-equation">
+                    Probability($a \le x \le b$) = $\int_a^b f(x)dx$
+                </span>
+                <p>The <em>total</em> area under the entire curve must be 1.</p>
+            </section>
+            
+            <section class="slide" id="slide30">
+                <h2><span class="title-text">1.4 PDF Example: Normal Distribution (Eq 1.2, 1.3)</span><audio controls><source src="Slide 30.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <p>A very common distribution, shaped like a "bell curve." (Source 296, 297)</p>
+                
+                <ul>
+                    <li>It is parameterized by its <strong>mean ($\mu$)</strong> (the center) and <strong>variance ($\sigma^2$)</strong> (the spread). (Source 298)</li>
+                    <li><strong>Variance:</strong> The average <em>squared distance</em> from the mean. (Source 301)</li>
+                </ul>
+                
+                <span class="latex-equation">
+                    <span class="equation-label">(1.2)</span>
+                    <strong>Standard Normal ($\mu=0, \sigma^2=1$):</strong> $f(x) = \frac{1}{\sqrt{2\pi}} \exp(-x^2/2)$
+                </span>
+                
+                <span class="latex-equation">
+                    <span class="equation-label">(1.3)</span>
+                    <strong>General Normal:</strong> $f(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x - \mu)^2}{2\sigma^2}\right)$
+                </span>
+            </section>
+
+            <section class="slide" id="slide31">
+                <h2><span class="title-text">1.4 Visualizing a PDF (Fig 1.4)</span><audio controls><source src="Slide 31.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <p>The parameters $\mu$ and $\sigma$ change the shape of the distribution. (Source 303)</p>
+
+                <div class="figure-placeholder">
+                    <strong>Figure 1.4: Two examples of Normal Distributions (Source 295, 304)</strong>
+                    <p><strong>(a) Mean = 0, Variance = 1:</strong> </p>
+                    <p><strong>(b) Mean = 1, Variance = 0.25:</strong> </p>
+                </div>
+                
+                <p><strong>Insight:</strong> A smaller variance (0.25) means the data is "more tightly... distributed around the mean" (Source 300), resulting in a taller, narrower peak. (Source 305)</p>
+            </section>
+
+            <section class="slide" id="slide32">
+                <h2><span class="title-text">1.4 Multivariate Distributions (Fig 1.5)</span><audio controls><source src="Slide 32.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <ul>
+                    <li>So far, we've seen <strong>univariate</strong> distributions (based on a single outcome). (Source 310)</li>
+                    <li><strong>Multivariate distributions</strong> are based on <em>multiple</em> numeric outcomes. (Source 310)</li>
+                    <li>The PDF $f(x_1, ..., x_d)$ is now a multivariate function (e.g., a 3D bell curve). (Source 311)</li>
+                </ul>
+                
+                <div class="figure-placeholder">
+                    <strong>Figure 1.5: Two multivariate normal distributions (Source 307)</strong>
+                    <p> (Source 308)</p>
+                </div>
+                
+                <p>These are more powerful but also "inherently more complex," as the variables may be related (correlated). (Source 314, 315)</p>
+            </section>
+            
+            <section class="slide" id="slide33">
+                <h2><span class="title-text">1.4.1 Populations vs. Samples</span><audio controls><source src="Slide 33.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <h3>Population</h3>
+                <ul>
+                    <li>The <strong>entire</strong> collection of objects we are interested in. (Source 323)</li>
+                    <li><strong>Example:</strong> The lengths of <em>all</em> one-year-old sharks over the last decade. (Source 319, 321)</li>
+                    <li>This is "potentially uncollectable" (Source 323) or "even infinitely large." (Source 326)</li>
+                    <li>The population is "almost always a <strong>theoretical construct</strong> for statistical modeling." (Source 363)</li>
+                </ul>
+
+                <h3>Sample</h3>
+                <ul>
+                    <li>A smaller, <strong>collected</strong> subset of the population. (Source 327)</li>
+                    <li><strong>Example:</strong> The lengths of 100 sharks we managed to catch.</li>
+                    <li>We use the sample to <strong>estimate properties</strong> (like the mean length) of the entire population. (Source 327)</li>
+                </ul>
+            </section>
+            
+            <section class="slide" id="slide34">
+                <h2><span class="title-text">1.4.1 The Role of Sampling</span><audio controls><source src="Slide 34.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <div class="key-concept">
+                    <p>Any data set used in machine learning is a <strong>sample</strong> from some underlying (and often infinite) data population. (Source 331, 333)</p>
+                </div>
+                
+                <h3>The Core Problem: Sampling Variation</h3>
+                <p>The estimates we get <em>depend on the specific sample we collected!</em> (Source 330)</p>
+                
+                <p>"...if two analysts collect different data samples using exactly the same methodology, they will typically obtain <strong>slightly different estimates</strong>..." (Source 335)</p>
+                
+                <p>This "variation in predictions is indicative of an underlying error that most analysts are willing to live with." (Source 337)</p>
+            </section>
+            
+            <section class="slide" id="slide35">
+                <h2><span class="title-text">1.4.2 Modeling Populations with Samples</span><audio controls><source src="Slide 35.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <p>This is the central challenge: How do we model the complex, unknown population (Source 340) using just our limited sample?</p>
+                
+                <h3>The Strategy: (Source 341)</h3>
+                <ol>
+                    <li>
+                        <strong>Make a Simplifying Assumption:</strong>
+                        <p><em>Assume</em> the population follows a known family of distributions (e.g., a <strong>normal distribution</strong>). (Source 342, 344)</p>
+                    </li>
+                    <li>
+                        <strong>Estimate Parameters:</strong>
+                        <p>Use the <strong>sample data</strong> to estimate the parameters of that distribution (e.g., estimate $\mu$ and $\sigma^2$ from our 100 sharks). (Source 344)</p>
+                    </li>
+                    <li>
+                        <strong>Make Inferences:</strong>
+                        <p>Use this <em>modeled and estimated</em> distribution to make predictions and complex inferences. (Source 345)</p>
+                    </li>
+                </ol>
+            </section>
+            
+            <section class="slide" id="slide36">
+                <h2><span class="title-text">1.4.2 The Prob-Stats-ML Framework (Fig 1.6)</span><audio controls><source src="Slide 36.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <p>This process is summarized in <strong>Figure 1.6</strong> (Source 348, 351):</p>
+
+                <div class="figure-placeholder">
+                    <strong>Simplified Diagram of Figure 1.6</strong>
+                    <p><strong>(POPULATION)</strong><br/>
+                       (e.g., All sharks, impossible to collect) (Source 323, 343)</p>
+                    <p>$\downarrow$ &nbsp; <em>(Probabilistic Sampling)</em> &nbsp; (Source 328)</p>
+                    <p><strong>(STATISTICAL SAMPLE)</strong><br/>
+                       (e.g., Our 100 collected sharks) (Source 327)</p>
+                    <p>$\downarrow$ &nbsp; <em>(Statistical Estimation)</em> &nbsp; (Source 344)</p>
+                    <p><strong>(SIMPLIFIED PROBABILITY DISTRIBUTION)</strong><br/>
+                       (e.g., A Normal Distribution with estimated $\mu$ and $\sigma^2$) (Source 349)</p>
+                    <p>$\downarrow$ &nbsp; <em>(Analysis / Inference)</em></p>
+                    <p><strong>(MAKE USEFUL INFERENCES)</strong><br/>
+                       (e.g., Predict properties of new sharks) (Source 350)</p>
+                </div>
+            </section>
+
+            <section class="slide" id="slide37">
+                <h2><span class="title-text">1.4.2 Warning: Sample Selection Bias</span><audio controls><source src="Slide 37.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <p>This entire framework fails if the sample is bad!</p>
+                
+                <div class="definition">
+                    <p><strong>Sample Selection Bias:</strong> Occurs when the sample is <strong>not reflective</strong> of the population you intended to analyze. (Source 352)</p>
+                    <p>This leads to "inaccurate modeling... and subsequent errors in downstream applications." (Source 354)</p>
+                </div>
+
+                <h3>Examples of Bias:</h3>
+                <ul>
+                    <li><strong>Shark Example:</strong> Sampling sharks <em>only</em> from a particular geographical locality (e.g., the coast of Florida), but trying to model <em>all</em> sharks on the planet. (Source 353)</li>
+                    <li><strong>Survey Example:</strong> See next slide.</li>
+                </ul>
+            </section>
+            
+            <section class="slide" id="slide38">
+                <h2><span class="title-text">1.4.2 Example 1.4: Biased Survey</span><audio controls><source src="Slide 38.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <div class="example">
+                    <span class="example-title">Example 1.4 (Source 364)</span>
+                    <p><strong>Goal:</strong> Estimate interest in video games in the <strong>US teenage population</strong>. (Source 364)</p>
+                    <p><strong>Method:</strong> You create a survey and hand it out to teenagers in <strong>your neighborhood</strong>. (Source 366)</p>
+                    <p><strong>What can go wrong?</strong> (Source 367)</p>
+                    <p><strong>Answer:</strong> This is a classic case of <strong>sample selection bias</strong>. (Source 352)</p>
+                    <p>"A neighborhood is often a relatively homogeneous group... with demographic and socioeconomic characteristics that are <strong>unrepresentative of the broader US population</strong>." (Source 369)</p>
+                    <p>The results will be "inaccurate" for representing the US population. (Source 371)</p>
+                </div>
+            </section>
+            
+            <section class="slide" id="slide39">
+                <h2><span class="title-text">1.5 Hypothesis Testing</span><audio controls><source src="Slide 39.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <p>This is needed because our model's accuracy (and all other estimates) <strong>depends on the sample</strong> we used. (Source 385, 386)</p>
+                
+                <h3>The Core Question:</h3>
+                <p>If Model A beats Model B on <em>our sample</em>, is Model A <em>truly</em> better? Or did it just get lucky with this <em>particular</em> sample? (Source 387)</p>
+                
+                <h3>The Process:</h3>
+                <ol>
+                    <li>Start with a <strong>"null hypothesis"</strong> (the "dull" hypothesis).
+                        <ul><li>e.g., "The two models are similar" / "There is no difference." (Source 389)</li></ul>
+                    </li>
+                    <li>Compute the probability (p-value) that the difference we saw was just due to "natural statistical variability" (i.e., random chance). (Source 390)</li>
+                    <li>If this probability is <em>very low</em> (e.g., < 5%)...</li>
+                    <li>...we <strong>reject the null hypothesis</strong> and conclude that our result is "statistically significant" (i.e., one model is statistically better). (Source 391, 392)</li>
+                </ol>
+            </section>
+            
+            <section class="slide" id="slide40">
+                <h2><span class="title-text">1.5 Confidence Intervals</span><audio controls><source src="Slide 40.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <p>A related concept for "bounding the uncertainty in the underlying results." (Source 396)</p>
+
+                <div class="definition">
+                    <p><strong>Confidence Interval:</strong> A range of values in which the <strong>true (population-centric)</strong> value (e.g., model accuracy, or difference in accuracies) must lie, with a high probability (e.g., 95% or 99%). (Source 392, 394)</p>
+                </div>
+
+                <h3>Example:</h3>
+                <p>Instead of saying "Our model's accuracy on the sample is <strong>91%</strong>"...</p>
+                <p>We say "We are <strong>95% confident</strong> that the model's <em>true</em> accuracy on the <em>entire population</em> is between <strong>89% and 93%</strong>."</p>
+                
+                <p>This is a much more honest and robust way to report results.</p>
+            </section>
+            
+            <section class="slide" id="slide41">
+                <h2><span class="title-text">1.6 Basic Problems in Machine Learning</span><audio controls><source src="Slide 41.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <p>ML is about "constructing models on observed examples and using these models to make predictions." (Source 399)</p>
+                
+                <p>We'll use our $n \times d$ data matrix $D$. (Source 400)</p>
+                
+                <h3>Classical Problems: (Source 405)</h3>
+                <ul>
+                    <li>
+                        <strong>Unsupervised Learning</strong> (No labels provided)
+                        <ul>
+                            <li><strong>Clustering:</strong> Find groups of similar patients. (Source 404, 405)</li>
+                            <li><strong>Outlier Detection:</strong> Find anomalous patients. (Source 404, 405)</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Supervised Learning</strong> (Labels are provided)
+                        <ul>
+                            <li><strong>Classification:</strong> Predict a <em>category</em> (e.g., "spam" or "not spam"). (Source 405)</li>
+                            <li><strong>Regression:</strong> Predict a <em>number</em> (e.g., "salary").</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+            
+            <section class="slide" id="slide42">
+                <h2><span class="title-text">1.6.1 Clustering (Unsupervised Learning)</span><audio controls><source src="Slide 42.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+
+                <ul>
+                    <li><strong>Goal:</strong> Segment the data set into groups of <em>similar</em> individuals. (Source 407)</li>
+                    <li><strong>Unsupervised:</strong> The groups are created "without any pre-conceptions." (Source 417) No examples (labels) are provided to "supervise" the group creation. (Source 418)</li>
+                    <li>The algorithm finds "natural" clusters in the data. (Source 408)</li>
+                </ul>
+                
+                <h3>Probabilistic View:</h3>
+                <ul>
+                    <li>Many clustering algorithms (like Expectation-Maximization) are probabilistic. (Source 413)</li>
+                    <li>They <strong>assume</strong> the data is drawn from a mixture of probability distributions (e.g., several multivariate normal distributions). (Source 413, 414)</li>
+                    <li>The algorithm then <strong>estimates the parameters</strong> of these distributions (e.g., the mean and variance of each cluster). (Source 413)</li>
+                </ul>
+            </section>
+            
+            <section class="slide" id="slide43">
+                <h2><span class="title-text">1.6.2 Classification (Supervised Learning)</span><audio controls><source src="Slide 43.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <ul>
+                    <li><strong>Goal:</strong> Assign a <strong>categorical label</strong> to new, unseen data points.</li>
+                    <li><strong>Supervised:</strong> The model learns from a <strong>training data set</strong> where the labels <em>are</em> provided. (Source 419, 423)</li>
+                </ul>
+
+                <h3>The Data:</h3>
+                <ul>
+                    <li>$n \times d$ data matrix $D$ (the <strong>features</strong>, $\vec{x}_i$). (Source 424)</li>
+                    <li>$n$-dimensional array $\vec{y}$ (the <strong>labels</strong>, $y_i$). (Source 424, 425)</li>
+                </ul>
+                
+                <h3>The Process:</h3>
+                <ol>
+                    <li><strong>Train:</strong> Build a model $f(\cdot)$ that learns the mapping $y_i \approx f(\vec{x}_i)$ from the training data ($D, \vec{y}$). (Source 431, 435)</li>
+                    <li><strong>Test:</strong> Use the constructed model $f(\cdot)$ to predict labels for a <em>new, unseen</em> test data set $D_t$. (Source 429, 432)</li>
+                </ol>
+            </section>
+
+            <section class="slide" id="slide44">
+                <h2><span class="title-text">1.6.2 Linear Classification Models</span><audio controls><source src="Slide 44.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <p>A common approach is a <strong>linear model</strong>, parameterized by a $d$-dimensional <em>weight vector</em> $\vec{w}$. (Source 435, 437)</p>
+
+                <p><strong>Example:</strong> Binary Classification for labels $\{-1, +1\}$ (Source 434, 436)</p>
+                <span class="latex-equation">
+                    $y_i \approx f_{\vec{w}}(\vec{x}_i) = \text{sign}\{\vec{w} \cdot \vec{x}_i^T\}$
+                </span>
+                <p>The sign of the dot product determines the predicted class.</p>
+                
+                <h3>How to "Learn" $\vec{w}$?</h3>
+                <p>We "penalize mismatching" using a <strong>loss function</strong> and find the $\vec{w}$ that minimizes the total penalty. (Source 438, 439)</p>
+                <span class="latex-equation">
+                    $\text{Minimize}_{\vec{w}} \sum_i \text{Mismatching between } y_i \text{ and } f_{\vec{w}}(\vec{x}_i)$
+                </span>
+            </section>
+
+            <section class="slide" id="slide45">
+                <h2><span class="title-text">1.6.2.1 Regression (Supervised Learning)</span><audio controls><source src="Slide 45.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <p>Very similar to classification, but with one key difference.</p>
+                
+                <p>The "dependent variable" (or "outcome") $\vec{y}$ is <strong>numerical</strong>, not categorical. (Source 443, 445, 446)</p>
+                
+                <div class="key-concept">
+                    <ul>
+                        <li><strong>Classification:</strong> Predicts a <em>category</em>.
+                            <ul><li>e.g., "Spam" or "Not Spam"</li></ul>
+                        </li>
+                        <li><strong>Regression:</strong> Predicts a <em>number</em>.
+                            <ul><li>e.g., "Salary" or "Stock Price"</li></ul>
+                        </li>
+                    </ul>
+                </div>
+                
+                <p><strong>Goal:</strong> Learn a function $f(\cdot)$ to predict a <em>continuous</em> outcome $y_i \approx f(\vec{x}_i)$.</p>
+            </section>
+            
+            <section class="slide" id="slide46">
+                <h2><span class="title-text">1.6.2.1 Linear Regression (Eq 1.5, 1.6)</span><audio controls><source src="Slide 46.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+
+                <p>We can use a linear model to find a weight vector $\vec{w}$ such that the dot product is (approximately) equal to the numerical outcome $y_i$. (Source 453, 455)</p>
+                
+                <span class="latex-equation">
+                    $y_i = f(\vec{x}_i) = \vec{w} \cdot \vec{x}_i^T$
+                </span>
+                
+                <p>Across all $n$ training instances, this is a matrix equation: (Source 456)</p>
+                <span class="latex-equation">
+                    <span class="equation-label">(1.5)</span>
+                    $\vec{y} \approx D\vec{w}$
+                </span>
+                
+                <p>This is an <strong>over-determined system</strong> of linear equations (usually $n \gg d$), so no exact solution exists. (Source 457, 458)</p>
+                
+                <p><strong>Solution:</strong> We minimize the <strong>sum of squares of the errors</strong> (a loss function): (Source 459)</p>
+                <span class="latex-equation">
+                    <span class="equation-label">(1.6)</span>
+                    $J = \frac{1}{2} ||D\vec{w} - \vec{y}||^2$
+                </span>
+                <p>This loss function is "rooted in a probabilistic assumption" about the errors. (Source 460)</p>
+            </section>
+            
+            <section class="slide" id="slide47">
+                <h2><span class="title-text">1.6.3 Outlier Detection (Unsupervised)</span><audio controls><source src="Slide 47.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <ul>
+                    <li><strong>Goal:</strong> Find rows (observations) in $D$ that are "very different from most of the other rows." (Source 467)</li>
+                    <li>This is the complement of clustering: (Source 468)
+                        <ul>
+                            <li><strong>Clustering:</strong> Finds groups of <em>similar</em> rows.</li>
+                            <li><strong>Outlier Detection:</strong> Finds rows that <em>do not fit</em> in with other rows. (Source 469)</li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <div class="definition">
+                    <p><strong>Hawkins Definition (Probabilistic):</strong> (Source 471)</p>
+                    <p>"An outlier is an observation that deviates so much from other observations as to arouse suspicion that it was generated by a different [probabilistic] mechanism."</p>
+                </div>
+                
+                <p>The "normal" points generated by the main mechanism are called <strong>inliers</strong>. (Source 472)</p>
+            </section>
+            
+            <section class="slide" id="slide48">
+                <h2><span class="title-text">1.6.3 Probabilistic Outlier Detection</span><audio controls><source src="Slide 48.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <p>This approach is based directly on the Hawkins definition:</p>
+                
+                <ol>
+                    <li>
+                        <strong>Assume:</strong> All <em>inlier</em> data is generated from a <em>single</em> probability distribution (e.g., a multivariate normal). (Source 474)
+                    </li>
+                    <li>
+                        <strong>Estimate Parameters:</strong> Use the data to estimate the parameters of this distribution (e.g., $\mu$ and $\sigma^2$). This is often done via <strong>Maximum-Likelihood Estimation (MLE)</strong>. (Source 475, 476)
+                    </li>
+                    <li>
+                        <strong>Score:</strong> Calculate the probability (or probability density) of <em>each</em> data point being generated from this learned model. (Source 477)
+                    </li>
+                    <li>
+                        <strong>Identify:</strong> Data points that have a <strong>low probability (or density)</strong> of being generated from this model are flagged as <strong>outliers</strong>. (Source 478)
+                    </li>
+                </ol>
+            </section>
+
+            <section class="slide" id="slide49">
+                <h2><span class="title-text">1.6 Example 1.5: Spam (Supervised)</span><audio controls><source src="Slide 49.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <div class="example">
+                    <span class="example-title">Example 1.5 (Source 485)</span>
+                    <p><strong>Data:</strong> Emails with features (length, word frequency, sender, etc.) <strong>AND labels</strong> indicating whether they are "spam". (Source 483)</p>
+                    <p><strong>Goal:</strong> Construct a model to predict if a <em>new, untagged</em> email is spam. (Source 484)</p>
+                    <p><strong>Which Model?</strong></p>
+                    <p><strong>Classification</strong>. (Source 486) This is a supervised problem where the "spam" labels are the categorical dependent variables. (Source 486)</p>
+                </div>
+            </section>
+            
+            <section class="slide" id="slide50">
+                <h2><span class="title-text">1.6 Example 1.6: Spam (Unsupervised)</span><audio controls><source src="Slide 50.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <div class="example">
+                    <span class="example-title">Example 1.6 (Source 490)</span>
+                    <p><strong>Data:</strong> Same email features as before, but <strong>NO spam labels</strong> are available. (Source 488)</p>
+                    <p><strong>Goal:</strong> Find out if a new email is spam. (Source 489)</p>
+                    <p><strong>Which Model?</strong></p>
+                    <p><strong>Outlier Detection</strong>. (Source 491) This is an unsupervised setting. (Source 491)</p>
+                    <p><strong>Key Assumption:</strong> This only works if "the vast majority of the emails are not spam." (Source 492) If that's true, the "anomalous characteristics of spam emails" will be detected as outliers. (Source 493)</p>
+                </div>
+            </section>
+            
+            <section class="slide" id="slide51">
+                <h2><span class="title-text">1.6 Example 1.7: Email Organizing</span><audio controls><source src="Slide 51.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <div class="example">
+                    <span class="example-title">Example 1.7 (Source 495)</span>
+                    <p><strong>Data:</strong> Same email features, <strong>NO labels</strong>. (Source 496)</p>
+                    <p><strong>Goal:</strong> Organize emails into <strong>folders by topical content</strong>. (Source 494)</p>
+                    <p><strong>Which Model?</strong></p>
+                    <p><strong>Clustering</strong>. (Source 497) This is an unsupervised setting where the goal is not to find *anomalies*, but to <em>partition</em> the data into <em>similar groups</em> of emails. (Source 497)</p>
+                </div>
+            </section>
+            
+            <section class="slide" id="slide52">
+                <h2><span class="title-text">1.7 Summary</span><audio controls><source src="Slide 52.wav" type="audio/wav">Your browser does not support the audio element.</audio></h2>
+                
+                <ul>
+                    <li>Prob & Stats are used in the <strong>entire ML pipeline</strong>: from data visualization to modeling and, finally, evaluation. (Source 499)</li>
+                    <li>
+                        <strong>Probability distributions</strong> are used to model <strong>samples</strong> drawn from a (theoretical) <strong>population</strong>. (Source 501)
+                    </li>
+                    <li>
+                        These distributions are "simplified representations" (Source 502) whose parameters are <em>learned from the data</em> (e.g., via <strong>Maximum-Likelihood Estimation</strong>). (Source 503)
+                    </li>
+                    <li>
+                        These reconstructed distributions are then used to make predictions in: (Source 504, 505)
+                        <ul>
+                            <li>Classification</li>
+                            <li>Regression</li>
+                            <li>Clustering</li>
+                            <li>Outlier Detection</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+            
+            <section class="slide title-slide" id="slide53">
+                <h1 style="font-size: 3.5rem; margin-top: 150px;">Questions?</h1>
+            </section>
+
+        </main>
+    </div>
+</body>
+</html>
